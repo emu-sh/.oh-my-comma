@@ -18,7 +18,7 @@ def main():
     has_powerline = not bool(subprocess.check_call(['powerline-shell'], stdout=subprocess.PIPE))
   except:
     has_powerline = False
-  print('Has powerline: {}'.format(has_powerline))
+
   files = RepoInfo.files_powerline if has_powerline else RepoInfo.files
   for file in files:
     copying = '{}/{}'.format(BASEDIR, file)
@@ -32,11 +32,6 @@ def main():
     to = '{}/{}'.format(RepoInfo.home, dr)
     if os.path.exists(to):
       shutil.rmtree(to)
-
-    # if dr == '.config':  # shouldn't be needed, .config just won't be used
-    #   if not has_powerline:
-    #     print('Skipping powerline installation since it\'s missing!')
-    #     continue
 
     shutil.copytree(copying, to)
     print('Copied {} to {}!'.format(copying, to))

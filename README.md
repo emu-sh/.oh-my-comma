@@ -7,15 +7,15 @@ PRs accepted! What cool shit do you do to your ssh session with your car??
 # Getting Started
 ```
 mount -o rw,remount /system
-pip install powerline-shell
+pip install powerline-shell  # optional!
 cd /home
 git clone https://github.com/ShaneSmiskol/comma-dotfiles
 python /home/comma-dotfiles/install.py
 ```
-**Note, running `install.sh` assumes you used the above command to clone this repository to `/home/comma-dotfiles`.**
+**Note, running `install.py` assumes you used the above command to clone this repository to `/home/comma-dotfiles`. If you installed `powerline`, it will be automatically detected and the config files will be copied.**
 
 # Updating
-To update `comma-dotfiles`, run `update.sh` with something like:
+To update `comma-dotfiles`, run `update.py` with something like:
 ```
 python /home/comma-dotfiles/update.py
 ```
