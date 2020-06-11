@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 
 
 class RepoInfo:
@@ -12,17 +13,26 @@ class RepoInfo:
 
 def main():
   BASEDIR = os.path.dirname(os.path.abspath(__file__))
+  has_powerline = bool(subprocess.check_call(['powerline-shell']))
+  print('Has powerline: {}'.format(has_powerline))
   for file in RepoInfo.files:
     copying = '{}/{}'.format(BASEDIR, file)
     to = '{}/{}'.format(RepoInfo.home, file)
     shutil.copyfile(copying, to)
     print('Copied {} to {}!'.format(copying, to))
 
+
   for dr in RepoInfo.dirs:
     copying = '{}/{}'.format(BASEDIR, dr)
     to = '{}/{}'.format(RepoInfo.home, dr)
     if os.path.exists(to):
       shutil.rmtree(to)
+
+    if dr == '.config':
+      if not has_powerline:
+        print('Skipping powerline installation since it\'s missing!')
+        continue
+
     shutil.copytree(copying, to)
     print('Copied {} to {}!'.format(copying, to))
 
