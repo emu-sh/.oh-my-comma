@@ -5,8 +5,7 @@ import subprocess
 
 class RepoInfo:
   # define any needed files or dirs
-  files_powerline = {'.bashrc_powerline': '.bashrc'}
-  files = {'.bashrc': '.bashrc', '.powerline': '.powerline'}
+  files = ['.bashrc', '.powerline']
   dirs = ['.config']
 
   home = '/home'  # where to install/copy files above
@@ -14,17 +13,12 @@ class RepoInfo:
 
 def main():
   BASEDIR = os.path.dirname(os.path.abspath(__file__))
-  try:
-    has_powerline = not bool(subprocess.check_call(['powerline-shell'], stdout=subprocess.PIPE))
-  except:
-    has_powerline = False
 
-  files = RepoInfo.files_powerline if has_powerline else RepoInfo.files
-  for file in files:
+  for file in RepoInfo.files:
     copying = '{}/{}'.format(BASEDIR, file)
-    to = '{}/{}'.format(RepoInfo.home, files[file])
+    to = '{}/{}'.format(RepoInfo.home, file)
     shutil.copyfile(copying, to)
-    print('Copied {} to {}!'.format(copying, to))
+    print('Copied file {} to {}!'.format(copying, to))
 
 
   for dr in RepoInfo.dirs:
@@ -34,7 +28,7 @@ def main():
       shutil.rmtree(to)
 
     shutil.copytree(copying, to)
-    print('Copied {} to {}!'.format(copying, to))
+    print('Copied directory {} to {}!'.format(copying, to))
 
 
 if __name__ == "__main__":
