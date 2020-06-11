@@ -28,7 +28,7 @@ function dotfiles(){
 
   if [ $# -lt 1 ]; then
     printf "You must specify a command for dotfiles. Some options are"
-    echo $functions
+    # echo $functions
     return 1
   fi
 
