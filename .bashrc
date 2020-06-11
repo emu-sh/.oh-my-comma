@@ -73,5 +73,4 @@ function dotfiles(){  # main wrapper function
     printf "Unsupported command! Try one of these:"
     printf '%s\n' "$commands"
   fi
-
 }
