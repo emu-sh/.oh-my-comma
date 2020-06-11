@@ -5,7 +5,8 @@ import subprocess
 
 class RepoInfo:
   # define any needed files or dirs needed
-  files = ['.bashrc']
+  files_powerline = {'.bashrc_powershell': '.bashrc'}
+  files = {'.bashrc': '.bashrc'}
   dirs = ['.config']
 
   home = '/home'  # where to install/copy files above
@@ -15,9 +16,10 @@ def main():
   BASEDIR = os.path.dirname(os.path.abspath(__file__))
   has_powerline = bool(subprocess.check_call(['powerline-shell']))
   print('Has powerline: {}'.format(has_powerline))
-  for file in RepoInfo.files:
+  files = RepoInfo.files_powerline if has_powerline else RepoInfo.files
+  for file in files:
     copying = '{}/{}'.format(BASEDIR, file)
-    to = '{}/{}'.format(RepoInfo.home, file)
+    to = '{}/{}'.format(RepoInfo.home, files[file])
     shutil.copyfile(copying, to)
     print('Copied {} to {}!'.format(copying, to))
 
@@ -28,10 +30,10 @@ def main():
     if os.path.exists(to):
       shutil.rmtree(to)
 
-    if dr == '.config':
-      if not has_powerline:
-        print('Skipping powerline installation since it\'s missing!')
-        continue
+    # if dr == '.config':  # shouldn't be needed, .config just won't be used
+    #   if not has_powerline:
+    #     print('Skipping powerline installation since it\'s missing!')
+    #     continue
 
     shutil.copytree(copying, to)
     print('Copied {} to {}!'.format(copying, to))
