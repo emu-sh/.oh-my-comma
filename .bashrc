@@ -37,6 +37,7 @@ function dotfiles(){
       _controlsdebug
     else
       echo "Unsupported debugging command!"
+    fi
   else
     echo "Unsupported command!"
   fi
