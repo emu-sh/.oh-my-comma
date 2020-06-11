@@ -36,7 +36,8 @@ function dotfiles(){  # main wrapper function
   - update: updates this tool, requires restart of ssh session
   - pandaflash: flashes panda
   - pandaflash2: flashes panda without make recover
-  - debug: debugging tools"
+  - debug: debugging tools
+  - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
   debugging_commands="
   - controls: logs controls to /data/output.log"
 
