@@ -26,9 +26,11 @@ function dotfiles(){
   - pandaflash - flashes panda
   - pandaflash2 - flashes panda without make recover
   - debug - debugging tools"
+  debugging_commands="
+  - controls - logs controls to /data/output.log"
 
   if [ $# -lt 1 ]; then
-    printf "You must specify a command for dotfiles. Some options are\n"
+    printf "You must specify a command for dotfiles. Some options are:"
     printf '%s\n' "$commands"
     return 1
   fi
@@ -41,15 +43,16 @@ function dotfiles(){
     _pandaflash2
   elif [ $1 = "debug" ]; then
     if [ $# -lt 2 ]; then  # verify at least two arguments
-      printf "You must specify a command for dotfiles debug. Some options are
-  - controls\n"
+      printf "You must specify a command for dotfiles debug. Some options are:"
+      printf '%s\n' "$debugging_commands"
       return 1
     fi
 
     if [ $2 = "controls" ]; then
       _controlsdebug
     else
-      echo "Unsupported debugging command!"
+      echo "Unsupported debugging command! Try one of these commands:"
+      printf '%s\n' "$commands"
     fi
   else
     echo "Unsupported command!"
