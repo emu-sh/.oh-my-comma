@@ -51,11 +51,11 @@ function dotfiles(){
     if [ $2 = "controls" ]; then
       _controlsdebug
     else
-      echo "Unsupported debugging command! Try one of these commands:"
+      printf "Unsupported debugging command! Try one of these commands:"
       printf '%s\n' "$debugging_commands"
     fi
   else
-    echo "Unsupported command! Try one of these commands:"
+    printf "Unsupported command! Try one of these commands:"
     printf '%s\n' "$commands"
   fi
 
