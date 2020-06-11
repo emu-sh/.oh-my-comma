@@ -8,7 +8,7 @@ def main():
     raise Exception('Please install to /home/comma-dotfiles!')
 
   os.chdir('/home/comma-dotfiles')
-  r = subprocess.check_call(['git pull'])
+  r = subprocess.check_call(['git', 'pull'])
   print(str(r))
   print('Updated successfully!')
   install()
