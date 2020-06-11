@@ -1,5 +1,9 @@
 cd /data/openpilot
 
+if ! [ -x "$(command -v powerline)" ]; then
+  source .powerline
+fi
+
 function pandaflash() {
   cd /data/openpilot/panda/board && make recover
 }
