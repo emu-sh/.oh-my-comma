@@ -15,9 +15,9 @@ python /home/comma-dotfiles/install.py
 **Note, running `install.py` assumes you used the above command to clone this repository to `/home/comma-dotfiles`. If you installed `powerline`, it will be automatically detected and the config files will be copied.**
 
 # Updating
-To update `comma-dotfiles`, run `update.py` with something like:
+To update `comma-dotfiles`, run the `updatedotfiles` command via:
 ```
-python /home/comma-dotfiles/update.py
+updatedotfiles
 ```
 This will essentially perform a git pull and replace all current files in the `/home` directory with new ones, if an update is available.
 

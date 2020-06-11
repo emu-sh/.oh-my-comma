@@ -17,5 +17,5 @@ function controlsdebug(){
 }
 
 function updatedotfiles(){
-  git -C /home/comma-dotfiles pull ; python /home/comma-dotfiles/update.py
+  git -C /home/comma-dotfiles pull ; python /home/comma-dotfiles/install.py
 }
