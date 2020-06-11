@@ -38,7 +38,8 @@ function dotfiles(){
     _pandaflash2
   elif [ $1 = "debug" ]; then
     if [ $# -lt 2 ]; then  # verify at least two arguments
-      printf "You must specify a command for dotfiles debug. Some options are\n- controls\n"
+      printf "You must specify a command for dotfiles debug. Some options are
+  - controls\n"
       return 1
     fi
 
