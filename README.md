@@ -30,3 +30,12 @@ You can debug controlsd and output it to a log of /data/output.log by typing
 ```
 controlsdebug
 ```
+
+## Git config
+while you're in a rw filesystem, you might as well edit your git config so you can push your changes up easily
+```
+git config --global user.name "your_username"
+git config --global user.email "your_email_address@example.com"
+git config --global credential.helper store
+git pull
+```
