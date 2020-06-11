@@ -39,7 +39,7 @@ The default directory of your bash/ssh session is now `/data/openpilot`. Much ea
 - `dotfiles pandaflash2`: Flashes the panda without `make recover`
 
 ### Debugging
-- `dotfiles debug controlsd`: You can debug controlsd and output it to a log of `/data/output.log`
+- `dotfiles debug controls`: You can debug controlsd and output it to a log file `/data/output.log`
 
 # Git config
 While you're in a rw filesystem, you might as well edit your git config so you can push your changes up easily.

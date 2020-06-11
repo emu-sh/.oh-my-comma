@@ -39,7 +39,7 @@ function dotfiles(){  # main wrapper function
   - debug: debugging tools
   - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
   debugging_commands="
-  - controls: logs controls to /data/output.log"
+  - controls: logs controlsd to /data/output.log"
 
   if [ $# -lt 1 ]; then
     printf "You must specify a command for dotfiles. Some options are:"
