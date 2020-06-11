@@ -7,14 +7,17 @@ class RepoInfo:
   files = ['.bashrc']
   dirs = ['.config']
 
-  basedir = '/home'  # where to install/copy files above
+  home = '/home'  # where to install/copy files above
 
 
 def main():
-  # basedir = os.getcwd()
-  os.chdir(os.path.dirname(os.path.abspath(__file__)))
+  BASEDIR = os.path.dirname(os.path.abspath(__file__))
   for file in RepoInfo.files:
-    shutil.copyfile(file, '{}/{}'.format(RepoInfo.basedir, file))
+    copying = '{}/{}'.format(BASEDIR, file)
+    to = '{}/{}'.format(RepoInfo.home, file)
+    shutil.copyfile(copying, to)
+
+    print('Copied {} to {}!'.format(copying, to))
 
 
 if __name__ == "__main__":
