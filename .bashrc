@@ -52,7 +52,7 @@ function dotfiles(){  # main wrapper function
   elif [ $1 = "pandaflash2" ]; then
     _pandaflash2
   elif [ $1 = "installfork" ]; then
-    _installfork
+    _installfork $2
   elif [ $1 = "debug" ]; then
     if [ $# -lt 2 ]; then  # verify at least two arguments
       printf "You must specify a command for dotfiles debug. Some options are:"
