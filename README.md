@@ -10,14 +10,14 @@ mount -o rw,remount /system
 pip install powerline-shell
 cd /home
 git clone https://github.com/ShaneSmiskol/comma-dotfiles
-./comma-dotfiles/install.sh
+python /home/comma-dotfiles/install.py
 ```
 **Note, running `install.sh` assumes you used the above command to clone this repository to `/home/comma-dotfiles`.**
 
 # Updating
 To update `comma-dotfiles`, run `update.sh` with something like:
 ```
-./home/comma-dotfiles/update.sh
+python /home/comma-dotfiles/update.py
 ```
 This will essentially perform a git pull and replace all current files in the `/home` directory with new ones, if an update is available.
 

@@ -1,1 +1,0 @@
-cd /home/comma-dotfiles
