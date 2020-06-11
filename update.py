@@ -9,7 +9,7 @@ def main():
 
   os.chdir('/home/comma-dotfiles')
   r = subprocess.check_call(['git', 'pull'])
-  if bool(r):
+  if not bool(r):
     # print('Updated successfully!')
     install()
   else:
