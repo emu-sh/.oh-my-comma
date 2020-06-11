@@ -9,11 +9,11 @@ def main():
 
   os.chdir('/home/comma-dotfiles')
   r = subprocess.check_call(['git', 'pull'])
-  if 'Updating' in r or 'Already up to date.' in r:
+  if bool(r):
     # print('Updated successfully!')
     install()
   else:
-    raise Exception('Error with git pull!\n{}'.format(r))
+    raise Exception('Error with git pull!')
 
 
 if __name__ == "__main__":
