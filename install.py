@@ -16,9 +16,18 @@ def main():
     copying = '{}/{}'.format(BASEDIR, file)
     to = '{}/{}'.format(RepoInfo.home, file)
     shutil.copyfile(copying, to)
+    print('Copied {} to {}!'.format(copying, to))
 
+  for dr in RepoInfo.dirs:
+    copying = '{}/{}'.format(BASEDIR, dr)
+    to = '{}/{}'.format(RepoInfo.home, dr)
+    if os.path.exists(to):
+      shutil.rmtree(to)
+    shutil.copytree(copying, to)
     print('Copied {} to {}!'.format(copying, to))
 
 
 if __name__ == "__main__":
+  print('Running installation...')
   main()
+  print('Finished!')
