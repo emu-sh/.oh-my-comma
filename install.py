@@ -6,7 +6,7 @@ import subprocess
 class RepoInfo:
   # define any needed files or dirs
   files_powerline = {'.bashrc_powerline': '.bashrc'}
-  files = {'.bashrc': '.bashrc'}
+  files = {'.bashrc': '.bashrc', '.powerline': '.powerline'}
   dirs = ['.config']
 
   home = '/home'  # where to install/copy files above
