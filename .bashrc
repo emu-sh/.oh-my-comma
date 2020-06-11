@@ -21,27 +21,9 @@ function _updatedotfiles(){
 }
 
 function dotfiles(){
-  if [ $# < 1]; then
+  if [ $# -lt 1]; then
     echo "You must give a command for dotfiles. Some are\n- update\n- pandaflash\n- debug"
     return [n]
   fi
-<<COMMENT1
-  if [ $1 = "update" ]; then
-    _updatedotfiles
 
-  elif [ $1 = "pandaflash" ]; then
-    _pandaflash
-
-  elif [ $1 = "pandaflash2" ]; then
-    _pandaflash2
-
-  elif [ $1 = "debug" ]; then
-    if [ $2 = "controls" ]; then
-      _controlsdebug
-    else
-      echo "Unsupported debugging command!"
-  else
-    echo "Unsupported command!"
-  fi
-COMMENT1
 }
