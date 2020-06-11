@@ -30,6 +30,8 @@ function dotfiles(){
     _updatedotfiles
   elif [ $1 = "pandaflash" ]; then
     _pandaflash
+  elif [ $1 = "pandaflash2" ]; then
+    _pandaflash2
   fi
 
 }
