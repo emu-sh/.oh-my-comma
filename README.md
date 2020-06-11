@@ -45,3 +45,4 @@ git config --global user.email "your_email_address@example.com"
 git config --global credential.helper store
 git pull
 ```
+if the git pull fails, just do some action on git that requires authentication, and you should be good to go
