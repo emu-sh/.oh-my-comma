@@ -16,7 +16,7 @@ Read the README for https://github.com/b-ryan/powerline-shell. You will need to 
 
 The goal is to get `.bashrc` and the `.config` folder in the `/home/` folder
 
-The default directory of your bash/ssh session is now /data/openpilot. Much easier to git pull after shelling in!
+The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in!
 
 ## Panda Flashing
 You can flash the panda by typing
