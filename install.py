@@ -4,7 +4,7 @@ import subprocess
 
 
 class RepoInfo:
-  # define any needed files or dirs needed
+  # define any needed files or dirs
   files_powerline = {'.bashrc_powerline': '.bashrc'}
   files = {'.bashrc': '.bashrc'}
   dirs = ['.config']
