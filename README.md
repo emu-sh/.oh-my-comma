@@ -9,8 +9,8 @@ PRs accepted! What cool shit do you do to your ssh session with your car??
 mount -o rw,remount /system
 pip install powerline-shell
 cd /home
-git clone https://github.com/askalice/comma-dotfiles
-./home/comma-dotfiles/install.sh
+git clone https://github.com/ShaneSmiskol/comma-dotfiles
+./comma-dotfiles/install.sh
 ```
 **Note, running `install.sh` assumes you used the above command to clone this repository to `/home/comma-dotfiles`.**
 
