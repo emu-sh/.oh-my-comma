@@ -14,8 +14,7 @@ def main():
   # basedir = os.getcwd()
   os.chdir(os.path.dirname(os.path.abspath(__file__)))
   for file in RepoInfo.files:
-    print(file)
-    shutil.copyfile(file, RepoInfo.basedir)
+    shutil.copyfile(file, '{}/{}'.format(RepoInfo.basedir, file))
 
 
 if __name__ == "__main__":
