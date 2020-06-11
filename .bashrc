@@ -23,6 +23,8 @@ function _updatedotfiles(){
 function dotfiles(){
   if [ $# < 1]; then
     echo "You must give a command for dotfiles. Some are\n- update\n- pandaflash\n- debug"
+    return [n]
+  fi
 
   if [ $1 = "update" ]; then
     _updatedotfiles
