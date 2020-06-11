@@ -25,7 +25,7 @@ function dotfiles(){
     echo "You must give a command for dotfiles. Some are\n- update\n- pandaflash\n- debug"
     return [n]
   fi
-
+<<COMMENT1
   if [ $1 = "update" ]; then
     _updatedotfiles
 
@@ -43,4 +43,5 @@ function dotfiles(){
   else
     echo "Unsupported command!"
   fi
+COMMENT1
 }
