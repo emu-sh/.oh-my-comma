@@ -31,11 +31,10 @@ function _installfork(){
     old_dir="${old_dir}.${old_count}"
   fi
 
-  echo "using: ${old_dir}"
-  #echo "Moving current openpilot installation to /data/openpilot.old"
-  #mv /data/openpilot /data/openpilot.old
-  #echo "Fork will be installed to /data/openpilot"
-  #git clone $1 /data/openpilot
+  echo "Moving current openpilot installation to ${old_dir}"
+  mv /data/openpilot ${old_dir}
+  echo "Fork will be installed to /data/openpilot"
+  git clone $1 /data/openpilot
 }
 
 function _updatedotfiles(){
