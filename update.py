@@ -15,7 +15,7 @@ def main():
     update_success = False
 
   if update_success:
-    # print('Updated successfully!')
+    print('Updated successfully!')
     install()
   else:
     raise Exception('Error with git pull!')
