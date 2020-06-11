@@ -31,8 +31,14 @@ function dotfiles(){
   elif [ $1 = "pandaflash" ]; then
     _pandaflash
   elif [ $1 = "pandaflash2" ]; then
-    echo "here"
     _pandaflash2
+  elif [ $1 = "debug" ]; then
+    if [ $2 = "controls" ]; then
+      _controlsdebug
+    else
+      echo "Unsupported debugging command!"
+  else
+    echo "Unsupported command!"
   fi
 
 }
