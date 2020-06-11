@@ -13,6 +13,7 @@ class RepoInfo:
 
 
 def main():
+  print('new functionality test')
   BASEDIR = os.path.dirname(os.path.abspath(__file__))
   info = RepoInfo()
 
