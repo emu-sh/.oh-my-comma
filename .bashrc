@@ -27,8 +27,8 @@ function dotfiles(){
   - debug - debugging tools"
 
   if [ $# -lt 1 ]; then
-    printf "You must specify a command for dotfiles. Some options are"
-    printf '%s' "$commands"
+    printf "You must specify a command for dotfiles. Some options are\n"
+    printf '%s\n' "$commands"
     return 1
   fi
 
