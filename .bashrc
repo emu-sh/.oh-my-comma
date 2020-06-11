@@ -21,14 +21,16 @@ function _installfork(){
     echo "You must specify a fork URL to clone!"
     return 1
   fi
+
   old_dir="/data/openpilot.old"
   old_count=0
   if [ -d $old_dir ]; then
-    while [ -d "/data/openpilot.old${old_count}" ]; do
-      old_count=$((old_count+1))
+    while [ -d "/data/openpilot.old.${old_count}" ]; do
+      old_count=$((old_count+1))  # counts until we find an unused dir name
     done
-    old_dir="${old_dir}${old_count}"
+    old_dir="${old_dir}.${old_count}"
   fi
+
   echo "using: ${old_dir}"
   #echo "Moving current openpilot installation to /data/openpilot.old"
   #mv /data/openpilot /data/openpilot.old
