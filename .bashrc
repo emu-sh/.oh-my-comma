@@ -1,7 +1,7 @@
 cd /data/openpilot
 
 if ! [ -x "$(command -v powerline)" ]; then
-  source .powerline
+  source /home/.powerline
 fi
 
 function pandaflash() {
