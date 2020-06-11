@@ -23,10 +23,10 @@ function _updatedotfiles(){
 function dotfiles(){
   if [ $# -lt 1 ]; then
     printf "You must specify a command for dotfiles. Some options are
-            \n- update - updates this tool, requires restart of ssh session
-            \n- pandaflash - flashes panda
-            \n- pandaflash2 - flashes panda without make recover
-            \n- debug - debugging tools\n"
+            - update - updates this tool, requires restart of ssh session
+            - pandaflash - flashes panda
+            - pandaflash2 - flashes panda without make recover
+            - debug - debugging tools\n"
     return 1
   fi
 
