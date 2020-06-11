@@ -21,7 +21,8 @@ function _updatedotfiles(){
 }
 
 function dotfiles(){
-  commands="- update - updates this tool, requires restart of ssh session
+  commands="
+  - update - updates this tool, requires restart of ssh session
   - pandaflash - flashes panda
   - pandaflash2 - flashes panda without make recover
   - debug - debugging tools"
