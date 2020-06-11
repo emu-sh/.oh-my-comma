@@ -1,5 +1,14 @@
 cd /data ; cd /data/openpilot  # just in case openpilot is missing, default to /data
 
+commands="
+  - update: updates this tool, requires restart of ssh session
+  - pandaflash: flashes panda
+  - pandaflash2: flashes panda without make recover
+  - debug: debugging tools
+  - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
+debugging_commands="
+  - controls: logs controlsd to /data/output.log"
+
 if [ -x "$(command -v powerline-shell)" ]; then
   source /home/.powerline
 fi
@@ -37,20 +46,26 @@ function _installfork(){
   git clone $1 /data/openpilot
 }
 
+function _debug(){
+  if [ $# -lt 1 ]; then  # verify at least two arguments
+    printf "You must specify a command for dotfiles debug. Some options are:"
+    printf '%s\n' "$debugging_commands"
+    return 1
+  fi
+
+  if [ $1 = "controls" ]; then
+    _controlsdebug
+  else
+    printf "Unsupported debugging command! Try one of these:"
+    printf '%s\n' "$debugging_commands"
+  fi
+}
+
 function _updatedotfiles(){
   git -C /home/comma-dotfiles pull ; python /home/comma-dotfiles/install.py
 }
 
 function emu(){  # main wrapper function
-  commands="
-  - update: updates this tool, requires restart of ssh session
-  - pandaflash: flashes panda
-  - pandaflash2: flashes panda without make recover
-  - debug: debugging tools
-  - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
-  debugging_commands="
-  - controls: logs controlsd to /data/output.log"
-
   if [ $# -lt 1 ]; then
     printf "You must specify a command for dotfiles. Some options are:"
     printf '%s\n' "$commands"
@@ -66,18 +81,7 @@ function emu(){  # main wrapper function
   elif [ $1 = "installfork" ]; then
     _installfork $2
   elif [ $1 = "debug" ]; then
-    if [ $# -lt 2 ]; then  # verify at least two arguments
-      printf "You must specify a command for dotfiles debug. Some options are:"
-      printf '%s\n' "$debugging_commands"
-      return 1
-    fi
-
-    if [ $2 = "controls" ]; then
-      _controlsdebug
-    else
-      printf "Unsupported debugging command! Try one of these:"
-      printf '%s\n' "$debugging_commands"
-    fi
+    _debug $2
   else
     printf "Unsupported command! Try one of these:"
     printf '%s\n' "$commands"
