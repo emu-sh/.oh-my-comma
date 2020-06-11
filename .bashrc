@@ -22,8 +22,8 @@ function _updatedotfiles(){
 
 function dotfiles(){
   if [ $# -lt 1 ]; then
-    printf "You must give a command for dotfiles. Some are\n- update\n- pandaflash\n- debug"
-    exit 1
+    printf "You must give a command for dotfiles. Some options are\n- update\n- pandaflash\n- debug"
+    return 1
   fi
 
 }
