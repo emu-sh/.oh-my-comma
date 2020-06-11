@@ -1,5 +1,7 @@
 ## Comma neOS powerline prompt and helper commands
 
+PRs accepted! What cool shit do you do to your ssh session with your car??
+
 <img src="https://emu.bz/xmf" alt="" />
 
 You should be able to get started with something like:
