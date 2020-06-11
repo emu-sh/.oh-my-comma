@@ -1,6 +1,6 @@
 cd /data/openpilot
 
-if ! [ -x "$(command -v powerline)" ]; then
+if [ -x "$(command -v powerline-shell)" ]; then
   source /home/.powerline
 fi
 
