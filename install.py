@@ -33,4 +33,4 @@ def main():
 if __name__ == "__main__":
   print('Running installation...')
   main()
-  print('Finished!')
+  print('Finished! Remember to reconnect to finish update.')
