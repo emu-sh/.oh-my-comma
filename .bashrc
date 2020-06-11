@@ -31,6 +31,7 @@ function dotfiles(){
   elif [ $1 = "pandaflash" ]; then
     _pandaflash
   elif [ $1 = "pandaflash2" ]; then
+    echo "here"
     _pandaflash2
   fi
 
