@@ -23,8 +23,9 @@ function _installfork(){
     return 1
   fi
   echo "Moving current openpilot installation to /data/openpilot.old"
+  mv /data/openpilot /data/openpilot.old
   echo "Fork will be installed to /data/openpilot"
-  mv /data/openpilot /data/openpilot.old ; git clone $1 /data/openpilot
+  git clone $1 /data/openpilot
 }
 
 function _updatedotfiles(){
