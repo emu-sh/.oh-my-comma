@@ -21,9 +21,9 @@ function _installfork(){
     echo "You must specify a fork URL to clone!"
     return 1
   fi
-  old_dir="/data/openpilot"
+  old_dir="/data/openpilot.old"
   old_count=0
-  if [ -d "/data/openpilot.old" ]; then
+  if [ -d $old_dir ]; then
     while [ -d "/data/openpilot.old${old_count}" ]; do
       old_count=$((old_count+1))
     done
