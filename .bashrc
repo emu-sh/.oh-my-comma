@@ -1,3 +1,4 @@
+cd /data
 cd /data/openpilot
 
 if [ -x "$(command -v powerline-shell)" ]; then
@@ -18,12 +19,12 @@ function _controlsdebug(){
 
 function _installfork(){
   if [ $# -lt 1 ]; then
-      echo "You must specify a fork URL to clone!"
-      return 1
+    echo "You must specify a fork URL to clone!"
+    return 1
   fi
   echo "Moving current openpilot installation to /data/openpilot.old"
+  echo "Fork will be installed to /data/openpilot"
   mv /data/openpilot /data/openpilot.old ; git clone $1 /data/openpilot
-  echo "Cloned fork to /data/openpilot"
 }
 
 function _updatedotfiles(){
