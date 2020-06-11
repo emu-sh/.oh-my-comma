@@ -15,3 +15,7 @@ function pandaflash2() {
 function controlsdebug(){
   pkill -f controlsd ; PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
 }
+
+function updatedotfiles(){
+  git -C /home/comma-dotfiles pull ; python /home/comma-dotfiles/update.py
+}
