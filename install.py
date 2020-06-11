@@ -15,7 +15,7 @@ class RepoInfo:
 def main():
   BASEDIR = os.path.dirname(os.path.abspath(__file__))
   try:
-    has_powerline = bool(subprocess.check_call(['powerline-shell']))
+    has_powerline = not bool(subprocess.check_call(['powerline-shell'], stdout=subprocess.PIPE))
   except:
     has_powerline = False
   print('Has powerline: {}'.format(has_powerline))
