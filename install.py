@@ -11,10 +11,11 @@ class RepoInfo:
 
 
 def main():
-  basedir = os.getcwd()
+  # basedir = os.getcwd()
+  os.chdir(os.path.dirname(os.path.abspath(__file__)))
   for file in RepoInfo.files:
-    print('{}/{}'.format(basedir, file))
-    shutil.copyfile('{}/{}'.format(basedir, file), basedir)
+    print(file)
+    shutil.copyfile(file, RepoInfo.basedir)
 
 
 if __name__ == "__main__":
