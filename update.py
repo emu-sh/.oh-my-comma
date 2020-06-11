@@ -4,8 +4,8 @@ from install import main as install
 
 
 def main():
-  # if not os.path.exists('/home/comma-dotfiles'):
-  #   raise Exception('Please run install.py first!')
+  if not os.path.exists('/home/comma-dotfiles'):
+    raise Exception('Please install to /home/comma-dotfiles!')
 
   os.chdir('cd /home/comma-dotfiles')
   r = subprocess.check_call(['git pull'])
