@@ -1,0 +1,16 @@
+{
+  "segments": [
+    "virtual_env",
+    "cwd",
+    "git",
+    "git_stash",
+    "set_term_title",
+    "root"
+  ],
+  "mode": "patched",
+  "cwd": {
+    "mode": "flat",
+    "max_depth": 4
+  },
+  "theme": "default"
+}
