@@ -14,7 +14,10 @@ class RepoInfo:
 
 def main():
   BASEDIR = os.path.dirname(os.path.abspath(__file__))
-  has_powerline = bool(subprocess.check_call(['powerline-shell']))
+  try:
+    has_powerline = bool(subprocess.check_call(['powerline-shell']))
+  except:
+    has_powerline = False
   print('Has powerline: {}'.format(has_powerline))
   files = RepoInfo.files_powerline if has_powerline else RepoInfo.files
   for file in files:
