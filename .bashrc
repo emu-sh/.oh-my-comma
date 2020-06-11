@@ -1,5 +1,4 @@
-cd /data
-cd /data/openpilot
+cd /data ; cd /data/openpilot  # just in case openpilot is missing, default to /data
 
 if [ -x "$(command -v powerline-shell)" ]; then
   source /home/.powerline
@@ -22,17 +21,24 @@ function _installfork(){
     echo "You must specify a fork URL to clone!"
     return 1
   fi
-  echo "Moving current openpilot installation to /data/openpilot.old"
-  mv /data/openpilot /data/openpilot.old
-  echo "Fork will be installed to /data/openpilot"
-  git clone $1 /data/openpilot
+  old_count=0
+  if [ -d "/data/openpilot.old" ]; then
+    while [ -d "/data/openpilot.old${old_count}" ]; do
+      old_count=$((old_count+1))
+    done
+  fi
+  echo "using: /data/openpilot.old${old_count}"
+  #echo "Moving current openpilot installation to /data/openpilot.old"
+  #mv /data/openpilot /data/openpilot.old
+  #echo "Fork will be installed to /data/openpilot"
+  #git clone $1 /data/openpilot
 }
 
 function _updatedotfiles(){
   git -C /home/comma-dotfiles pull ; python /home/comma-dotfiles/install.py
 }
 
-function dotfiles(){  # main wrapper function
+function emu(){  # main wrapper function
   commands="
   - update: updates this tool, requires restart of ssh session
   - pandaflash: flashes panda
