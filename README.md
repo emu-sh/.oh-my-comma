@@ -1,12 +1,10 @@
-## Comma neOS powerline prompt and helper commands
-
-PRs accepted! What cool shit do you do to your ssh session with your car??
+## comma.ai command-line additions and practical tooling for all
 
 improving the dev workflow friction is paramount to innovating openpilot
 
-<img src="https://emu.bz/xmf" alt="" />
+***PRs accepted!** What cool shit do you do to your ssh session with your car??*
 
-<img src="https://thumbs.gfycat.com/VapidRipeAquaticleech-size_restricted.gif" alt ="" />
+<img src="https://emu.bz/xmf" alt="" />
 
 # Getting Started
 
@@ -14,6 +12,8 @@ improving the dev workflow friction is paramount to innovating openpilot
  bash -c "$(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)"
  source /home/.bashrc
 ```
+
+<img src="https://thumbs.gfycat.com/VapidRipeAquaticleech-size_restricted.gif" alt ="" />
 
 # Updating
 
@@ -23,7 +23,7 @@ Once you've installed, you can update via the utility
 emu update
 ```
 
-This will essentially perform a git pull and replace all current files in the `/data/community/.oh-my-comma` directory with new ones, if an update is available.
+This will essentially perform a git pull and replace all current files in the `/data/community/.oh-my-comma` directory with new ones, if an update is available, as well as check the integrity of the files that must remain elsewhere on the filesystem such as the .bashrc and powerline configs
 
 ---
 Read the README for <https://github.com/b-ryan/powerline-shell.> You will need to [install the fonts for your terminal](https://github.com/powerline/fonts)
