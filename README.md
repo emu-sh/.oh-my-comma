@@ -7,45 +7,50 @@ improving the dev workflow friction is paramount to innovating openpilot
 <img src="https://emu.bz/xmf" alt="" />
 
 # Getting Started
-```
-mount -o rw,remount /system
-pip install powerline-shell  # optional!
-cd /home
-git clone https://github.com/AskAlice/comma-dotfiles
-python /home/comma-dotfiles/install.py
-```
-**Note, running `install.py` assumes you used the above command to clone this repository to `/home/comma-dotfiles`. If you installed `powerline`, it will be automatically detected and the config files will be copied.**
 
-Reboot or remount your system as read-only after installing to ensure your /system partiton doesn't get accidentally wrecked by some stupid change other than what we've done here.
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)"
+```
 
 # Updating
-To update `comma-dotfiles`, run the `updatedotfiles` command via:
+
+Once you've installed, you can update via the utility
+
 ```
-updatedotfiles
+emu update
 ```
-This will essentially perform a git pull and replace all current files in the `/home` directory with new ones, if an update is available.
+
+This will essentially perform a git pull and replace all current files in the `/data/community/.oh-my-comma` directory with new ones, if an update is available.
 
 ---
-Read the README for https://github.com/b-ryan/powerline-shell. You will need to [install the fonts for your terminal](https://github.com/powerline/fonts)
+Read the README for <https://github.com/b-ryan/powerline-shell.> You will need to [install the fonts for your terminal](https://github.com/powerline/fonts)
 
-The goal is to get `.bashrc` and the `.config` folder in the `/home/` folder
-
-The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in!
+The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in.
 
 # Commands
+
+### General
+
+- `emu installfork https://github.com/...`: Clones the fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` before cloning
+
 ### Panda
-- `pandaflash`: Flashes the panda
-- `pandaflash2`: Flashes the panda without `make recover`
+
+- `emu pandaflash`: Flashes the panda
+- `emu pandaflash2`: Flashes the panda without `make recover`
 
 ### Debugging
-- `controlsdebug`: You can debug controlsd and output it to a log of `/data/output.log`
+
+- `emu debug controls`: You can debug controlsd and output it to a log file `/data/output.log`
 
 # Git config
+
 While you're in a rw filesystem, you might as well edit your git config so you can push your changes up easily.
+
 ```
 git config --global user.name "your_username"
 git config --global user.email "your_email_address@example.com"
 git config --global credential.helper store
 git pull
 ```
+
 if the git pull fails, just do some action on git that requires authentication, and you should be good to go
