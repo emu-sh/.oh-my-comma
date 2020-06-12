@@ -67,16 +67,16 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
     printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n\
-cd /data ; cd /data/openpilot  \# just in case openpilot is missing, default to /data\n\n \
-\# This is your space to configure your terminal to your liking\n\n" >>  ${COMMUNITY_BASHRC_PATH}
+cd /data ; cd /data/openpilot # just in case openpilot is missing, default to /data\n\n \
+# This is your space to configure your terminal to your liking\n\n" >>  ${COMMUNITY_BASHRC_PATH}
   fi
 else
   echo "Creating the community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   touch ${COMMUNITY_BASHRC_PATH}
   printf '#!/bin/sh\n' >> ${COMMUNITY_BASHRC_PATH}
   printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n\
-cd /data ; cd /data/openpilot  \# just in case openpilot is missing, default to /data\n\n \
-\# This is your space to configure your terminal to your liking\n\n" >>  ${COMMUNITY_BASHRC_PATH}
+cd /data ; cd /data/openpilot # just in case openpilot is missing, default to /data\n\n \
+# This is your space to configure your terminal to your liking\n\n" >>  ${COMMUNITY_BASHRC_PATH}
 fi
 
 #Post-install
