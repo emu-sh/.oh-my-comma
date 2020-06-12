@@ -1,9 +1,13 @@
 #!/bin/sh
 SYSTEM_BASHRC_PATH=/home/.bashrc
+COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
-mkdir /data/community
+if [ ! -d "/data/community" ]; then
+  mkdir /data/community
+fi
+
 cd /data/community
 
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
@@ -20,6 +24,7 @@ if [ ! -x "$(command -v powerline-shell)" ]; then
     * ) echo "Skipping...";;
   esac
 fi
+
 echo "Installing emu utilities..."
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   echo "Your system /home/.bashrc exists..."
@@ -34,6 +39,10 @@ if [ -f "$SYSTEM_BASHRC_PATH" ]; then
     mv ${SYSTEM_BASHRC_PATH} ${COMMUNITY_BASHRC_PATH}
     echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
+    echo "Creating a symlink of /data/community/.config to /home/.config"
+    ln -s /data/community/.config /home/.config
+    echo "Creating a symlink of /data/community/.config/powerline-shell to /home/.oh-my-comma/.config/powerline-shell"
+    ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /data/community/.config/powerline-shell
     echo "remounting /system as read-only"
     mount -o r,remount /system
   fi
@@ -50,7 +59,7 @@ else
   mount -o r,remount /system
 fi
 
-
+#Coping user bashrc, outside of system partition
 if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
   if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu-utils.sh'
   then
@@ -73,10 +82,13 @@ else
   # This is your space to configure your terminal to your liking \
   " >>  ${COMMUNITY_BASHRC_PATH}
 fi
+
+#Post-install
 echo "Contents of system bashrc:"
 cat ${SYSTEM_BASHRC_PATH}
 
 echo "Contents of community bashrc:"
 cat ${COMMUNITY_BASHRC_PATH}
 
+echo "Sourcing /home/.bashrc to init the changes made during installation"
 source /home/.bashrc
