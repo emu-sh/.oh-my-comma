@@ -17,7 +17,9 @@ esac
 echo "Installing emu utilities..."
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   echo "Your system /home/.bashrc exists..."
-  if [! cmp ${SYSTEM_BASHRC_PATH} ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system >/dev/null 2>&1]; then
+  if  [grep -q '/home/.bashrc' -e 'source /data/community/.bashrc']; then
+    echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
+  else
     echo "Your bashrc file is different than the one on the repo. neos 15 will redirect all users to store their bashrc in /data/community"
     echo "remounting /system as rewritable (until neos 15)"
     mount -o rw,remount /system
@@ -27,8 +29,6 @@ if [ -f "$SYSTEM_BASHRC_PATH" ]; then
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
     echo "remounting /system as read-only"
     mount -o r,remount /system
-  else
-    echo "Your /home/.bashrc is identical to the one on this repo. Skipping system bashrc installation"
   fi
 else
   echo "remounting /system as rewritable (until neos 15)"
@@ -50,6 +50,7 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
     echo "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)" >> ${COMMUNITY_BASHRC_PATH}
+  fi
 else
   echo "Creating user .bashrc to ${COMMUNITY_BASHRC_PATH}"
   touch ${COMMUNITY_BASHRC_PATH}
