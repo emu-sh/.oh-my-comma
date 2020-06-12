@@ -6,6 +6,8 @@ export OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&
 
 source ${OH_MY_COMMA_PATH}/powerline.sh
 
+source ${OH_MY_COMMA_PATH}/aliases.sh
+
 commands="
   - update: updates this tool, requires restart of ssh session
   - pandaflash: flashes panda
