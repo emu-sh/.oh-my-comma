@@ -39,8 +39,8 @@ if [ -f "$SYSTEM_BASHRC_PATH" ]; then
     mv ${SYSTEM_BASHRC_PATH} ${COMMUNITY_BASHRC_PATH}
     echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
-    echo "Creating a symlink of /data/community/.config to /home/.config"
-    ln -s ${COMMUNITY_PATH}/.config /home/.config
+    echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
+    ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
     echo "remounting /system as read-only"
     mount -o r,remount /system
   fi
@@ -49,8 +49,8 @@ else
   mount -o rw,remount /system
   echo "Creating a .bashrc in /home/ that sources the community bashrc in /data/community/"
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
-  echo "Creating a symlink of /data/community/.config to /home/.config"
-  ln -s ${COMMUNITY_PATH}/.config /home/.config
+  echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
+  ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
   echo "remounting /system as read-only"
   mount -o r,remount /system
 fi
