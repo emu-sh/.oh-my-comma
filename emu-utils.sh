@@ -4,6 +4,8 @@ export COMMUNITY_PATH=/data/community
 export COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 export OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+source powerline.sh
+
 commands="
   - update: updates this tool, requires restart of ssh session
   - pandaflash: flashes panda
