@@ -35,11 +35,11 @@ fi
 
 echo "Installing emu utilities..."
 
-echo "remounting /system as rewritable (until neos 15)"
+#echo "Remounting /system as rewritable (until neos 15)"
 mount -o rw,remount /system
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
-  echo "Your system /home/.bashrc exists..."
+#  echo "Your system /home/.bashrc exists..."
   if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
   then
     echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
@@ -59,11 +59,11 @@ echo "Checking /home/.config symlink..."
 if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
   echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
   ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
-  else
+else
   echo "Symlink check passed"
 fi
 
-echo "remounting /system as read-only"
+#echo "Remounting /system as read-only"
 mount -o r,remount /system
 
 #Coping user bashrc, outside of system partition
