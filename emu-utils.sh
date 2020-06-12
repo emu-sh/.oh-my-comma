@@ -65,9 +65,9 @@ function _debug(){
 }
 
 function _opedit() {
-  file=/data/openpilot/op_edit.py
-  if [ -f "$FILE" ]; then
-    python /data/openpilot/op_edit.py
+  $opEditFile=/data/openpilot/op_edit.py
+  if [ -f "$opEditFile" ]; then
+    python $opEditFile
   else
     echo "Error, current installed fork doesn't have opEdit!"
   fi
