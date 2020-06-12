@@ -2,7 +2,7 @@
 SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
-OH_MY_COMMA_PATH=/data/community/.oh-my-comma
+OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 commands="
   - update: updates this tool, requires restart of ssh session
