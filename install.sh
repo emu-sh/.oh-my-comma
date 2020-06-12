@@ -94,7 +94,7 @@ fi
 echo "Sourcing /home/.bashrc to init the changes made during installation"
 source /home/.bashrc
 if [ update = true ]; then
-  echo "Successfully updated emu utilities!"
+  printf "\nSuccessfully updated emu utilities!\n"
 else
-  echo "Successfully installed emu utilities!"
+  printf "\nSuccessfully installed emu utilities!\n"
 fi
