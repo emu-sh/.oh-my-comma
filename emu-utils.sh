@@ -85,8 +85,6 @@ function emu(){  # main wrapper function
   fi
 
   command="${1,,}"
-  echo "command: $command"
-
   if [ $command = "update" ]; then
     _updateohmycomma
   elif [ $command = "pandaflash" ]; then
