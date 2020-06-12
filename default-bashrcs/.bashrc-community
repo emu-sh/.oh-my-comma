@@ -1,0 +1,7 @@
+source /data/community/.oh-my-comma/emu-utils.sh
+
+# This is your space to configure your terminal to your liking
+
+# Change default working directory
+# Just in case openpilot is missing, default to /data
+cd /data ; cd /data/openpilot
