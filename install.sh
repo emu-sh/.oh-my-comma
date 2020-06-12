@@ -1,13 +1,18 @@
 #!/bin/sh
-cd /data
-mkdir community
-cd community
-echo "Cloning..."
-git clone -b devel https://github.com/AskAlice/.oh-my-comma.git
-cd .oh-my-comma
 SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
+
+mkdir /data/community
+cd /data/community
+
+if [ ! -d "$OH_MY_COMMA_PATH" ]; then
+  echo "Cloning..."
+  git clone -b devel https://github.com/AskAlice/.oh-my-comma.git
+fi
+
+cd ${OH_MY_COMMA_PATH}
+
 if [ -x "$(command -v powerline-shell)" ]; then
   read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]  >" choice
   case $choices in
