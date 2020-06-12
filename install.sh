@@ -17,7 +17,7 @@ cd /data/community
 
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   echo "Cloning..."
-  git clone -b master https://github.com/ShaneSmiskol/.oh-my-comma.git
+  git clone -b devel https://github.com/AskAlice/.oh-my-comma.git
 fi
 
 cd ${OH_MY_COMMA_PATH}
