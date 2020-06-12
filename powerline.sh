@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [ -x "$(command -v powerline-shell)" ]; then
   function _update_ps1() {
     PS1=$(powerline-shell $?)

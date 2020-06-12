@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
