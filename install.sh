@@ -8,6 +8,7 @@ update=false
 if [ $# -lt 1 ]; then
     if [ $1 = "update" ]; then
       update=true
+      echo "UPDATING"
   fi
 fi
 
