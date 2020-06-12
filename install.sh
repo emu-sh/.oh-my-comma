@@ -9,7 +9,7 @@ SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 COMMUNITY_PROFILE_PATH=/data/community/.comma-profile.sh
-read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]" choice
+read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]  >" choice
 case $choices in
   y|Y ) pip install powerline-shell;;
   * ) echo "Skipping...";;
@@ -17,7 +17,7 @@ esac
 echo "Installing emu utilities..."
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   echo "Your system /home/.bashrc exists..."
-  if ! cmp ${SYSTEM_BASHRC_PATH} ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system >/dev/null 2>&1 then
+  if [! cmp ${SYSTEM_BASHRC_PATH} ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system >/dev/null 2>&1]; then
     echo "Your bashrc file is different than the one on the repo. neos 15 will redirect all users to store their bashrc in /data/community"
     echo "remounting /system as rewritable (until neos 15)"
     mount -o rw,remount /system
@@ -45,7 +45,7 @@ fi
 
 
 if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
-  if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu-utils.sh'
+  if [grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu-utils.sh']; then
     echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
