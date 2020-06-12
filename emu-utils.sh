@@ -98,7 +98,7 @@ function emu(){  # main wrapper function
   elif [ $command = "debug" ]; then
     _debug $2
   elif [ $command = "opedit" ]; then
-    _opEdit
+    _opedit
   else
     printf "Unsupported command! Try one of these:"
     printf '%s\n' "$commands"
