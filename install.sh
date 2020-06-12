@@ -4,6 +4,8 @@ COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
+echo "test: $1";
+
 if [ ! -d "/data/community" ]; then
   mkdir /data/community
 fi
