@@ -31,22 +31,20 @@ Read the README for <https://github.com/b-ryan/powerline-shell.> You will need t
 The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in.
 
 # Commands
-
 ### General
-
 - `emu installfork https://github.com/...`: Clones the fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` before cloning
+- `emu opEdit`: Opens the opParams editing interface if available
 
 ### Panda
-
 - `emu pandaflash`: Flashes the panda
 - `emu pandaflash2`: Flashes the panda without `make recover`
 
 ### Debugging
-
 - `emu debug controls`: You can debug controlsd and output it to a log file `/data/output.log`
 
-# Git config
+**All commands are case-insensitive!**
 
+# Git config
 While you're in a rw filesystem, you might as well edit your git config so you can push your changes up easily.
 
 ```

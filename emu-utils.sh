@@ -11,7 +11,8 @@ commands="
   - pandaflash: flashes panda
   - pandaflash2: flashes panda without make recover
   - debug: debugging tools
-  - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
+  - installfork: Specify the fork URL after. Moves openpilot to openpilot.old
+  - opEdit: Opens the opParams editing interface if available"
 debugging_commands="
   - controls: logs controlsd to /data/output.log"
 
@@ -63,6 +64,15 @@ function _debug(){
   fi
 }
 
+function _opedit() {
+  opEditFile=/data/openpilot/op_edit.py
+  if [ -f "$opEditFile" ]; then
+    python $opEditFile
+  else
+    echo "Error, current installed fork doesn't have opEdit!"
+  fi
+}
+
 function _updateohmycomma(){
   source /data/community/.oh-my-comma/update.sh
 }
@@ -74,16 +84,19 @@ function emu(){  # main wrapper function
     return 1
   fi
 
-  if [ $1 = "update" ]; then
+  command="${1,,}"  # str.lower()
+  if [ $command = "update" ]; then
     _updateohmycomma
-  elif [ $1 = "pandaflash" ]; then
+  elif [ $command = "pandaflash" ]; then
     _pandaflash
-  elif [ $1 = "pandaflash2" ]; then
+  elif [ $command = "pandaflash2" ]; then
     _pandaflash2
-  elif [ $1 = "installfork" ]; then
+  elif [ $command = "installfork" ]; then
     _installfork $2
-  elif [ $1 = "debug" ]; then
+  elif [ $command = "debug" ]; then
     _debug $2
+  elif [ $command = "opedit" ]; then
+    _opedit
   else
     printf "Unsupported command! Try one of these:"
     printf '%s\n' "$commands"
