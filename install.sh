@@ -9,7 +9,7 @@ if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
 fi
 
-if [ ! update ] then
+if [ ! update ]; then
   [ "$DEBUG" == 'true' ] && set -x
 fi
 
@@ -21,7 +21,7 @@ cd /data/community
 
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   echo "Cloning..."
-  git clone -b devel https://github.com/AskAlice/.oh-my-comma.git
+  git clone -b master https://github.com/AskAlice/.oh-my-comma.git
 fi
 
 cd ${OH_MY_COMMA_PATH}
@@ -101,6 +101,11 @@ else
   printf "\nSuccessfully installed emu utilities!\n"
 fi
 
-if [ ! update ] then
+
+if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then
+  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
+fi
+
+if [ ! update ]; then
   set +x
 fi
