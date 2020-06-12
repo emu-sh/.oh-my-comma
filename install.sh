@@ -40,9 +40,7 @@ if [ -f "$SYSTEM_BASHRC_PATH" ]; then
     echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
     echo "Creating a symlink of /data/community/.config to /home/.config"
-    ln -s /data/community/.config /home/.config
-    echo "Creating a symlink of /data/community/.config/powerline-shell to /home/.oh-my-comma/.config/powerline-shell"
-    ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /data/community/.config/powerline-shell
+    ln -s ${COMMUNITY_PATH}/.config /home/.config
     echo "remounting /system as read-only"
     mount -o r,remount /system
   fi
@@ -52,9 +50,7 @@ else
   echo "Creating a .bashrc in /home/ that sources the community bashrc in /data/community/"
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
   echo "Creating a symlink of /data/community/.config to /home/.config"
-  ln -s /data/community/.config /home/.config
-  echo "Creating a symlink of /data/community/.config/powerline-shell to /home/.oh-my-comma/.config/powerline-shell"
-  ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /data/community/.config/powerline-shell
+  ln -s ${COMMUNITY_PATH}/.config /home/.config
   echo "remounting /system as read-only"
   mount -o r,remount /system
 fi
