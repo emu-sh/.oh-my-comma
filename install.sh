@@ -6,7 +6,7 @@ OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
-  update=true
+  update=false
 fi
 
 if [ ! -d "/data/community" ]; then
