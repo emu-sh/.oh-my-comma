@@ -5,12 +5,9 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 update=false
-echo "START"
 if [ $# -ge 1 ]; then
-  echo "FOUND ARGS"
     if [ $1 = "update" ]; then
       update=true
-      echo "UPDATING"
   fi
 fi
 
@@ -27,7 +24,7 @@ fi
 
 cd ${OH_MY_COMMA_PATH}
 
-if [ ! -x "$(command -v powerline-shell)" ] && [ update = false ]; then
+if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[y/n] > " choices
   case $choices in
