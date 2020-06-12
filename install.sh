@@ -49,8 +49,7 @@ else
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
 fi
 
-if readlink -f /home/.config != ${OH_MY_COMMA_PATH}/.config
-then
+if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
   echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
   ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
 fi
