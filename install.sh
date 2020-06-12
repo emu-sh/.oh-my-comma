@@ -43,16 +43,18 @@ if [ -f "$SYSTEM_BASHRC_PATH" ]; then
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
   fi
 else
-  echo "remounting /system as rewritable (until neos 15)"
-  mount -o rw,remount /system
   echo "Creating a .bashrc in /home/ that sources the community bashrc in /data/community/"
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
 fi
 
+echo "Checking /home/.config symlink..."
 if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
   echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
   ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
+  else
+  echo "Symlink check passed"
 fi
+
 echo "remounting /system as read-only"
 mount -o r,remount /system
 
