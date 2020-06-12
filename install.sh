@@ -4,6 +4,11 @@ COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
+update=false
+if [ $# -ge 1 ] && [ $1 = "update" ]; then
+  update=true
+fi
+
 if [ ! -d "/data/community" ]; then
   mkdir /data/community
 fi
@@ -17,8 +22,9 @@ fi
 
 cd ${OH_MY_COMMA_PATH}
 
-if [ ! -x "$(command -v powerline-shell)" ]; then
-  read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]  >" choices
+if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
+  echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
+  read -p "[y/n] > " choices
   case $choices in
     y|Y ) pip install powerline-shell;;
     * ) echo "Skipping...";;
@@ -27,7 +33,7 @@ fi
 
 echo "Installing emu utilities..."
 
-echo "remounting /system as rewritable (until neos 15)"
+echo "Remounting /system as rewritable (until neos 15)"
 mount -o rw,remount /system
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
@@ -51,11 +57,11 @@ echo "Checking /home/.config symlink..."
 if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
   echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
   ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
-  else
+else
   echo "Symlink check passed"
 fi
 
-echo "remounting /system as read-only"
+echo "Remounting /system as read-only"
 mount -o r,remount /system
 
 #Coping user bashrc, outside of system partition
@@ -75,11 +81,18 @@ else
 fi
 
 #Post-install
-printf "Contents of system bashrc:\n"
-cat ${SYSTEM_BASHRC_PATH}
-printf "\nEnd of $SYSTEM_BASHRC_PATH\nContents of community bashrc:\n"
-cat ${COMMUNITY_BASHRC_PATH}
-printf "End of $COMMUNITY_BASHRC_PATH\n"
+if [ $update = false ]; then
+  printf "Contents of system bashrc:\n"
+  cat ${SYSTEM_BASHRC_PATH}
+  printf "\nEnd of $SYSTEM_BASHRC_PATH\nContents of community bashrc:\n"
+  cat ${COMMUNITY_BASHRC_PATH}
+  printf "End of $COMMUNITY_BASHRC_PATH\n"
+fi
 
 echo "Sourcing /home/.bashrc to init the changes made during installation"
 source /home/.bashrc
+if [ $update = true ]; then
+  printf "\nSuccessfully updated emu utilities!\n"
+else
+  printf "\nSuccessfully installed emu utilities!\n"
+fi
