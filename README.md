@@ -6,10 +6,13 @@ improving the dev workflow friction is paramount to innovating openpilot
 
 <img src="https://emu.bz/xmf" alt="" />
 
+<img src="https://thumbs.gfycat.com/VapidRipeAquaticleech-size_restricted.gif" alt ="" />
+
 # Getting Started
 
 ```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)"
+ bash -c "$(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)"
+ source /home/.bashrc
 ```
 
 # Updating
