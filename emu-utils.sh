@@ -1,5 +1,4 @@
-cd /data ; cd /data/openpilot  # just in case openpilot is missing, default to /data
-
+#!/bin/sh
 commands="
   - update: updates this tool, requires restart of ssh session
   - pandaflash: flashes panda
@@ -8,10 +7,6 @@ commands="
   - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
 debugging_commands="
   - controls: logs controlsd to /data/output.log"
-
-if [ -x "$(command -v powerline-shell)" ]; then
-  source /home/.powerline
-fi
 
 function _pandaflash() {
   cd /data/openpilot/panda/board && make recover
@@ -62,7 +57,7 @@ function _debug(){
 }
 
 function _updatedotfiles(){
-  git -C /home/comma-dotfiles pull ; python /home/comma-dotfiles/install.py
+  git -C /data/community/.oh-my-comma pull ; python /data/community/.oh-my-comma/install.py
 }
 
 function emu(){  # main wrapper function
