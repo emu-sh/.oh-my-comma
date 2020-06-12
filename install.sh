@@ -66,40 +66,24 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
     echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
-    echo " \
-  $(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community) \
-  cd /data ; cd /data/openpilot  # just in case openpilot is missing, default to /data \
-  #This is your space to configure your terminal to your liking \
-  " >> ${COMMUNITY_BASHRC_PATH}
-  fi
+    printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n \
+    cd /data ; cd /data/openpilot  \# just in case openpilot is missing, default to /data\n\n \
+    \# This is your space to configure your terminal to your liking\n\n" >>  ${COMMUNITY_BASHRC_PATH}
 else
   echo "Creating the community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   touch ${COMMUNITY_BASHRC_PATH}
-  echo -e '#!/bin/sh' >> ${COMMUNITY_BASHRC_PATH}
-  echo " \
-  $(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community) \
-  cd /data ; cd /data/openpilot  # just in case openpilot is missing, default to /data \
-  # This is your space to configure your terminal to your liking \
-  " >>  ${COMMUNITY_BASHRC_PATH}
+  printf '#!/bin/sh\n' >> ${COMMUNITY_BASHRC_PATH}
+  printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n \
+  cd /data ; cd /data/openpilot  \# just in case openpilot is missing, default to /data\n\n \
+  \# This is your space to configure your terminal to your liking\n\n" >>  ${COMMUNITY_BASHRC_PATH}
 fi
 
 #Post-install
-echo "Contents of system bashrc:\
-\
-"
+printf "Contents of system bashrc:\n"
 cat ${SYSTEM_BASHRC_PATH}
-echo " \
-End of $SYSTEM_BASHRC_PATH
-\
-\
-Contents of community bashrc: \
-\
-"
+printf "\n\nEnd of $SYSTEM_BASHRC_PATH\n\nContents of community bashrc:\n\n"
 cat ${COMMUNITY_BASHRC_PATH}
-echo " \
-\
-End of $COMMUNITY_BASHRC_PATH
-"
+printf "\n\nEnd of $COMMUNITY_BASHRC_PATH\n"
 
 echo "Sourcing /home/.bashrc to init the changes made during installation"
 source /home/.bashrc
