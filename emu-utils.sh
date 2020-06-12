@@ -1,4 +1,9 @@
 #!/bin/sh
+SYSTEM_BASHRC_PATH=/home/.bashrc
+COMMUNITY_PATH=/data/community
+COMMUNITY_BASHRC_PATH=/data/community/.bashrc
+OH_MY_COMMA_PATH=/data/community/.oh-my-comma
+
 commands="
   - update: updates this tool, requires restart of ssh session
   - pandaflash: flashes panda
@@ -57,7 +62,7 @@ function _debug(){
 }
 
 function _updateohmycomma(){
-  git -C /data/community/.oh-my-comma pull ;
+  source ${OH_MY_COMMA_PATH}/update.sh
 }
 
 function emu(){  # main wrapper function
