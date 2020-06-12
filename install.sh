@@ -5,6 +5,7 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 update=false
+echo "START"
 if [ $# -lt 1 ]; then
   echo "FOUND ARGS"
     if [ $1 = "update" ]; then
