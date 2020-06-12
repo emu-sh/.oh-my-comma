@@ -9,7 +9,7 @@ improving the dev workflow friction is paramount to innovating openpilot
 # Getting Started
 
 ```
- bash -c "$(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)"
+ bash <(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)
  source /home/.bashrc
 ```
 
