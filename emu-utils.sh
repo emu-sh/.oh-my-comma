@@ -64,7 +64,7 @@ function _debug(){
   fi
 }
 
-function opedit() {
+function _opedit() {
   file=/data/openpilot/op_edit.py
   if [ -f "$FILE" ]; then
     python /data/openpilot/op_edit.py
