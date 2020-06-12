@@ -6,6 +6,7 @@ OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 update=false
 if [ $# -lt 1 ]; then
+  echo "FOUND ARGS"
     if [ $1 = "update" ]; then
       update=true
       echo "UPDATING"
