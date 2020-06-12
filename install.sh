@@ -6,7 +6,7 @@ OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
-  update=false
+  update=true
 fi
 
 if [ ! -d "/data/community" ]; then
@@ -33,11 +33,11 @@ fi
 
 echo "Installing emu utilities..."
 
-#echo "Remounting /system as rewritable (until neos 15)"
+echo "Remounting /system as rewritable (until neos 15)"
 mount -o rw,remount /system
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
-#  echo "Your system /home/.bashrc exists..."
+  echo "Your system /home/.bashrc exists..."
   if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
   then
     echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
@@ -61,7 +61,7 @@ else
   echo "Symlink check passed"
 fi
 
-#echo "Remounting /system as read-only"
+echo "Remounting /system as read-only"
 mount -o r,remount /system
 
 #Coping user bashrc, outside of system partition
