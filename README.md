@@ -9,34 +9,23 @@ improving the dev workflow friction is paramount to innovating openpilot
 # Getting Started
 
 ```
-mount -o rw,remount /system
-pip install powerline-shell  # optional!
-cd /data
-mkdir community
-git clone https://github.com/AskAlice/.oh-my-comma.git
-python /data/community/.oh-my-comma/install.py
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)"
 ```
-
-**Note, running `install.py` assumes you used the above command to clone this repository to `/home/.oh-my-comma`. If you installed `powerline`, it will be automatically detected and the config files will be copied.**
-
-Reboot or remount your system as read-only after installing to ensure your /system partiton doesn't get accidentally wrecked by some stupid change other than what we've done here.
 
 # Updating
 
-To update `.oh-my-comma`, run the `update` command via:
+Once you've installed, you can update via the utility
 
 ```
-dotfiles update
+emu update
 ```
 
-This will essentially perform a git pull and replace all current files in the `/home` directory with new ones, if an update is available.
+This will essentially perform a git pull and replace all current files in the `/data/community/.oh-my-comma` directory with new ones, if an update is available.
 
 ---
 Read the README for <https://github.com/b-ryan/powerline-shell.> You will need to [install the fonts for your terminal](https://github.com/powerline/fonts)
 
-The goal is to get `.bashrc` and the `.config` folder in the `/home/` folder
-
-The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in!
+The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in.
 
 # Commands
 
