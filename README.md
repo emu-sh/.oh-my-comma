@@ -4,6 +4,8 @@ improving the dev workflow friction is paramount to innovating openpilot
 
 ***PRs accepted!** What cool shit do you do to your ssh session with your car??*
 
+This repo is very much in active development! Expect it to evolve greatly over the next few weeks
+
 <img src="https://emu.bz/xmf" alt="" />
 
 # Getting Started
