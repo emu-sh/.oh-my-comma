@@ -9,6 +9,10 @@ if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
 fi
 
+if [ ! update ] then
+  [ "$DEBUG" == 'true' ] && set -x
+fi
+
 if [ ! -d "/data/community" ]; then
   mkdir /data/community
 fi
@@ -24,7 +28,7 @@ cd ${OH_MY_COMMA_PATH}
 
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
-  read -p "[y/n] > " choices
+  read -p "[Y/n] > " choices
   case $choices in
     y|Y ) pip install powerline-shell;;
     * ) echo "Skipping...";;
@@ -95,4 +99,8 @@ if [ $update = true ]; then
   printf "\nSuccessfully updated emu utilities!\n"
 else
   printf "\nSuccessfully installed emu utilities!\n"
+fi
+
+if [ ! update ] then
+  set +x
 fi
