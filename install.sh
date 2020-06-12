@@ -7,7 +7,7 @@ OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 update=false
 if [ $# -ge 1 ]; then
     if [ $1 = "update" ]; then
-      update=false
+      update=true
   fi
 fi
 
@@ -83,7 +83,7 @@ else
 fi
 
 #Post-install
-if [ update = false ]; then
+if [ $update = false ]; then
   printf "Contents of system bashrc:\n"
   cat ${SYSTEM_BASHRC_PATH}
   printf "\nEnd of $SYSTEM_BASHRC_PATH\nContents of community bashrc:\n"
@@ -93,7 +93,7 @@ fi
 
 echo "Sourcing /home/.bashrc to init the changes made during installation"
 source /home/.bashrc
-if [ update = true ]; then
+if [ $update = true ]; then
   printf "\nSuccessfully updated emu utilities!\n"
 else
   printf "\nSuccessfully installed emu utilities!\n"
