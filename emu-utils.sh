@@ -12,7 +12,7 @@ commands="
   - pandaflash2: flashes panda without make recover
   - debug: debugging tools
   - installfork: Specify the fork URL after. Moves openpilot to openpilot.old
-  - opEdit: Opens the opParams editing interface"
+  - opEdit: Opens the opParams editing interface if available"
 debugging_commands="
   - controls: logs controlsd to /data/output.log"
 
