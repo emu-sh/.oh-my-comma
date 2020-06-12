@@ -1,8 +1,8 @@
 #!/bin/sh
 SYSTEM_BASHRC_PATH=/home/.bashrc
-COMMUNITY_PATH=/data/community
-COMMUNITY_BASHRC_PATH=/data/community/.bashrc
-OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export COMMUNITY_PATH=/data/community
+export COMMUNITY_BASHRC_PATH=/data/community/.bashrc
+export OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 commands="
   - update: updates this tool, requires restart of ssh session
