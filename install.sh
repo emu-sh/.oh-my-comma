@@ -18,7 +18,7 @@ fi
 cd ${OH_MY_COMMA_PATH}
 
 if [ ! -x "$(command -v powerline-shell)" ]; then
-  read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]  >" choice
+  read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]  >" choices
   case $choices in
     y|Y ) pip install powerline-shell;;
     * ) echo "Skipping...";;
