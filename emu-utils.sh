@@ -87,17 +87,17 @@ function emu(){  # main wrapper function
   command="${1,,}"
   echo "command: $command"
 
-  if [ $1 = "update" ]; then
+  if [ $command = "update" ]; then
     _updateohmycomma
-  elif [ $1 = "pandaflash" ]; then
+  elif [ $command = "pandaflash" ]; then
     _pandaflash
-  elif [ $1 = "pandaflash2" ]; then
+  elif [ $command = "pandaflash2" ]; then
     _pandaflash2
-  elif [ $1 = "installfork" ]; then
+  elif [ $command = "installfork" ]; then
     _installfork $2
-  elif [ $1 = "debug" ]; then
+  elif [ $command = "debug" ]; then
     _debug $2
-  elif [ $1 = "opedit" ]; then
+  elif [ $command = "opedit" ]; then
     _opEdit
   else
     printf "Unsupported command! Try one of these:"
