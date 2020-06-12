@@ -6,6 +6,8 @@ improving the dev workflow friction is paramount to innovating openpilot
 
 <img src="https://emu.bz/xmf" alt="" />
 
+<img src="https://thumbs.gfycat.com/VapidRipeAquaticleech-size_restricted.gif" alt ="" />
+
 # Getting Started
 
 ```
