@@ -64,7 +64,7 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
   " >> ${COMMUNITY_BASHRC_PATH}
   fi
 else
-  echo "Creating user .bashrc to ${COMMUNITY_BASHRC_PATH}"
+  echo "Creating the community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   touch ${COMMUNITY_BASHRC_PATH}
   echo -e '#!/bin/sh' >> ${COMMUNITY_BASHRC_PATH}
   echo " \
@@ -73,5 +73,10 @@ else
   # This is your space to configure your terminal to your liking \
   " >>  ${COMMUNITY_BASHRC_PATH}
 fi
+echo "Contents of system bashrc:"
+cat ${SYSTEM_BASHRC_PATH}
+
+echo "Contents of community bashrc:"
+cat ${COMMUNITY_BASHRC_PATH}
 
 source /home/.bashrc
