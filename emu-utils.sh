@@ -43,7 +43,7 @@ function _installfork(){
 
 function _debug(){
   if [ $# -lt 1 ]; then  # verify at least two arguments
-    printf "You must specify a command for dotfiles debug. Some options are:"
+    printf "You must specify a command for emu debug. Some options are:"
     printf '%s\n' "$debugging_commands"
     return 1
   fi
@@ -56,19 +56,19 @@ function _debug(){
   fi
 }
 
-function _updatedotfiles(){
-  git -C /data/community/.oh-my-comma pull ; python /data/community/.oh-my-comma/install.py
+function _updateohmycomma(){
+  git -C /data/community/.oh-my-comma pull ;
 }
 
 function emu(){  # main wrapper function
   if [ $# -lt 1 ]; then
-    printf "You must specify a command for dotfiles. Some options are:"
+    printf "You must specify a command for emu. Some options are:"
     printf '%s\n' "$commands"
     return 1
   fi
 
   if [ $1 = "update" ]; then
-    _updatedotfiles
+    _updateohmycomma
   elif [ $1 = "pandaflash" ]; then
     _pandaflash
   elif [ $1 = "pandaflash2" ]; then
