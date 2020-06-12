@@ -1,2 +1,2 @@
 #!/bin/sh
-$(cd /data/community/.oh-my-comma/ && git pull)
+git -C /data/community/.oh-my-comma pull ;
