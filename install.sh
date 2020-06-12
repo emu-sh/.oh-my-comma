@@ -4,7 +4,12 @@ COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
-echo "test: $1";
+update=false
+if [ $# -lt 1 ]; then
+    if [ $1 = "update" ]; then
+      update=true
+  fi
+fi
 
 if [ ! -d "/data/community" ]; then
   mkdir /data/community
@@ -19,7 +24,7 @@ fi
 
 cd ${OH_MY_COMMA_PATH}
 
-if [ ! -x "$(command -v powerline-shell)" ]; then
+if [ ! -x "$(command -v powerline-shell)" ] && [ update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[y/n] > " choices
   case $choices in
@@ -78,11 +83,18 @@ else
 fi
 
 #Post-install
-printf "Contents of system bashrc:\n"
-cat ${SYSTEM_BASHRC_PATH}
-printf "\nEnd of $SYSTEM_BASHRC_PATH\nContents of community bashrc:\n"
-cat ${COMMUNITY_BASHRC_PATH}
-printf "End of $COMMUNITY_BASHRC_PATH\n"
+if [ update = false ]; then
+  printf "Contents of system bashrc:\n"
+  cat ${SYSTEM_BASHRC_PATH}
+  printf "\nEnd of $SYSTEM_BASHRC_PATH\nContents of community bashrc:\n"
+  cat ${COMMUNITY_BASHRC_PATH}
+  printf "End of $COMMUNITY_BASHRC_PATH\n"
+fi
 
 echo "Sourcing /home/.bashrc to init the changes made during installation"
 source /home/.bashrc
+if [ update = true ]; then
+  echo "Successfully updated!"
+else
+  echo "Successfully installed!"
+fi
