@@ -62,7 +62,7 @@ function _debug(){
 }
 
 function _updateohmycomma(){
-  source ${OH_MY_COMMA_PATH}/update.sh
+  source /data/community/.oh-my-comma/update.sh
 }
 
 function emu(){  # main wrapper function
