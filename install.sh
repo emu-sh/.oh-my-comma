@@ -5,10 +5,8 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 update=false
-if [ $# -ge 1 ]; then
-    if [ $1 = "update" ]; then
-      update=false
-  fi
+if [ $# -ge 1 ] && [ $1 = "update" ]; then
+  update=true
 fi
 
 if [ ! -d "/data/community" ]; then
