@@ -8,11 +8,13 @@ cd .oh-my-comma
 SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
-read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]  >" choice
-case $choices in
-  y|Y ) pip install powerline-shell;;
-  * ) echo "Skipping...";;
-esac
+if [ -x "$(command -v powerline-shell)" ]; then
+  read -p "Do you want to install powerline? (y/n) [You will also need to install the fonts on your local terminal.]  >" choice
+  case $choices in
+    y|Y ) pip install powerline-shell;;
+    * ) echo "Skipping...";;
+  esac
+fi
 echo "Installing emu utilities..."
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   echo "Your system /home/.bashrc exists..."
