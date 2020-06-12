@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 SYSTEM_BASHRC_PATH=/home/.bashrc
 export COMMUNITY_PATH=/data/community
 export COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 export OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source powerline.sh
+source ${OH_MY_COMMA_PATH}/powerline.sh
 
 commands="
   - update: updates this tool, requires restart of ssh session
