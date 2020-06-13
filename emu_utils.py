@@ -1,6 +1,7 @@
 import sys
+import os
 
-DEBUG = True
+DEBUG = not os.path.exists('/data/params/d')
 
 
 class Command:
@@ -21,7 +22,7 @@ class CommandClass:
 
 class Emu:
   def __init__(self, args):
-    print(args)
+    # print(args)
     self.args = args
     self.cc = CommandClass()
     self.parse()
@@ -63,7 +64,7 @@ class Emu:
 
 if __name__ == "__main__":
   args = sys.argv[1:]
-  if len(args) == 0 and DEBUG:
+  if DEBUG:
     args = input().split(' ')
     if '' in args:
       args.remove('')
