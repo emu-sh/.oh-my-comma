@@ -41,26 +41,19 @@ class Emu:
       print('Unsupported command! Try one of these:')
       self.print_commands()
       return
+
     cmd = self.args[0].lower()
+    self.start_function_from_str(cmd)
 
-    self.start_command_from_str(cmd)
-    # if cmd == 'update':
-    #   print('updating!')
-    # elif cmd == 'pandaflash':
-    #   print('pandaflash')
-    # elif cmd == 'pandaflash2':
-    #   print('pandaflash2')
-    # elif cmd == 'debug':
-    #   print('debug')
-    # elif cmd == 'installfork':
-    #   print('debug')
-
-  def start_command_from_str(self, cmd):
-    getattr(self, '_{}'.format(cmd))
+  def start_function_from_str(self, cmd):
+    cmd = '_' + cmd
+    if not hasattr(self, cmd):
+      print('Command has not been implemented yet, please try updating.')
+      return
+    getattr(self, cmd)()  # call command's function
 
   def print_commands(self):
     cmds = [cmd for cmd in self.cc.commands]
-    # descs = [self.cc.commands[cmd].description for cmd in cmds]
     to_print = []
     for cmd in cmds:
       desc = self.cc.commands[cmd].description
