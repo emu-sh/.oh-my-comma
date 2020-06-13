@@ -48,7 +48,7 @@ class Emu:
       r = 1
     if r:
       self.error('Error calling update script!')
-    print('HERE!')
+    print('change!')
 
   def _pandaflash(self):
     print('panda flashing!')
