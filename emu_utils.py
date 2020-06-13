@@ -42,6 +42,7 @@ class Emu:
   #   os.chmod(self.UPDATE_PATH, st.st_mode | stat.S_IEXEC)
 
   def _update(self):
+    print('HERE!')
     try:
       r = subprocess.call(['sh', self.UPDATE_PATH])
     except:
