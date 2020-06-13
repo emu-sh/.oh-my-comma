@@ -74,10 +74,9 @@ function emu(){  # main wrapper function
     if [ $1 = "update" ]; then
     _updateohmycomma
     return 0
+    fi
   fi
   python /data/community/.oh-my-comma/emu_utils.py "$@"
-
-
 
 #  if [ $1 = "update" ]; then
 #    _updateohmycomma
