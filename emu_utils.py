@@ -1,5 +1,6 @@
 import sys
 import os
+from py_utils.colors import COLORS
 
 DEBUG = not os.path.exists('/data/params/d')
 
@@ -58,8 +59,9 @@ class Emu:
     to_print = []
     for cmd in cmds:
       desc = self.cc.commands[cmd].description
-      to_print.append('- {}: {}'.format(cmd, desc))
-    print('\n'.join(to_print))
+      to_append = '{}- {}: {}{}'.format(COLORS.OKGREEN, cmd, COLORS.CYAN, desc)
+      to_print.append(to_append)
+    print('\n'.join(to_print) + COLORS.ENDC)
 
 
 if __name__ == "__main__":
