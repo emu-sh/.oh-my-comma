@@ -104,7 +104,7 @@ if [ $update = true ]; then
 else
   printf "\nSuccessfully installed emu utilities!\n"
 fi
-echo "hi!"
+echo "test123!"
 
 if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
   printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
