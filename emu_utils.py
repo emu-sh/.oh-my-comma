@@ -58,9 +58,10 @@ class Emu:
     cmds = [cmd for cmd in self.cc.commands]
     to_print = []
     for cmd in cmds:
-      desc = self.cc.commands[cmd].description
-      to_append = '{}- {}: {}{}'.format(COLORS.OKGREEN, cmd, COLORS.CYAN, desc)
-      to_print.append(to_append)
+      desc = COLORS.CYAN + self.cc.commands[cmd].description
+      # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
+      to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
+      to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC)
 
 
