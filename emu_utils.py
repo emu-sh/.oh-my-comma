@@ -43,8 +43,7 @@ class Emu:
 
   def _update(self):
     r = subprocess.call(['sh', self.UPDATE_PATH])
-    print(r)
-    if not r:
+    if r == 1:
       self.error('Error calling update script!')
 
   def _pandaflash(self):
