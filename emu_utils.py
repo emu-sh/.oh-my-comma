@@ -43,6 +43,7 @@ class Emu:
 
   def _update(self):
     r = subprocess.call(['sh', self.UPDATE_PATH])
+    print(r)
     if not r:
       self.error('Error calling update script!')
 
