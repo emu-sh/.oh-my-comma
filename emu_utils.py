@@ -1,6 +1,7 @@
 import os
-import subprocess
 import sys
+import stat
+import subprocess
 from py_utils.colors import COLORS
 
 DEBUG = not os.path.exists('/data/params/d')
@@ -31,8 +32,14 @@ class Emu:
     self.COMMUNITY_PATH = '/data/community'
     self.COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
     self.OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
+    self.UPDATE_PATH = '{}/update.sh'.format(self.OH_MY_COMMA_PATH)
 
+    self.make_executable()
     self.parse()
+
+  def make_executable(self):
+    st = os.stat(self.UPDATE_PATH)
+    os.chmod(self.UPDATE_PATH, st.st_mode | stat.S_IEXEC)
 
   def _update(self):
     r = subprocess.call(['{}/update.sh'.format(self.OH_MY_COMMA_PATH)])
