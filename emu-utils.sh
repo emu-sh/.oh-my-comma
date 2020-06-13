@@ -70,13 +70,15 @@ function _updateohmycomma(){
 }
 
 function emu(){  # main wrapper function
+  if [ $# > 0 ]; then
+    if [ $1 = "update" ]; then
+    _updateohmycomma
+    return 0
+  fi
   python /data/community/.oh-my-comma/emu_utils.py "$@"
-#  if [ $# -lt 1 ]; then
-#    printf "You must specify a command for emu. Some options are:"
-#    printf '%s\n' "$commands"
-#    return 1
-#  fi
-#
+
+
+
 #  if [ $1 = "update" ]; then
 #    _updateohmycomma
 #  elif [ $1 = "pandaflash" ]; then
