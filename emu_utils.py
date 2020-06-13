@@ -1,5 +1,6 @@
-import sys
 import os
+import subprocess
+import sys
 from py_utils.colors import COLORS
 
 DEBUG = not os.path.exists('/data/params/d')
@@ -23,13 +24,20 @@ class CommandClass:
 
 class Emu:
   def __init__(self, args):
-    # print(args)
     self.args = args
     self.cc = CommandClass()
+
+    self.SYSTEM_BASHRC_PATH = '/home/.bashrc'
+    self.COMMUNITY_PATH = '/data/community'
+    self.COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
+    self.OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
+
     self.parse()
 
   def _update(self):
-    print('updating!')
+    r = subprocess.call(['{}/update.sh'.format(self.OH_MY_COMMA_PATH)])
+    if not r:
+      self.error('Error calling update script!')
 
   def _pandaflash(self):
     print('panda flashing!')
@@ -63,6 +71,9 @@ class Emu:
       to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC)
+
+  def error(self, msg):
+    print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC))
 
 
 if __name__ == "__main__":
