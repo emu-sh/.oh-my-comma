@@ -5,4 +5,5 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 git -C /data/community/.oh-my-comma pull
+echo ${OH_MY_COMMA_PATH}/install.sh
 source ${OH_MY_COMMA_PATH}/install.sh 'update'
