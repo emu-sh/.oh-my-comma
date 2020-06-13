@@ -42,7 +42,7 @@ class Emu:
     os.chmod(self.UPDATE_PATH, st.st_mode | stat.S_IEXEC)
 
   def _update(self):
-    r = subprocess.call(['{}/update.sh'.format(self.OH_MY_COMMA_PATH)])
+    r = subprocess.call([self.UPDATE_PATH])
     if not r:
       self.error('Error calling update script!')
 
