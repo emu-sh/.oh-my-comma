@@ -18,7 +18,7 @@ class Emu:
     self.parse()
 
   def parse(self):
-    print(sys.argv)
+    print(self.args)
 
 
 if __name__ == "__main__":
