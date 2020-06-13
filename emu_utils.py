@@ -42,8 +42,11 @@ class Emu:
     os.chmod(self.UPDATE_PATH, st.st_mode | stat.S_IEXEC)
 
   def _update(self):
-    r = subprocess.call(['sh', self.UPDATE_PATH])
-    if r == 1:
+    try:
+      r = subprocess.call(['sh', self.UPDATE_PATH])
+    except:
+      r = 1
+    if r:
       self.error('Error calling update script!')
 
   def _pandaflash(self):
