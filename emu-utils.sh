@@ -70,24 +70,25 @@ function _updateohmycomma(){
 }
 
 function emu(){  # main wrapper function
-  if [ $# -lt 1 ]; then
-    printf "You must specify a command for emu. Some options are:"
-    printf '%s\n' "$commands"
-    return 1
-  fi
-
-  if [ $1 = "update" ]; then
-    _updateohmycomma
-  elif [ $1 = "pandaflash" ]; then
-    _pandaflash
-  elif [ $1 = "pandaflash2" ]; then
-    _pandaflash2
-  elif [ $1 = "installfork" ]; then
-    _installfork $2
-  elif [ $1 = "debug" ]; then
-    _debug $2
-  else
-    printf "Unsupported command! Try one of these:"
-    printf '%s\n' "$commands"
-  fi
+  python emu_utils.py
+#  if [ $# -lt 1 ]; then
+#    printf "You must specify a command for emu. Some options are:"
+#    printf '%s\n' "$commands"
+#    return 1
+#  fi
+#
+#  if [ $1 = "update" ]; then
+#    _updateohmycomma
+#  elif [ $1 = "pandaflash" ]; then
+#    _pandaflash
+#  elif [ $1 = "pandaflash2" ]; then
+#    _pandaflash2
+#  elif [ $1 = "installfork" ]; then
+#    _installfork $2
+#  elif [ $1 = "debug" ]; then
+#    _debug $2
+#  else
+#    printf "Unsupported command! Try one of these:"
+#    printf '%s\n' "$commands"
+#  fi
 }
