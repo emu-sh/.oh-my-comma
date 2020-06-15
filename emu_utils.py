@@ -34,7 +34,8 @@ def kill(procname):
   for proc in psutil.process_iter():
     # check whether the process name matches
     if proc.name() == procname:
-      proc.kill()
+      return proc.kill()
+  return None
 
 
 def error(msg):
@@ -99,8 +100,8 @@ class Emu:
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    kill('selfdrive.logcatd')
-    kill('selfdrive.tombstoned')
+    print(kill('selfdrive.logcatd'))
+    print(kill('selfdrive.tombstoned'))
     # # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
     # r = run('pkill -f controlsd')
     # if not r:
