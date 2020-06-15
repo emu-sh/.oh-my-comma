@@ -3,6 +3,7 @@ sys.path.append('/data/openpilot')
 import os
 import importlib
 import subprocess
+import time
 from py_utils.colors import COLORS
 
 DEBUG = not os.path.exists('/data/params/d')
@@ -94,7 +95,7 @@ class Emu:
     r = run('pkill -f controlsd')
     if not r:
       error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
-
+    time.sleep(2)
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
     out_file = '/data/output.log'
