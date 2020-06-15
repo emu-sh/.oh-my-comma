@@ -14,10 +14,10 @@ def run(cmd):
   """
   if isinstance(cmd, str):
     cmd = cmd.split()
-  try Exception as e:
-    print(e)
+  try:
     return not subprocess.call(cmd)
-  except:
+  except Exception as e:
+    print(e)
     return False
 
 
