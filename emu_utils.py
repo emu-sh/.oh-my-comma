@@ -100,8 +100,8 @@ class Emu:
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    print(kill('selfdrive.logcatd'))
-    print(kill('selfdrive.tombstoned'))
+    print(kill('selfdrive.thermald'))
+    print(kill('selfdrive.pandad'))
     # # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
     # r = run('pkill -f controlsd')
     # if not r:
