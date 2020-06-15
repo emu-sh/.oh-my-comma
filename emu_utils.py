@@ -82,6 +82,15 @@ class Emu:
       return
     self.start_function_from_str(cmd)
 
+  def _controlsd(self):
+    # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
+    if not run('pkill -f controlsd'):
+      error('Error killing boardd! Is it running?')
+      return
+    r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
+    print(r)
+
+
   def _installfork(self):
     print('Install fork menu')
 
