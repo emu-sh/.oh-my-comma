@@ -65,7 +65,7 @@ class Emu:
 
   def _pandaflash2(self):
     run('pkill -f boardd')
-    importlib.import_module('.panda', 'Panda').Panda().flash()
+    importlib.import_module('panda', 'Panda').Panda().flash()
     # r = run(['cd /data/openpilot/panda; pkill -f boardd; PYTHONPATH=..; python -c "from panda import Panda; Panda().flash()"'])
     # print(r)
 
