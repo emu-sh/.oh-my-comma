@@ -71,10 +71,16 @@ class Emu:
     importlib.import_module('panda', 'Panda').Panda().flash()
 
   def _debug(self):
-    arg = self.get_next_arg()
-    if arg is None:
+    cmd = self.get_next_arg()
+    if cmd is None:
       print("You must specify a command for emu debug. Some options are:")
       self.print_commands('debug_commands')
+      return
+    if cmd not in self.cc.debug_commands:
+      print('Unsupported debug command! Try one of these:')
+      self.print_commands('debug_commands')
+      return
+    self.start_function_from_str(cmd)
 
   def _installfork(self):
     print('Install fork menu')
