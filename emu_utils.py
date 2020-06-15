@@ -34,12 +34,7 @@ class Emu:
     self.OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
     self.UPDATE_PATH = '{}/update.sh'.format(self.OH_MY_COMMA_PATH)
 
-    # self.make_executable()
     self.parse()
-
-  # def make_executable(self):
-  #   st = os.stat(self.UPDATE_PATH)
-  #   os.chmod(self.UPDATE_PATH, st.st_mode | stat.S_IEXEC)
 
   def _update(self):
     try:
@@ -51,6 +46,9 @@ class Emu:
 
   def _pandaflash(self):
     print('panda flashing!')
+
+  def _pandaflash2(self):
+    print('panda flashing2!')
 
   def parse(self):
     if len(self.args) == 0:
