@@ -6,6 +6,10 @@ import subprocess
 import time
 import psutil
 from py_utils.colors import COLORS
+from multiprocessing import Process
+# from selfdrive.launcher import launcher
+import cereal.messaging as messaging
+from setproctitle import setproctitle
 
 DEBUG = not os.path.exists('/data/params/d')
 
@@ -109,7 +113,20 @@ class Emu:
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
     if r is None:
       warning('controlsd is already dead! (continuing...)')
-    run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
+
+    def f(proc):
+      sys.stdout = open('/data/output.log', 'a')
+      mod = importlib.import_module(proc)
+      # rename the process
+      setproctitle(proc)
+      # create new context since we forked
+      messaging.context = messaging.Context()
+      # exec the process
+      mod.main()
+
+    controlsd = Process(name='controlsd', target=f, args=('selfdrive.controls.controlsd',))
+    controlsd.start()
+    # run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
 
   def _installfork(self):
     old_dir = "/data/openpilot.old"
