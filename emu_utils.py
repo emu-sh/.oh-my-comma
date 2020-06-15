@@ -19,6 +19,7 @@ def run(cmd):
     return not subprocess.call(cmd)
   except Exception as e:
     print(e)
+    print('here!')
     return False
 
 
@@ -33,11 +34,11 @@ class Command:
 
 
 class CommandClass:
-  debug_commands = {'controls': Command(description='logs controlsd to /data/output.log')}
+  debug_commands = {'controlsd': Command(description='logs controlsd to /data/output.log')}
 
   commands = {'update': Command(description='updates this tool, requires restart of ssh session'),
-              'pandaflash': Command(description='pandaflash: flashes panda'),
-              'pandaflash2': Command(description='pandaflash2: flashes panda without make recover'),
+              'pandaflash': Command(description='pandaflash: flashes panda with make recover'),
+              'pandaflash2': Command(description='pandaflash2: flashes panda using Panda module'),
               'debug': Command(description='debugging tools', commands=debug_commands),
               'installfork': Command(description='Specify the fork URL after. Moves openpilot to openpilot.old')}
 
@@ -65,7 +66,7 @@ class Emu:
 
   def _pandaflash2(self):
     if not run('pkill -f boardd'):
-      error('Error killing boardd!')
+      error('Error killing boardd! Is it running?')
       return
     importlib.import_module('panda', 'Panda').Panda().flash()
 
