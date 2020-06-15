@@ -17,17 +17,17 @@ commands="
 debugging_commands="
   - controls: logs controlsd to /data/output.log"
 
-function _pandaflash() {
-  cd /data/openpilot/panda/board && make recover
-}
+#function _pandaflash() {
+#  cd /data/openpilot/panda/board && make recover
+#}
 
-function _pandaflash2() {
-  cd /data/openpilot/panda; pkill -f boardd; PYTHONPATH=..; python -c "from panda import Panda; Panda().flash()"
-}
+#function _pandaflash2() {
+#  cd /data/openpilot/panda; pkill -f boardd; PYTHONPATH=..; python -c "from panda import Panda; Panda().flash()"
+#}
 
-function _controlsdebug(){
-  pkill -f controlsd ; PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
-}
+#function _controlsdebug(){
+#  pkill -f controlsd ; PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
+#}
 
 function _installfork(){
   if [ $# -lt 1 ]; then
@@ -50,22 +50,22 @@ function _installfork(){
   git clone $1 /data/openpilot
 }
 
-function _debug(){
-  if [ $# -lt 1 ]; then  # verify at least two arguments
-    printf "You must specify a command for emu debug. Some options are:"
-    printf '%s\n' "$debugging_commands"
-    return 1
-  fi
+#function _debug(){
+#  if [ $# -lt 1 ]; then  # verify at least two arguments
+#    printf "You must specify a command for emu debug. Some options are:"
+#    printf '%s\n' "$debugging_commands"
+#    return 1
+#  fi
+#
+#  if [ $1 = "controls" ]; then
+#    _controlsdebug
+#  else
+#    printf "Unsupported debugging command! Try one of these:"
+#    printf '%s\n' "$debugging_commands"
+#  fi
+#}
 
-  if [ $1 = "controls" ]; then
-    _controlsdebug
-  else
-    printf "Unsupported debugging command! Try one of these:"
-    printf '%s\n' "$debugging_commands"
-  fi
-}
-
-function _updateohmycomma(){
+function _updateohmycomma(){  # good to keep a backup in case python CLI is broken
   source /data/community/.oh-my-comma/update.sh
 }
 
@@ -76,7 +76,14 @@ function emu(){  # main wrapper function
 #    return 0
 #    fi
 #  fi
-  python /data/community/.oh-my-comma/emu_utils.py "$@"
+
+  if python /data/community/.oh-my-comma/emu_utils.py "$@"; then
+    echo "Exit code of 0, success"
+  else
+    echo "Exit code of $?, failure"
+  fi
+
+#  python /data/community/.oh-my-comma/emu_utils.py "$@"
 
 #  if [ $1 = "update" ]; then
 #    _updateohmycomma
