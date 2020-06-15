@@ -105,15 +105,15 @@ class Emu:
     print('\n'.join(to_print) + COLORS.ENDC)
 
   def get_next_arg(self, lower=True):
-    print(self.args)
-    print(len(self.args), self.arg_idx)
-    if len(self.args) < self.arg_idx:
+    # print(self.args)
+    # print(len(self.args), self.arg_idx)
+    if len(self.args) - 1 < self.arg_idx:
       return None
     arg = self.args[self.arg_idx]
     self.arg_idx += 1
     if lower:
       arg = arg.lower()
-    print(arg)
+    # print(arg)
     return arg
 
 
