@@ -99,7 +99,8 @@ class Emu:
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    kill('selfdrive.updated')
+    kill('selfdrive.logcatd')
+    kill('selfdrive.tombstoned')
     # # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
     # r = run('pkill -f controlsd')
     # if not r:
