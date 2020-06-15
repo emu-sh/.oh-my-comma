@@ -18,7 +18,7 @@ def run(cmd):
     print('run1')
   try:
     print('run2')
-    r = subprocess.call(cmd)
+    r = subprocess.Popen(cmd)
     print(r)
     print('run4')
     return not r
