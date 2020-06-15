@@ -92,14 +92,14 @@ class Emu:
   def _controlsd(self):
     # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
     if not run('pkill -f controlsd'):
-      error('Error killing controlsd! Is it running? (continuing...)')
+      error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
 
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
     out_file = '/data/output.log'
 
     f = open(out_file, 'a')
-    r = subprocess.Popen('python /data/openpilot/selfdrive/controls/controlsd.py'.split(), stdout=f)
+    r = subprocess.Popen('python /data/openpilot/selfdrive/controls/controlsd.py'.split())
 
     print('end')
     # print(r)
