@@ -34,10 +34,7 @@ def kill(procname):
   for proc in psutil.process_iter():
     # check whether the process name matches
     if proc.name() == procname:
-      try:
-        proc.kill()
-      except:
-        return False
+      proc.kill()
       return True
   return None
 
@@ -104,22 +101,24 @@ class Emu:
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    print(kill('selfdrive.ui'))
     print(kill('selfdrive.thermald'))
-    # # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
+    print(kill('selfdrive.pandad'))
+    # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
     # r = run('pkill -f controlsd')
-    # if not r:
-    #   error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
-    # time.sleep(2)
-    # # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
-    # # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
-    # out_file = '/data/output.log'
-    #
-    # # f = open(out_file, 'a')
-    # r = subprocess.call(['python', '/data/openpilot/selfdrive/controls/controlsd.py'])
-    #
-    # print('end')
-    # # print(r)
+    r = kill('selfdrive.controlsd')
+    if r is None:
+      # error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
+      error('controlsd is already dead! (continuing...)')  # todo: add warning
+    time.sleep(2)
+    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
+    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
+    out_file = '/data/output.log'
+
+    f = open(out_file, 'a')
+    r = subprocess.call(['python', '/data/openpilot/selfdrive/controls/controlsd.py'], stdout=f)
+
+    print('end')
+    # print(r)
 
 
   def _installfork(self):
