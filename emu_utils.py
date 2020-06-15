@@ -18,7 +18,7 @@ def run(cmd):
     print('run1')
   try:
     print('run2')
-    r = subprocess.Popen(cmd)
+    r = subprocess.call(cmd)
     print(r)
     print('run4')
     return not r
@@ -91,7 +91,7 @@ class Emu:
   def _controlsd(self):
     # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
     print('here1')
-    if not run('pkill -f uploader'):
+    if not run('pkill -f logmessaged'):
       error('Error killing controlsd! Is it running?')
       return
     print('here2')
