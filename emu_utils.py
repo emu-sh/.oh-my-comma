@@ -78,7 +78,6 @@ class Emu:
     self.parse()
 
   def _update(self):
-    raise Exception('error updating')
     if not run(['sh', self.UPDATE_PATH]):
       error('Error updating!')
 
