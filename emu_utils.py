@@ -105,7 +105,7 @@ class Emu:
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    # r = run('pkill -f controlsd')  # terminated file for some reason  # todo: remove me
+    # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
     if r is None:
       warning('controlsd is already dead! (continuing...)')
