@@ -7,7 +7,8 @@ import time
 import psutil
 from py_utils.colors import COLORS
 from multiprocessing import Process
-from selfdrive.launcher import launcher
+# from selfdrive.launcher import launcher
+import cereal.messaging as messaging
 
 DEBUG = not os.path.exists('/data/params/d')
 
@@ -112,8 +113,14 @@ class Emu:
     if r is None:
       warning('controlsd is already dead! (continuing...)')
 
-    def f(name):
+    def f(proc):
       sys.stdout = open('/data/output.log', 'a')
+      mod = importlib.import_module(proc)
+      # rename the process
+      # create new context since we forked
+      messaging.context = messaging.Context()
+      # exec the process
+      mod.main()
 
     controlsd = Process(name='controlsd', target=f, args=('selfdrive.controls.controlsd',))
     controlsd.start()
