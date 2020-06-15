@@ -19,7 +19,7 @@ def run(cmd, out_file=None):
   f = None
   if isinstance(out_file, str):
     f = open(out_file, 'a')
-
+  print('here')
   try:
     r = subprocess.call(cmd, stdout=f)
     return not r
