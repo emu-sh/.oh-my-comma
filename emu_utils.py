@@ -18,10 +18,10 @@ def run(cmd):
     print('run1')
   try:
     print('run2')
-    r = subprocess.Popen(cmd)
+    r = subprocess.call(cmd)
     print(r)
     print('run4')
-    return not subprocess.call(cmd)
+    return not r
   except Exception as e:
     print('run3')
     return False
