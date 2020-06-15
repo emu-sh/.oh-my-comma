@@ -14,7 +14,7 @@ class Command:
 
 
 class CommandClass:
-  debug_commands = {'controld': Command(description='logs controlsd to /data/output.log')}
+  debug_commands = {'controls': Command(description='logs controlsd to /data/output.log')}
 
   commands = {'update': Command(description='updates this tool, requires restart of ssh session'),
               'pandaflash': Command(description='pandaflash: flashes panda'),
