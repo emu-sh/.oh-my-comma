@@ -95,10 +95,11 @@ class Emu:
     getattr(self, cmd)()  # call command's function
 
   def print_commands(self, command='commands'):
-    cmds = [cmd for cmd in getattr(self.cc, command)]
+    cmd_list = getattr(self.cc, command)
+    cmds = [cmd for cmd in cmd_list]
     to_print = []
     for cmd in cmds:
-      desc = COLORS.CYAN + self.cc.commands[cmd].description
+      desc = COLORS.CYAN + cmd_list[cmd].description
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
       to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
       to_print.append(COLORS.OKGREEN + to_append)
