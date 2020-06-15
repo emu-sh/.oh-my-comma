@@ -68,7 +68,7 @@ class Emu:
   def _debug(self):
     arg = self.get_next_arg()
     if arg is None:
-      print("You must specify a command for emu debug. Some options are:\n")
+      print("You must specify a command for emu debug. Some options are:")
       self.print_commands('debug_commands')
 
   def _installfork(self):
@@ -76,7 +76,7 @@ class Emu:
 
   def parse(self):
     if len(self.args) == 0:
-      print('You must specify a command for emu. Some options are:\n')
+      print('You must specify a command for emu. Some options are:')
       self.print_commands()
       return
     cmd = self.get_next_arg()
@@ -103,7 +103,7 @@ class Emu:
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
       to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
       to_print.append(COLORS.OKGREEN + to_append)
-    print('\n'.join(to_print) + COLORS.ENDC)
+    print('\n' + '\n'.join(to_print) + COLORS.ENDC)
 
   def get_next_arg(self, lower=True):
     # print(self.args)
