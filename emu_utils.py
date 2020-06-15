@@ -8,22 +8,23 @@ from py_utils.colors import COLORS
 DEBUG = not os.path.exists('/data/params/d')
 
 
-def run(cmd):
+def run(cmd, out_file=None):
   """
   If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
   The status is returned, True being success, False for failure
   """
   if isinstance(cmd, str):
     cmd = cmd.split()
-    print('run1')
+
+  f = None
+  if isinstance(out_file, str):
+    f = open(out_file, 'a')
+
   try:
-    print('run2')
-    r = subprocess.call(cmd)
-    print(r)
-    print('run4')
+    r = subprocess.call(cmd, stdout=f)
     return not r
   except Exception as e:
-    print('run3')
+    print(e)
     return False
 
 
@@ -90,13 +91,11 @@ class Emu:
 
   def _controlsd(self):
     # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
-    print('here1')
-    if not run('pkill -f logmessaged'):
-      error('Error killing controlsd! Is it running?')
-      return
-    print('here2')
+    if not run('pkill -f controlsd'):
+      error('Error killing controlsd! Is it running? (continuing...)')
+
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
-    r = run('python /data/openpilot/selfdrive/controls/controlsd.py')
+    r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
     print('here3')
     print(r)
 
