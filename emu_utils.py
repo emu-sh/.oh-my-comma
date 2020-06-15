@@ -14,7 +14,8 @@ def run(cmd):
   """
   if isinstance(cmd, str):
     cmd = cmd.split()
-  try:
+  try Exception as e:
+    print(e)
     return not subprocess.call(cmd)
   except:
     return False
