@@ -34,7 +34,11 @@ def kill(procname):
   for proc in psutil.process_iter():
     # check whether the process name matches
     if proc.name() == procname:
-      return proc.kill()
+      try:
+        proc.kill()
+      except:
+        return False
+      return True
   return None
 
 
