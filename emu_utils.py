@@ -79,12 +79,12 @@ class Emu:
       print('You must specify a command for emu. Some options are:')
       self.print_commands()
       return
-    if self.args[0].lower() not in self.cc.commands:
+    cmd = self.get_next_arg()
+    if cmd not in self.cc.commands:
       print('Unsupported command! Try one of these:')
       self.print_commands()
       return
 
-    cmd = self.get_next_arg()
     self.start_function_from_str(cmd)
 
   def start_function_from_str(self, cmd):
@@ -105,12 +105,15 @@ class Emu:
     print('\n'.join(to_print) + COLORS.ENDC)
 
   def get_next_arg(self, lower=True):
+    print(self.args)
+    print(len(self.args), self.arg_idx)
     if len(self.args) < self.arg_idx:
       return None
     arg = self.args[self.arg_idx]
     self.arg_idx += 1
     if lower:
       arg = arg.lower()
+    print(arg)
     return arg
 
 
