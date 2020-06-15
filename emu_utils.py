@@ -95,9 +95,14 @@ class Emu:
       error('Error killing controlsd! Is it running? (continuing...)')
 
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
-    r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
-    print('here3')
-    print(r)
+    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
+    out_file = '/data/output.log'
+
+    f = open(out_file, 'a')
+    r = subprocess.Popen('python /data/openpilot/selfdrive/controls/controlsd.py'.split(), stdout=f)
+
+    print('end')
+    # print(r)
 
 
   def _installfork(self):
