@@ -47,7 +47,7 @@ def warning(msg):
   print('{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC))
 
 
-class Command: g
+class Command:
   def __init__(self, description=None, commands=None):
     self.description = description
     self.commands = commands
