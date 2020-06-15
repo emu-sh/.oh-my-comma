@@ -88,7 +88,9 @@ class Emu:
       error('Error killing boardd! Is it running?')
       return
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
+    print('here')
     r = run('python /data/openpilot/selfdrive/controls/controlsd.py')
+    print('here1')
     print(r)
 
 
