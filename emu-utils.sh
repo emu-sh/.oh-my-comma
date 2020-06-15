@@ -79,7 +79,8 @@ function emu(){  # main wrapper function
   python /data/community/.oh-my-comma/emu_utils.py "$@"
 
   if [[ $? = 1 ]]; then
-    echo "failure: $?"
+    echo "\033[91mAn error occurred in the Python CLI, attempting to manually update .oh-my-comma..."
+    _updateohmycomma
   fi
 
 
