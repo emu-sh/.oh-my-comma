@@ -99,7 +99,7 @@ class Emu:
     out_file = '/data/output.log'
 
     f = open(out_file, 'a')
-    r = subprocess.Popen('python /data/openpilot/selfdrive/controls/controlsd.py'.split(), shell=True)
+    r = subprocess.call(['python', '/data/openpilot/selfdrive/controls/controlsd.py'], shell=True)
 
     print('end')
     # print(r)
