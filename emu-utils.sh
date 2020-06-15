@@ -76,15 +76,13 @@ function emu(){  # main wrapper function
 #    return 0
 #    fi
 #  fi
-  echo "HERE!"
   python /data/community/.oh-my-comma/emu_utils.py "$@"
-  echo "END!"
 
-#  if [[ $? = 0 ]]; then
-#    echo "success"
-#  else
-#    echo "failure: $?"
-#  fi
+  if [[ $? = 0 ]]; then
+    echo "success"
+  else
+    echo "failure: $?"
+  fi
 
 
 #  if [ $1 = "update" ]; then
