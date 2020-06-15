@@ -22,7 +22,7 @@ def run(cmd, out_file=None):
     f = open(out_file, 'a')
   print('here')
   try:
-    r = subprocess.call(cmd)
+    r = subprocess.call(cmd, stdout=f)
     return not r
   except Exception as e:
     print(e)
@@ -92,9 +92,12 @@ class Emu:
 
   def _controlsd(self):
     # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
-    r = run('pkill -f controlsd')
-    if not r:
-      error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
+    try:
+      r = run('pkill -f controlsd')
+      if not r:
+        error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
+    except:
+      pass
     time.sleep(2)
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
