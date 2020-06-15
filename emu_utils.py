@@ -103,7 +103,7 @@ class Emu:
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
       to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
       to_print.append(COLORS.OKGREEN + to_append)
-    print('\n' + '\n'.join(to_print) + COLORS.ENDC)
+    print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
   def get_next_arg(self, lower=True):
     # print(self.args)
