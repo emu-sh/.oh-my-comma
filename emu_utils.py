@@ -15,9 +15,12 @@ def run(cmd):
   """
   if isinstance(cmd, str):
     cmd = cmd.split()
+    print('run1')
   try:
+    print('run2')
     return not subprocess.call(cmd)
   except Exception as e:
+    print('run3')
     return False
 
 
