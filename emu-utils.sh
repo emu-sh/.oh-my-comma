@@ -80,7 +80,7 @@ function emu(){  # main wrapper function
 
   if [ $? = 1 ] && [ "$1" = "update" ]; then  # fallback to updating immediately if CLI crashed updating
     printf "\033[91mAn error occurred in the Python CLI, attempting to manually update .oh-my-comma...\n"
-    printf "5 seconds until update. Press Ctrl+C to cancel!\033[0m\n"
+    printf "Press Ctrl+C to cancel!\033[0m\n"
     sleep 5
     _updateohmycomma
   fi
