@@ -21,7 +21,7 @@ def run(cmd, out_file=None):
     f = open(out_file, 'a')
   print('here')
   try:
-    r = subprocess.Popen(cmd, stdout=f)
+    r = subprocess.call(cmd, stdout=f)
     return not r
   except Exception as e:
     print(e)
