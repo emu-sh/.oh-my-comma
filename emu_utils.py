@@ -87,7 +87,8 @@ class Emu:
     if not run('pkill -f controlsd'):
       error('Error killing boardd! Is it running?')
       return
-    r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
+    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
+    r = run('python /data/openpilot/selfdrive/controls/controlsd.py')
     print(r)
 
 
