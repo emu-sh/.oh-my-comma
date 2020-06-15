@@ -78,9 +78,7 @@ function emu(){  # main wrapper function
 #  fi
   python /data/community/.oh-my-comma/emu_utils.py "$@"
 
-  if [[ $? = 0 ]]; then
-    echo "success"
-  else
+  if [[ $? = 1 ]]; then
     echo "failure: $?"
   fi
 
