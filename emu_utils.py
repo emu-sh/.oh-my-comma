@@ -44,7 +44,7 @@ def error(msg):
 
 
 def warning(msg):
-  print('{}{}{}'.format(COLORS.INFO, msg, COLORS.ENDC))
+  print('{}{}{}'.format(COLORS.PROMPT, msg, COLORS.ENDC))
 
 
 class Command:
