@@ -18,8 +18,6 @@ def run(cmd):
   try:
     return not subprocess.call(cmd)
   except Exception as e:
-    print(e)
-    print('here!')
     return False
 
 
@@ -62,7 +60,9 @@ class Emu:
       error('Error updating!')
 
   def _pandaflash(self):
-    run('make -C /data/openpilot/panda/board recover')
+    r = run('make -C /data/openpilot/panda/board recover')
+    if not r:
+      error('Error running make command!')
 
   def _pandaflash2(self):
     if not run('pkill -f boardd'):
