@@ -64,10 +64,10 @@ class Emu:
     run('make -C /data/openpilot/panda/board recover')
 
   def _pandaflash2(self):
-    run('pkill -f boardd')
+    if not run('pkill -f boardd'):
+      error('Error killing boardd!')
+      return
     importlib.import_module('panda', 'Panda').Panda().flash()
-    # r = run(['cd /data/openpilot/panda; pkill -f boardd; PYTHONPATH=..; python -c "from panda import Panda; Panda().flash()"'])
-    # print(r)
 
   def _debug(self):
     arg = self.get_next_arg()
