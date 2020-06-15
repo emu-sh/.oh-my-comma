@@ -112,7 +112,7 @@ class Emu:
     if r is None:
       warning('controlsd is already dead! (continuing...)')
 
-    def f():
+    def f(name):
       sys.stdout = open('/data/output.log', 'a')
 
     controlsd = Process(name='controlsd', target=f, args=('selfdrive.controls.controlsd',))
