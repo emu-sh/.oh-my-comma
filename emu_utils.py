@@ -1,10 +1,27 @@
 import os
 import sys
-import stat
+import importlib
 import subprocess
 from py_utils.colors import COLORS
 
 DEBUG = not os.path.exists('/data/params/d')
+
+
+def run(cmd):
+  """
+  If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
+  The status is returned, True being success, False for failure
+  """
+  if isinstance(cmd, str):
+    cmd = cmd.split()
+  try:
+    return not subprocess.call(cmd)
+  except:
+    return False
+
+
+def error(msg):
+  print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC))
 
 
 class Command:
@@ -34,21 +51,28 @@ class Emu:
     self.OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
     self.UPDATE_PATH = '{}/update.sh'.format(self.OH_MY_COMMA_PATH)
 
+    self.arg_idx = 0
     self.parse()
 
   def _update(self):
-    try:
-      r = subprocess.call(['sh', self.UPDATE_PATH])
-    except:
-      r = 1
-    if r:
-      self.error('Error calling update script!')
+    if not run(['sh', self.UPDATE_PATH]):
+      error('Error updating!')
 
   def _pandaflash(self):
-    print('panda flashing!')
+    run('make -C /data/openpilot/panda/board recover')
 
   def _pandaflash2(self):
-    print('panda flashing2!')
+    run('pkill -f boardd')
+    importlib.import_module('panda', 'Panda').Panda().flash()
+
+  def _debug(self):
+    arg = self.get_next_arg()
+    if arg is None:
+      print("You must specify a command for emu debug. Some options are:")
+      self.print_commands('debug_commands')
+
+  def _installfork(self):
+    print('Install fork menu')
 
   def parse(self):
     if len(self.args) == 0:
@@ -60,7 +84,7 @@ class Emu:
       self.print_commands()
       return
 
-    cmd = self.args[0].lower()
+    cmd = self.get_next_arg()
     self.start_function_from_str(cmd)
 
   def start_function_from_str(self, cmd):
@@ -70,8 +94,8 @@ class Emu:
       return
     getattr(self, cmd)()  # call command's function
 
-  def print_commands(self):
-    cmds = [cmd for cmd in self.cc.commands]
+  def print_commands(self, command='commands'):
+    cmds = [cmd for cmd in getattr(self.cc, command)]
     to_print = []
     for cmd in cmds:
       desc = COLORS.CYAN + self.cc.commands[cmd].description
@@ -80,8 +104,14 @@ class Emu:
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC)
 
-  def error(self, msg):
-    print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC))
+  def get_next_arg(self, lower=True):
+    if len(self.args) < self.arg_idx:
+      return None
+    arg = self.args[self.arg_idx]
+    self.arg_idx += 1
+    if lower:
+      arg = arg.lower()
+    return arg
 
 
 if __name__ == "__main__":
