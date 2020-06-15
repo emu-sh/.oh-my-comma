@@ -9,6 +9,7 @@ from py_utils.colors import COLORS
 from multiprocessing import Process
 # from selfdrive.launcher import launcher
 import cereal.messaging as messaging
+from setproctitle import setproctitle
 
 DEBUG = not os.path.exists('/data/params/d')
 
@@ -117,6 +118,7 @@ class Emu:
       sys.stdout = open('/data/output.log', 'a')
       mod = importlib.import_module(proc)
       # rename the process
+      setproctitle(proc)
       # create new context since we forked
       messaging.context = messaging.Context()
       # exec the process
