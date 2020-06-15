@@ -68,7 +68,7 @@ class Emu:
   def _debug(self):
     arg = self.get_next_arg()
     if arg is None:
-      print("You must specify a command for emu debug. Some options are:")
+      print("You must specify a command for emu debug. Some options are:\n")
       self.print_commands('debug_commands')
 
   def _installfork(self):
@@ -76,7 +76,7 @@ class Emu:
 
   def parse(self):
     if len(self.args) == 0:
-      print('You must specify a command for emu. Some options are:')
+      print('You must specify a command for emu. Some options are:\n')
       self.print_commands()
       return
     cmd = self.get_next_arg()
