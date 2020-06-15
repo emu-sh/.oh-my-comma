@@ -21,7 +21,7 @@ def run(cmd, out_file=None):
   f = None
   if isinstance(out_file, str):
     f = open(out_file, 'a')
-  print('here')
+
   try:
     r = subprocess.call(cmd, stdout=f)
     return not r
@@ -41,6 +41,10 @@ def kill(procname):
 
 def error(msg):
   print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC))
+
+
+def warning(msg):
+  print('{}{}{}'.format(COLORS.INFO, msg, COLORS.ENDC))
 
 
 class Command:
@@ -101,23 +105,13 @@ class Emu:
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    print(kill('selfdrive.thermald'))
-    print(kill('selfdrive.pandad'))
     # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
-    # r = run('pkill -f controlsd')
-    r = kill('selfdrive.controlsd')
+    # r = run('pkill -f controlsd')  # terminated file for some reason
+    r = kill('selfdrive.controlsd')  # seems to work, some process names are weird
     if r is None:
-      # error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
-      error('controlsd is already dead! (continuing...)')  # todo: add warning
-    time.sleep(2)
-    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
-    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
-    out_file = '/data/output.log'
+      warning('controlsd is already dead! (continuing...)')
+    run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
 
-    f = open(out_file, 'a')
-    r = subprocess.call(['python', '/data/openpilot/selfdrive/controls/controlsd.py'], stdout=f)
-
-    print('end')
     # print(r)
 
 
