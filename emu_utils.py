@@ -33,7 +33,7 @@ def run(cmd, out_file=None):
 def kill(procname):
   for proc in psutil.process_iter():
     # check whether the process name matches
-    print(proc.name)
+    print(proc.name())
     if proc.name() == procname:
       proc.kill()
 
