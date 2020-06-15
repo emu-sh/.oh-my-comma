@@ -4,6 +4,7 @@ import os
 import importlib
 import subprocess
 import time
+import psutil
 from py_utils.colors import COLORS
 
 DEBUG = not os.path.exists('/data/params/d')
@@ -27,6 +28,13 @@ def run(cmd, out_file=None):
   except Exception as e:
     print(e)
     return False
+
+
+def kill(procname):
+  for proc in psutil.process_iter():
+    # check whether the process name matches
+    if proc.name() == procname:
+      proc.kill()
 
 
 def error(msg):
@@ -91,23 +99,21 @@ class Emu:
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
-    try:
-      r = run('pkill -f controlsd')
-      if not r:
-        error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
-    except:
-      pass
-    time.sleep(2)
-    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
-    # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
-    out_file = '/data/output.log'
-
-    # f = open(out_file, 'a')
-    r = subprocess.call(['python', '/data/openpilot/selfdrive/controls/controlsd.py'])
-
-    print('end')
-    # print(r)
+    kill('updated')
+    # # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
+    # r = run('pkill -f controlsd')
+    # if not r:
+    #   error('Error killing controlsd! Is it running? (continuing...)')  # todo: add warning
+    # time.sleep(2)
+    # # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
+    # # r = run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
+    # out_file = '/data/output.log'
+    #
+    # # f = open(out_file, 'a')
+    # r = subprocess.call(['python', '/data/openpilot/selfdrive/controls/controlsd.py'])
+    #
+    # print('end')
+    # # print(r)
 
 
   def _installfork(self):
