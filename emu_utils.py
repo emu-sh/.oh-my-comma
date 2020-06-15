@@ -18,6 +18,9 @@ def run(cmd):
     print('run1')
   try:
     print('run2')
+    r = subprocess.call(cmd)
+    print(r)
+    print('run4')
     return not subprocess.call(cmd)
   except Exception as e:
     print('run3')
