@@ -99,13 +99,15 @@ if [ $update = false ]; then
   printf "End of $COMMUNITY_BASHRC_PATH\n"
 fi
 
+printf "\033[92m"
 if [ $update = true ]; then
   printf "\nSuccessfully updated emu utilities!\n"
 else
   echo "Sourcing /home/.bashrc to apply the changes made during installation"
   source /home/.bashrc
-  printf "\nSuccessfully installed emu utilities!\n"
+  printf "\nSuccessfully installed emu utilities\n"
 fi
+printf "\033[0m"
 
 if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
   printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
