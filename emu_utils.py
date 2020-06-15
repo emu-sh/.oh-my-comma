@@ -111,7 +111,11 @@ class Emu:
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
     if r is None:
       warning('controlsd is already dead! (continuing...)')
-    controlsd = Process(name='controlsd', target=launcher, args=('selfdrive.controls.controlsd',))
+
+    def f():
+      sys.stdout = open('/data/output.log', 'a')
+
+    controlsd = Process(name='controlsd', target=f, args=('selfdrive.controls.controlsd',))
     controlsd.start()
     # run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
 
