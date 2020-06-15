@@ -91,8 +91,8 @@ class Emu:
   def _controlsd(self):
     # PYTHONPATH=/data/openpilot python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log
     print('here1')
-    if not run('pkill -f controlsd'):
-      error('Error killing boardd! Is it running?')
+    if not run('pkill -f uploader'):
+      error('Error killing controlsd! Is it running?')
       return
     print('here2')
     # r = run('python /data/openpilot/selfdrive/controls/controlsd.py 2>&1 | tee /data/output.log')
