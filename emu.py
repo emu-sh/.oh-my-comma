@@ -126,7 +126,8 @@ class Emu:
   def _help(self):
     cmd = self.get_next_arg()
     if cmd is None:
-      error('You must specify a command to get help with!')
+      error('You must specify a command to get help with! Some are:')
+      self.print_commands()
       return
     if cmd not in self.cc.commands:
       error('Unknown command! Try one of these:')
