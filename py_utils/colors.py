@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 class COLORS:
   # HEADER = '\033[95m'
   OKBLUE = '\033[94m'
