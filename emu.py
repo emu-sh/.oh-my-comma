@@ -25,8 +25,8 @@ class CommandClass:
   debug_commands = {'controlsd': Command(description='logs controlsd to /data/output.log')}
 
   commands = {'update':      Command(description='updates this tool, recommended to restart ssh session'),
-              'pandaflash':  Command(description='flashes panda with make recover'),
-              'pandaflash2': Command(description='flashes panda using Panda module'),
+              'pandaflash':  Command(description='flashes 🐼 with make recover'),
+              'pandaflash2': Command(description='flashes 🐼 using 🐼 module'),
               'debug':       Command(description='debugging tools', commands=debug_commands),
               'installfork': Command(description='🦉 Whoooose fork do you wanna install?',
                                      flags=[Flag(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened'),
