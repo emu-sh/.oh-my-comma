@@ -13,3 +13,6 @@ def main():
 )
 def current(location, api_key):
   pass
+
+if __name__ == "__main__":
+  main()
