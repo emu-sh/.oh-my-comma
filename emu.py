@@ -6,13 +6,14 @@ def main():
   pass
 
 @main.command()
-@click.argument('location')
+@click.argument('clone_url')
 @click.option(
-  '--api-key', '-a',
-  help='your API key for the OpenWeatherMap API',
+  '--lite', '-l',
+  help='Fast cloning, clones only one branch with all commits flattened',
 )
-def current(location, api_key):
-  pass
+def installfork(clone_url, lite):
+  print(clone_url, lite)
+
 
 if __name__ == "__main__":
   main()
