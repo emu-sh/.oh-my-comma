@@ -143,7 +143,7 @@ class Emu:
       warning('  - None')
     elif isinstance(flags, list) and len(flags) > 0:
       for flag in flags:
-        aliases = ', '.join(flag.aliases)
+        aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.ENDC
         flags_to_print.append(warning('  - {}: {}'.format(aliases, flag.description), ret=True))
     else:
       print('Unknown to parse flags, this is awkward...')
