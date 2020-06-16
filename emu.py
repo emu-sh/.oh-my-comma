@@ -1,50 +1,13 @@
 import sys
-sys.path.append('/data/openpilot')
 import os
 import importlib
-import subprocess
 import shutil
-import psutil
 from py_utils.colors import COLORS
+from py_utils.emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative
+from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH
 
+sys.path.append(OPENPILOT_PATH)
 DEBUG = not os.path.exists('/data/params/d')
-
-
-def run(cmd, out_file=None):
-  """
-  If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
-  The status is returned, True being success, False for failure
-  """
-  if isinstance(cmd, str):
-    cmd = cmd.split()
-
-  f = None
-  if isinstance(out_file, str):
-    f = open(out_file, 'a')
-
-  try:
-    r = subprocess.call(cmd, stdout=f)
-    return not r
-  except Exception as e:
-    print(e)
-    return False
-
-
-def kill(procname):
-  for proc in psutil.process_iter():
-    # check whether the process name matches
-    if proc.name() == procname:
-      proc.kill()
-      return True
-  return None
-
-
-def error(msg):
-  print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC))
-
-
-def warning(msg):
-  print('{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC))
 
 
 class Command:
@@ -68,21 +31,15 @@ class Emu:
     self.args = args
     self.cc = CommandClass()
 
-    self.SYSTEM_BASHRC_PATH = '/home/.bashrc'
-    self.COMMUNITY_PATH = '/data/community'
-    self.COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
-    self.OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
-    self.UPDATE_PATH = '{}/update.sh'.format(self.OH_MY_COMMA_PATH)
-
     self.arg_idx = 0
     self.parse()
 
   def _update(self):
-    if not run(['sh', self.UPDATE_PATH]):
+    if not run(['sh', UPDATE_PATH]):
       error('Error updating!')
 
   def _pandaflash(self):
-    r = run('make -C /data/openpilot/panda/board recover')
+    r = run('make -C {}/panda/board recover'.format(OPENPILOT_PATH))
     if not r:
       error('Error running make command!')
 
@@ -109,27 +66,48 @@ class Emu:
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
     if r is None:
       warning('controlsd is already dead! (continuing...)')
-    run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
+    run('python {}/selfdrive/controls/controlsd.py'.format(OPENPILOT_PATH), out_file='/data/output.log')
 
   def _installfork(self):
+    OPENPILOT_TEMP_PATH = '{}.temp'.format(OPENPILOT_PATH)
     clone_url = self.get_next_arg()
     if clone_url is None:
       error('You must specify a fork URL to clone!')
       return
 
-    old_dir = "/data/openpilot.old"
-    old_count = 0
-    if os.path.exists(old_dir):
-      while os.path.exists(old_dir):
-        old_count += 1
-        old_dir = '{}.{}'.format(old_dir, old_count)
+    if not verify_fork_url(clone_url):  # verify we can clone before moving folder!
+      error('The specified fork URL is not valid!')
+      return
 
-    warning("Moving current openpilot installation to {}".format(old_dir))
-    shutil.move('/data/openpilot', old_dir)
-    warning("Fork will be installed to /data/openpilot")
-    r = run('git clone {} /data/openpilot'.format(clone_url))
-    if not r:
-      error('Error cloning specified fork URL!')
+    if os.path.exists(OPENPILOT_TEMP_PATH):
+      warning('{} already exists, should it be deleted to continue?'.format(OPENPILOT_TEMP_PATH))
+      if is_affirmative():
+        shutil.rmtree(OPENPILOT_TEMP_PATH)
+      else:
+        error('Exiting...')
+        return
+
+    # Clone fork to temp folder
+    warning('Fork will be installed to {}'.format(OPENPILOT_PATH))
+    r = run('git clone {} {}'.format(clone_url, OPENPILOT_TEMP_PATH))  # clone to temp folder
+
+    # If openpilot.old exists, determine a good non-exiting path
+    # todo: make a folder that holds all installed forks and provide an interface of switching between them
+    old_dir = '{}.old'.format(OPENPILOT_PATH)
+    old_count = 0
+    while os.path.exists(old_dir):
+      old_count += 1
+      old_dir = '{}.{}'.format(old_dir, old_count)
+
+    if r:
+      success('Cloned successfully! Installing fork...')
+      shutil.move(OPENPILOT_PATH, old_dir)  # move current installation to old dir
+      shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
+      success('Installed! Don\'t forget to restart your device')
+    else:
+      error('Error cloning specified fork URL! Cleaning up...')
+      if os.path.exists(OPENPILOT_TEMP_PATH):
+        shutil.rmtree(OPENPILOT_TEMP_PATH)
 
   def parse(self):
     if len(self.args) == 0:
@@ -163,15 +141,14 @@ class Emu:
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
   def get_next_arg(self, lower=True):
-    # print(self.args)
-    # print(len(self.args), self.arg_idx)
     if len(self.args) - 1 < self.arg_idx:
       return None
+
     arg = self.args[self.arg_idx]
     self.arg_idx += 1
+
     if lower:
       arg = arg.lower()
-    # print(arg)
     return arg
 
 
