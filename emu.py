@@ -113,7 +113,7 @@ class Emu:
       success('Cloned successfully! Installing fork...')
       shutil.move(OPENPILOT_PATH, bak_dir)  # move current installation to old dir
       shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
-      success('Installed! Don\'t forget to restart your device')
+      success("Installed! Don't forget to restart your device")
     else:
       error('\nError cloning specified fork URL!', end='')
       if os.path.exists(OPENPILOT_TEMP_PATH):  # git usually does this for us
@@ -132,7 +132,13 @@ class Emu:
       self.print_commands('commands')
       return
 
-    flags = self.cc.commands[cmd]['flags']
+    flags = self.cc.commands[cmd].flags
+    if flags is None:
+      print("The command you selected doesn't have any flags")
+    elif isinstance(flags, list) and len(flags) > 0:
+      print(flags)
+    else:
+      print('Unknown to parse flags, this is awkward...')
 
   def parse(self):
     if len(self.args) == 0:
