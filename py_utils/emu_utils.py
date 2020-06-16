@@ -46,14 +46,14 @@ def is_affirmative():
   print(COLORS.ENDC)
   return i in ['y', 'yes']
 
-def error(msg):
-  print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC))
+def error(msg, end='\n'):
+  print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC), end=end)
 
-def warning(msg):
-  print('{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC))
+def warning(msg, end='\n'):
+  print('{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC), end=end)
 
-def success(msg):
-  print('{}{}{}'.format(COLORS.SUCCESS, msg, COLORS.ENDC))
+def success(msg, end='\n'):
+  print('{}{}{}'.format(COLORS.SUCCESS, msg, COLORS.ENDC), end=end)
 
 def verify_fork_url(url):
   if url[:4].lower() != 'http':

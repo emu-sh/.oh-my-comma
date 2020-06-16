@@ -89,7 +89,7 @@ class Emu:
 
     # Clone fork to temp folder
     warning('Fork will be installed to {}'.format(OPENPILOT_PATH))
-    try:
+    try:  # catch ctrl+c and clean up after
       r = run('git clone {} {}'.format(clone_url, OPENPILOT_TEMP_PATH))  # clone to temp folder
     except:
       r = False
@@ -108,7 +108,8 @@ class Emu:
       shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
       success('Installed! Don\'t forget to restart your device')
     else:
-      error('Error cloning specified fork URL! Cleaning up...')
+      error('Error cloning specified fork URL!', end='')
+      error(' Cleaning up...')
       if os.path.exists(OPENPILOT_TEMP_PATH):
         shutil.rmtree(OPENPILOT_TEMP_PATH)
 
