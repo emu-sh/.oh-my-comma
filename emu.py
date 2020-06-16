@@ -24,10 +24,10 @@ class Flag:
 class CommandClass:
   debug_commands = {'controlsd': Command(description='logs controlsd to /data/output.log')}
 
-  commands = {'update':      Command(description='updates this tool, recommended to restart ssh session'),
+  commands = {'update':      Command(description='🎉 updates this tool, recommended to restart ssh session'),
               'pandaflash':  Command(description='flashes 🐼 with make recover'),
               'pandaflash2': Command(description='flashes 🐼 using 🐼 module'),
-              'debug':       Command(description='debugging tools', commands=debug_commands),
+              'debug':       Command(description='de-🐛-ing tools', commands=debug_commands),
               'installfork': Command(description='🦉 Whoooose fork do you wanna install?',
                                      flags=[Flag(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened'),
                                             Flag(['b', 'branch'], 'Specify the branch to clone after this flag')]),
