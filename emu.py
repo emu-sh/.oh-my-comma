@@ -30,8 +30,8 @@ class CommandClass:
               'debug':       Command(description='de-🐛-ing tools', commands=debug_commands),
               'installfork': Command(description='🦉 Whoooose fork do you wanna install?',
                                      flags=[Flag(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened'),
-                                            Flag(['b', 'branch'], 'Specify the branch to clone after this flag')]),
-              'help':        Command(description='Type `emu help command` to get flags and syntax for command')}
+                                            Flag(['b', 'branch'], 'Specify the branch to clone after this flag 🎌')]),
+              'help':        Command(description='Type `emu help command` to get flags 🚩 and syntax for command')}
 
 
 class Emu:
