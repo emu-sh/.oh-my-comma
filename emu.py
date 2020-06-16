@@ -132,13 +132,20 @@ class Emu:
       self.print_commands('commands')
       return
 
+    description = self.cc.commands[cmd].description
+    print('{}>>  Description: {}{}'.format(COLORS.OKGREEN, description, COLORS.ENDC))
+    print('{}>>  Flags:{}'.format(COLORS.PROMPT, COLORS.ENDC))
     flags = self.cc.commands[cmd].flags
+
+    flags_to_print = []
     if flags is None:
-      print("The command you selected doesn't have any flags")
+      error('    - None')
     elif isinstance(flags, list) and len(flags) > 0:
-      print(flags)
+      for flag in flags:
+        flags_to_print.append('    - {}: {}'.format(flag.aliases, flag.description))
     else:
       print('Unknown to parse flags, this is awkward...')
+    print('\n'.join(flags_to_print))
 
   def parse(self):
     if len(self.args) == 0:
