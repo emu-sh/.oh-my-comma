@@ -1,21 +1,21 @@
 #!/bin/bash
 SYSTEM_BASHRC_PATH=/home/.bashrc
 export COMMUNITY_PATH=/data/community
-export COMMUNITY_BASHRC_PATH=/data/community/.bashrc
+export COMMUNITY_BASHRC_PATH=${COMMUNITY_PATH}/.bashrc
 export OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source ${OH_MY_COMMA_PATH}/powerline.sh
 
+source ${OH_MY_COMMA_PATH}/powerline.sh
 source ${OH_MY_COMMA_PATH}/aliases.sh
 
-commands="
-  - update: updates this tool, requires restart of ssh session
-  - pandaflash: flashes panda
-  - pandaflash2: flashes panda without make recover
-  - debug: debugging tools
-  - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
-debugging_commands="
-  - controls: logs controlsd to /data/output.log"
+#commands=" \
+#  - update: updates this tool, requires restart of ssh session\
+#  - pandaflash: flashes panda\
+#  - pandaflash2: flashes panda without make recover\
+#  - debug: debugging tools\
+#  - installfork: Specify the fork URL after. Moves openpilot to openpilot.old"
+#debugging_commands="\
+#  - controls: logs controlsd to /data/output.log"
 
 #function _pandaflash() {
 #  cd /data/openpilot/panda/board && make recover
@@ -66,7 +66,8 @@ function _installfork(){
 #}
 
 function _updateohmycomma(){  # good to keep a backup in case python CLI is broken
-  source /data/community/.oh-my-comma/update.sh
+  source ${OH_MY_COMMA_PATH}/update.sh
+  source ${OH_MY_COMMA_PATH}/emu-utils.sh
 }
 
 function emu(){  # main wrapper function
@@ -76,7 +77,13 @@ function emu(){  # main wrapper function
 #    return 0
 #    fi
 #  fi
-  python /data/community/.oh-my-comma/emu.py "$@"
+
+  if $(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))' | grep -q -e '^2')
+  then
+    python3 ${OH_MY_COMMA_PATH}/emu.py "$@"
+  else
+    python ${OH_MY_COMMA_PATH}/emu.py "$@"
+  fi
 
   if [ $? = 1 ] && [ "$1" = "update" ]; then  # fallback to updating immediately if CLI crashed updating
     printf "\033[91mAn error occurred in the Python CLI, attempting to manually update .oh-my-comma...\n"
