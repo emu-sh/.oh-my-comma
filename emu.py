@@ -113,7 +113,7 @@ class Emu:
         error(' Cleaning up...')
         shutil.rmtree(OPENPILOT_TEMP_PATH)
       else:
-        print('\n')
+        print()
 
   def parse(self):
     if len(self.args) == 0:
