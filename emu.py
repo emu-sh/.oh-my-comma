@@ -91,17 +91,17 @@ class Emu:
     warning('Fork will be installed to {}'.format(OPENPILOT_PATH))
     r = run('git clone {} {}'.format(clone_url, OPENPILOT_TEMP_PATH))  # clone to temp folder
 
-    # If openpilot.old exists, determine a good non-exiting path
+    # If openpilot.bak exists, determine a good non-exiting path
     # todo: make a folder that holds all installed forks and provide an interface of switching between them
-    old_dir = '{}.old'.format(OPENPILOT_PATH)
-    old_count = 0
-    while os.path.exists(old_dir):
-      old_count += 1
-      old_dir = '{}.{}'.format(old_dir, old_count)
+    bak_dir = '{}.bak'.format(OPENPILOT_PATH)
+    bak_count = 0
+    while os.path.exists(bak_dir):
+      bak_count += 1
+      bak_dir = '{}.{}'.format(bak_dir, bak_count)
 
     if r:
       success('Cloned successfully! Installing fork...')
-      shutil.move(OPENPILOT_PATH, old_dir)  # move current installation to old dir
+      shutil.move(OPENPILOT_PATH, bak_dir)  # move current installation to old dir
       shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
       success('Installed! Don\'t forget to restart your device')
     else:
