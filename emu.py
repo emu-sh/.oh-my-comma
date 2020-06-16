@@ -165,8 +165,7 @@ class Emu:
 
     cmd = self.get_next_arg()
     if cmd not in self.cc.commands:
-      error('Unknown command! Try one of these:')
-      self.print_commands()
+      self.print_commands(msg='Unknown command! Try one of these:')
       return
 
     self.start_function_from_str(cmd)
@@ -178,10 +177,26 @@ class Emu:
       return
     getattr(self, cmd)()  # call command's function
 
-  def print_commands(self, command='commands'):
+  def print_commands(self, command='commands', msg=''):
     cmd_list = getattr(self.cc, command)
     cmds = [cmd for cmd in cmd_list]
     to_print = []
+    print(r"""
+          _
+       -=("""+COLORS.RED+"""'"""+COLORS.CWHITE+""")
+         ;;
+        //
+       //
+      : '.---.__
+      |  --_-_)__) 
+      `.____,'     
+         \  \      """+COLORS.OKGREEN+""" ___ ._ _ _  _ _ """+COLORS.CWHITE+"""
+       ___\  \     """+COLORS.OKGREEN+"""/ ._>| ' ' || | |"""+COLORS.CWHITE+"""
+      (       \    """+COLORS.OKGREEN+"""\___.|_|_|_|`___|"""+COLORS.CWHITE+"""
+               \   
+               /"""+'\n')
+    if len(msg):
+      error(msg)
     for cmd in cmds:
       desc = COLORS.CYAN + cmd_list[cmd].description
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
