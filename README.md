@@ -17,8 +17,11 @@ This repo is very much in active development! Expect it to evolve greatly over t
 
 <img src="https://thumbs.gfycat.com/VapidRipeAquaticleech-size_restricted.gif" alt ="" />
 
-welcome to the family
+# welcome to the family
+
 <img src="https://emu.bz/gay" alt="" height="250px" />
+
+You should now be able to use the `emu` command.
 
 # Updating
 
