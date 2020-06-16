@@ -15,15 +15,25 @@ class Command:
     self.description = description
     self.commands = commands
 
+class Argument:
+  def __init__(self, flags, description):
+    self.flags = flags
+    self.description = description
 
 class CommandClass:
-  debug_commands = {'controlsd': Command(description='logs controlsd to /data/output.log')}
+  debug_commands = {'controlsd': {'command': Command(description='logs controlsd to /data/output.log'),
+                                  'flags': None}}
 
-  commands = {'update': Command(description='updates this tool, requires restart of ssh session'),
-              'pandaflash': Command(description='pandaflash: flashes panda with make recover'),
-              'pandaflash2': Command(description='pandaflash2: flashes panda using Panda module'),
-              'debug': Command(description='debugging tools', commands=debug_commands),
-              'installfork': Command(description='Specify the fork URL after. Moves openpilot to openpilot.old')}
+  commands = {'update':      {'command': Command(description='updates this tool, recommended to restart ssh session'),
+                              'flags': None},
+              'pandaflash':  {'command': Command(description='flashes panda with make recover'),
+                              'flags': None},
+              'pandaflash2': {'command': Command(description='flashes panda using Panda module'),
+                              'flags': None},
+              'debug':       {'command': Command(description='debugging tools', commands=debug_commands),
+                              'flags': None},
+              'installfork': {'command': Command(description='Specify the fork URL after. Moves openpilot to openpilot.old'),
+                              'flags': [Argument(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened')]}}
 
 
 class Emu:
@@ -109,7 +119,7 @@ class Emu:
       success('Installed! Don\'t forget to restart your device')
     else:
       error('\nError cloning specified fork URL!', end='')
-      if os.path.exists(OPENPILOT_TEMP_PATH):
+      if os.path.exists(OPENPILOT_TEMP_PATH):  # git usually does this for us
         error(' Cleaning up...')
         shutil.rmtree(OPENPILOT_TEMP_PATH)
       else:
@@ -140,7 +150,7 @@ class Emu:
     cmds = [cmd for cmd in cmd_list]
     to_print = []
     for cmd in cmds:
-      desc = COLORS.CYAN + cmd_list[cmd].description
+      desc = COLORS.CYAN + cmd_list[cmd]['command'].description
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
       to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
       to_print.append(COLORS.OKGREEN + to_append)
