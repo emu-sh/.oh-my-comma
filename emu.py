@@ -90,7 +90,8 @@ class Emu:
     # Clone fork to temp folder
     warning('Fork will be installed to {}'.format(OPENPILOT_PATH))
     try:  # catch ctrl+c and clean up after
-      r = run('git clone {} {}'.format(clone_url, OPENPILOT_TEMP_PATH))  # clone to temp folder
+      # r = run('git clone {} {}'.format(clone_url, OPENPILOT_TEMP_PATH))  # clone to temp folder
+      r = False
     except:
       r = False
 
