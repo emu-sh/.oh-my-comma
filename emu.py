@@ -15,7 +15,7 @@ class Command:
     self.description = description
     self.commands = commands
 
-class Argument:
+class Flag:
   def __init__(self, flags, description):
     self.flags = flags
     self.description = description
@@ -33,7 +33,7 @@ class CommandClass:
               'debug':       {'command': Command(description='debugging tools', commands=debug_commands),
                               'flags': None},
               'installfork': {'command': Command(description='Specify the fork URL after. Moves openpilot to openpilot.old'),
-                              'flags': [Argument(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened')]}}
+                              'flags': [Flag(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened')]}}
 
 
 class Emu:
