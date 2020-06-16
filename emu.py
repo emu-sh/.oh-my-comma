@@ -108,7 +108,7 @@ class Emu:
       shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
       success('Installed! Don\'t forget to restart your device')
     else:
-      error('Error cloning specified fork URL!', end='')
+      error('\nError cloning specified fork URL!', end='')
       if os.path.exists(OPENPILOT_TEMP_PATH):
         error(' Cleaning up...')
         shutil.rmtree(OPENPILOT_TEMP_PATH)
