@@ -1,8 +1,14 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import psutil
 import requests
 import subprocess
+if __package__ is None:
+  import sys
+  from os import path
+  sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
+  from colors import COLORS
 from py_utils.colors import COLORS
-
 
 SYSTEM_BASHRC_PATH = '/home/.bashrc'
 COMMUNITY_PATH = '/data/community'
@@ -10,6 +16,7 @@ COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
 OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
 UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
+
 
 def run(cmd, out_file=None):
   """
@@ -30,6 +37,7 @@ def run(cmd, out_file=None):
     print(e)
     return False
 
+
 def kill(procname):
   for proc in psutil.process_iter():
     # check whether the process name matches
@@ -38,6 +46,7 @@ def kill(procname):
       return True
   return None
 
+
 def is_affirmative():
   i = None
   print(COLORS.PROMPT)
@@ -45,6 +54,7 @@ def is_affirmative():
     i = input('[Y/n]: ').lower().strip()
   print(COLORS.ENDC)
   return i in ['y', 'yes']
+
 
 def error(msg, end='\n', ret=False):
   """
@@ -59,17 +69,20 @@ def error(msg, end='\n', ret=False):
     return e
   print(e, end=end)
 
+
 def warning(msg, end='\n', ret=False):
   w = '{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC)
   if ret:
     return w
   print(w, end=end)
 
+
 def success(msg, end='\n', ret=False):
   s = '{}{}{}'.format(COLORS.SUCCESS, msg, COLORS.ENDC)
   if ret:
     return s
   print(s, end=end)
+
 
 def verify_fork_url(url):
   if url[:4].lower() != 'http':
