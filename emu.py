@@ -11,29 +11,27 @@ DEBUG = not os.path.exists('/data/params/d')
 
 
 class Command:
-  def __init__(self, description=None, commands=None):
+  def __init__(self, description=None, commands=None, flags=None):
     self.description = description
     self.commands = commands
+    self.flags = flags
 
 class Flag:
-  def __init__(self, flags, description):
-    self.flags = flags
+  def __init__(self, aliases, description):
+    self.aliases = aliases
     self.description = description
 
 class CommandClass:
-  debug_commands = {'controlsd': {'command': Command(description='logs controlsd to /data/output.log'),
-                                  'flags': None}}
+  debug_commands = {'controlsd': Command(description='logs controlsd to /data/output.log')}
 
-  commands = {'update':      {'command': Command(description='updates this tool, recommended to restart ssh session'),
-                              'flags': None},
-              'pandaflash':  {'command': Command(description='flashes panda with make recover'),
-                              'flags': None},
-              'pandaflash2': {'command': Command(description='flashes panda using Panda module'),
-                              'flags': None},
-              'debug':       {'command': Command(description='debugging tools', commands=debug_commands),
-                              'flags': None},
-              'installfork': {'command': Command(description='Specify the fork URL after. Moves openpilot to openpilot.old'),
-                              'flags': [Flag(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened')]}}
+  commands = {'update':      Command(description='updates this tool, recommended to restart ssh session'),
+              'pandaflash':  Command(description='flashes panda with make recover'),
+              'pandaflash2': Command(description='flashes panda using Panda module'),
+              'debug':       Command(description='debugging tools', commands=debug_commands),
+              'installfork': Command(description='Specify the fork URL after. Moves openpilot to openpilot.old',
+                                     flags=[Flag(aliases=['l', 'lite'],
+                                                 description='Fast cloning, clones only the default branch with all commits flattened')]),
+              'help':        Command(description='Type `emu help command` to get flags and syntax for command')}
 
 
 class Emu:
@@ -62,11 +60,11 @@ class Emu:
   def _debug(self):
     cmd = self.get_next_arg()
     if cmd is None:
-      print("You must specify a command for emu debug. Some options are:")
+      error("You must specify a command for emu debug. Some options are:")
       self.print_commands('debug_commands')
       return
     if cmd not in self.cc.debug_commands:
-      print('Unsupported debug command! Try one of these:')
+      error('Unknown debug command! Try one of these:')
       self.print_commands('debug_commands')
       return
     self.start_function_from_str(cmd)
@@ -125,14 +123,27 @@ class Emu:
       else:
         print()
 
+  def _help(self):
+    cmd = self.get_next_arg()
+    if cmd is None:
+      error('You must specify a command to get help with!')
+      return
+    if cmd not in self.cc.commands:
+      error('Unknown command! Try one of these:')
+      self.print_commands('commands')
+      return
+
+    flags = self.cc.commands[cmd]['flags']
+
   def parse(self):
     if len(self.args) == 0:
-      print('You must specify a command for emu. Some options are:')
+      error('You must specify a command for emu. Some options are:')
       self.print_commands()
       return
+
     cmd = self.get_next_arg()
     if cmd not in self.cc.commands:
-      print('Unsupported command! Try one of these:')
+      error('Unknown command! Try one of these:')
       self.print_commands()
       return
 
@@ -150,7 +161,7 @@ class Emu:
     cmds = [cmd for cmd in cmd_list]
     to_print = []
     for cmd in cmds:
-      desc = COLORS.CYAN + cmd_list[cmd]['command'].description
+      desc = COLORS.CYAN + cmd_list[cmd].description
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
       to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
       to_print.append(COLORS.OKGREEN + to_append)
