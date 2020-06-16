@@ -29,8 +29,7 @@ class CommandClass:
               'pandaflash2': Command(description='flashes panda using Panda module'),
               'debug':       Command(description='debugging tools', commands=debug_commands),
               'installfork': Command(description='Specify the fork URL after. Moves openpilot to openpilot.old',
-                                     flags=[Flag(aliases=['l', 'lite'],
-                                                 description='Fast cloning, clones only the default branch with all commits flattened')]),
+                                     flags=[Flag(['l', 'lite'], 'Fast cloning, clones only the default branch with all commits flattened')]),
               'help':        Command(description='Type `emu help command` to get flags and syntax for command')}
 
 
