@@ -77,23 +77,11 @@ class Emu:
     run('python {}/selfdrive/controls/controlsd.py'.format(OPENPILOT_PATH), out_file='/data/output.log')
 
   def _installfork(self):
-    flags = self.cc.commands['installfork'].flags
-    aliases = [f.aliases for f in flags]
     OPENPILOT_TEMP_PATH = '{}.temp'.format(OPENPILOT_PATH)
-    arg = self.get_next_arg()
-    if arg is None:
+    clone_url = self.get_next_arg()
+    if clone_url is None:
       error('You must specify a fork URL to clone!')
       return
-
-    # branch = None
-    # lite = None
-
-    if arg[0] == '-':
-      clone_url = self.get_next_arg()
-      if arg in [x for i in aliases for x in i]:
-        pass
-    else:
-      clone_url = arg
 
     if not verify_fork_url(clone_url):  # verify we can clone before moving folder!
       error('The specified fork URL is not valid!')
