@@ -46,14 +46,30 @@ def is_affirmative():
   print(COLORS.ENDC)
   return i in ['y', 'yes']
 
-def error(msg, end='\n'):
-  print('{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC), end=end)
+def error(msg, end='\n', ret=False):
+  """
+  The following applies to error, warning, and success methods
+  :param msg: The message to display
+  :param end: The ending char, default is \n
+  :param ret: Whether to return the formatted string, or print it
+  :return: The formatted string if ret is True
+  """
+  e = '{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC)
+  if ret:
+    return e
+  print(e, end=end)
 
-def warning(msg, end='\n'):
-  print('{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC), end=end)
+def warning(msg, end='\n', ret=False):
+  w = '{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC)
+  if ret:
+    return w
+  print(w, end=end)
 
-def success(msg, end='\n'):
-  print('{}{}{}'.format(COLORS.SUCCESS, msg, COLORS.ENDC), end=end)
+def success(msg, end='\n', ret=False):
+  s = '{}{}{}'.format(COLORS.SUCCESS, msg, COLORS.ENDC)
+  if ret:
+    return s
+  print(s, end=end)
 
 def verify_fork_url(url):
   if url[:4].lower() != 'http':
