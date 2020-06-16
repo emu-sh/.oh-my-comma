@@ -112,6 +112,8 @@ class Emu:
       if os.path.exists(OPENPILOT_TEMP_PATH):
         error(' Cleaning up...')
         shutil.rmtree(OPENPILOT_TEMP_PATH)
+      else:
+        print('\n')
 
   def parse(self):
     if len(self.args) == 0:
