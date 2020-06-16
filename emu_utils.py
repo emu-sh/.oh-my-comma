@@ -3,7 +3,7 @@ sys.path.append('/data/openpilot')
 import os
 import importlib
 import subprocess
-import time
+import shutil
 import psutil
 from py_utils.colors import COLORS
 
@@ -112,10 +112,24 @@ class Emu:
     run('python /data/openpilot/selfdrive/controls/controlsd.py', out_file='/data/output.log')
 
   def _installfork(self):
+    clone_url = self.get_next_arg()
+    if clone_url is None:
+      error('You must specify a fork URL to clone!')
+      return
+
     old_dir = "/data/openpilot.old"
     old_count = 0
+    if os.path.exists(old_dir):
+      while os.path.exists(old_dir):
+        old_count += 1
+        old_dir = '{}.{}'.format(old_dir, old_count)
 
-    print('Install fork menu')
+    warning("Moving current openpilot installation to {}".format(old_dir))
+    shutil.move('/data/openpilot', old_dir)
+    warning("Fork will be installed to /data/openpilot")
+    r = run('git clone {} /data/openpilot'.format(clone_url))
+    if not r:
+      error('Error cloning specified fork URL!')
 
   def parse(self):
     if len(self.args) == 0:
