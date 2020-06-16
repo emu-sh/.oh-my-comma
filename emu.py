@@ -1,10 +1,17 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import sys
 import os
 import importlib
 import shutil
-from py_utils.colors import COLORS
-from py_utils.emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative
-from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH
+if __package__ is None:
+  import sys
+  from os import path
+  sys.path.append(path.abspath(path.join(path.dirname(__file__), 'py_utils')))
+
+  from colors import COLORS
+  from emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative
+  from emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH
 
 sys.path.append(OPENPILOT_PATH)
 DEBUG = not os.path.exists('/data/params/d')
