@@ -133,7 +133,7 @@ class Emu:
       return
 
     description = self.cc.commands[cmd].description
-    print('{}>>  Description: {}{}'.format(COLORS.OKGREEN, description, COLORS.ENDC))
+    print('{}>>  Description: {}{}'.format(COLORS.OKBLUE, description, COLORS.ENDC))
     print('{}>>  Flags:{}'.format(COLORS.FAIL, COLORS.ENDC))
     flags = self.cc.commands[cmd].flags
 
