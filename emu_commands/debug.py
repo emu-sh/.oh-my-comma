@@ -19,8 +19,8 @@ class Debug(CommandBase):
       return
 
     print(flags.log_file)
-    print(type(flags.log_file))
-
+    print(type(flags.file))
+    return
     # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me if not needed
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
     if r is None:
