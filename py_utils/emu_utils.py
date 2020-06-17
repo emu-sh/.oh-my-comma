@@ -39,6 +39,7 @@ class BaseFunctions:
       to_append = ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc)
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
+    print('before')
     if command is not None:
       print('here')
       self._help(command)
