@@ -36,7 +36,7 @@ class BaseFunctions:
     for cmd in self.commands:
       desc = COLORS.CYAN + self.commands[cmd].description
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
-      if getattr(self, '_help', None) is not None:
+      if hasattr(self, '_help'):
         self._help(cmd, show_description=False)
     print(COLORS.ENDC)
 
