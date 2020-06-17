@@ -1,10 +1,10 @@
 import shutil
 from os import path
-from emu_commands.base import BaseCommand, Command, Flag
+from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative, ArgumentParser
 from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH, EMU_ART
 
-class Fork(BaseCommand):
+class Fork(CommandBase):
   def __init__(self, description):
     super().__init__(description)
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
@@ -13,9 +13,11 @@ class Fork(BaseCommand):
                                                Flag(['-b', '--branch'], 'Specify the branch to clone after this flag 🎌', True)])}
 
   def _install(self):
-    if self.next_arg(ingest=False) is None:  # todo: show install help
+    if self.next_arg(ingest=False) is None:
+      error('You must supply command arguments!')
       self._help('install')
       return
+
     flags, e = self.parse_flags(self.commands['install'].parser)
     if e is not None:
       error(e)

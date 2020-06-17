@@ -1,7 +1,7 @@
 from py_utils.colors import COLORS
 from py_utils.emu_utils import ArgumentParser, BaseFunctions, warning, success
 
-class BaseCommand(BaseFunctions):
+class CommandBase(BaseFunctions):
   def __init__(self, description):
     self.description = description
     self.commands = {}
@@ -42,13 +42,13 @@ class BaseCommand(BaseFunctions):
     #   return
 
     description = self.commands[cmd].description
-    print('{}>>  Description: {}{}'.format(COLORS.CYAN, description, COLORS.ENDC))
+    print('{}>>  💡Description: {}{}'.format(COLORS.CYAN, description, COLORS.ENDC))
 
     flags = self.commands[cmd].flags
 
     flags_to_print = []
     if flags is not None and len(flags) > 0:
-      print('{}>>  Flags:{}'.format(COLORS.WARNING, COLORS.ENDC))
+      print('{}>>  🚩Flags:{}'.format(COLORS.WARNING, COLORS.ENDC))
       for flag in flags:
         aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
         flags_to_print.append(COLORS.WARNING + '  - {}: {}'.format(aliases, flag.description) + COLORS.ENDC)
@@ -57,7 +57,7 @@ class BaseCommand(BaseFunctions):
     commands = self.commands[cmd].commands
     cmds_to_print = []
     if commands is not None and len(commands) > 0:
-      print('{}>>  Commands:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
+      print('{}>>  🍁Commands:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
       for cmd in commands:
         # cmds_to_print.append('  - {}: {}'.format(cmd, commands[cmd].description))
         # aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING

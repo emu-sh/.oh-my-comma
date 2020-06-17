@@ -12,7 +12,7 @@ if __package__ is None:
   from py_utils.colors import COLORS
   from py_utils.emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative, ArgumentParser, BaseFunctions
   from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH, EMU_ART
-  from emu_commands.base import BaseCommand, Flag, Command
+  from emu_commands.base import CommandBase, Flag, Command
   from emu_commands.fork import Fork
   from emu_commands.update import Update
 
@@ -72,10 +72,6 @@ class Emu(BaseFunctions):
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
 
-  # def _update(self):
-  #   if not run(['sh', UPDATE_PATH]):
-  #     error('Error updating!')
-  #
   # def _flash(self):
   #   r = run('make -C {}/panda/board recover'.format(OPENPILOT_PATH))
   #   if not r:
@@ -103,15 +99,6 @@ class Emu(BaseFunctions):
   #     warning('controlsd is already dead! (continuing...)')
   #   run('python {}/selfdrive/controls/controlsd.py'.format(OPENPILOT_PATH), out_file='/data/output.log')
   #
-  # def _fork(self):
-  #   cmd = self.next_arg()
-  #   if cmd is None:
-  #     self.print_commands('fork_commands', 'You must specify a command for emu fork. Some options are:')
-  #     return
-  #   if cmd not in self.cc.fork_commands:
-  #     self.print_commands('fork_commands', 'Unknown fork command! Try one of these:')
-  #     return
-  #   self.start_function_from_str(cmd)
   #
   # def _panda(self):
   #   cmd = self.next_arg()
@@ -154,6 +141,7 @@ class Emu(BaseFunctions):
   #   cmds_to_print = []
   #   if commands is None:
   #     success('  - None')
+  #   elif commands is not None and len(commands) > 0:
   #   elif commands is not None and len(commands) > 0:
   #     for cmd in commands:
   #       # cmds_to_print.append('  - {}: {}'.format(cmd, commands[cmd].description))
