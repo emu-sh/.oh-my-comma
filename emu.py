@@ -10,22 +10,22 @@ if __package__ is None:
 
   t = time.time()
   from py_utils.emu_utils import BaseFunctions
-  print(time.time() - t)
+  # print(time.time() - t)
   t = time.time()
   from py_utils.emu_utils import OPENPILOT_PATH
-  print(time.time() - t)
+  #print(time.time() - t)
   t = time.time()
   from emu_commands.fork import Fork
-  print(time.time() - t)
+  #print(time.time() - t)
   t = time.time()
   from emu_commands.update import Update
-  print(time.time() - t)
+  #print(time.time() - t)
   t = time.time()
   from emu_commands.panda import Panda
-  print(time.time() - t)
+  #print(time.time() - t)
   t = time.time()
   from emu_commands.debug import Debug
-  print(time.time() - t)
+  #print(time.time() - t)
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
