@@ -74,4 +74,4 @@ class Command:
         # for each flag, add it as argument with aliases.
         # if flag.has_value, parse value as string, if not, assume flag is boolean
         action = 'store_true' if not flag.has_value else None
-        self.parser.add_argument(*flag.aliases, flag.description, action=action)
+        self.parser.add_argument(*flag.aliases, help=flag.description, action=action)
