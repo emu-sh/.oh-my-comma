@@ -37,7 +37,7 @@ class BaseFunctions:
       desc = COLORS.CYAN + self.commands[cmd].description
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
       if hasattr(self, '_help'):
-        self._help(cmd, show_description=False)
+        self._help(cmd, show_description=False, leading=' ')
     print(COLORS.ENDC)
 
   def next_arg(self, lower=True, ingest=True):
