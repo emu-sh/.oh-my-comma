@@ -11,7 +11,7 @@ class CommandBase(BaseFunctions):
     cmd = self.next_arg()
     if len(self.commands) > 0:
       if cmd is None:
-        self.print_commands(error_msg='You must specify a command for emu {}. Some options are:'.format(cmd_name))
+        self.print_commands(error_msg='You must specify a command for emu {}. Some options are:'.format(cmd_name), command=cmd)
         return
       if cmd not in self.commands:
         self.print_commands(error_msg='Unknown command! Try one of these:')

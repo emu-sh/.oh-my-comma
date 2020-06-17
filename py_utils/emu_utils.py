@@ -26,7 +26,7 @@ class ArgumentParser(argparse.ArgumentParser):
 
 
 class BaseFunctions:
-  def print_commands(self, error_msg=None, ascii_art=False):
+  def print_commands(self, error_msg=None, ascii_art=False, command=None):
     to_print = []
     if ascii_art:
       print(EMU_ART)
@@ -39,6 +39,8 @@ class BaseFunctions:
       to_append = ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc)
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
+    if command is not None:
+      self._help(command)
 
   def next_arg(self, lower=True, ingest=True):
     """
