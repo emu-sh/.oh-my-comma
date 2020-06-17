@@ -13,7 +13,7 @@ class Debug(CommandBase):
       error('You must supply command arguments!')
       self._help('controlsd')
       return
-    flags, e = self.parse_flags(self.commands['install'].parser)
+    flags, e = self.parse_flags(self.commands['controlsd'].parser)
     if e is not None:
       error(e)
       return
