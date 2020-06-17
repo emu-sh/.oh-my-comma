@@ -51,7 +51,7 @@ class CommandBase(BaseFunctions):
     commands = self.commands[cmd].commands
     cmds_to_print = []
     if commands is not None and len(commands) > 0:
-      print('{}>>  Commands 💻:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
+      print(leading + '{}>>  Commands 💻:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
       for cmd in commands:
         cmds_to_print.append(leading + COLORS.FAIL + '  - {}: {}'.format(cmd, success(commands[cmd].description, ret=True)) + COLORS.ENDC)
       print('\n'.join(cmds_to_print))
