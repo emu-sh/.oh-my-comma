@@ -34,13 +34,6 @@ class CommandBase(BaseFunctions):
       return None, e
 
   def _help(self, cmd):
-    # if cmd is None:
-    #   self.print_commands(error_msg='You must specify a command to get help with! Some are:')
-    #   return
-    # if cmd not in self.cc.commands:
-    #   self.print_commands(error_msg='Unknown command! Try one of these:')
-    #   return
-
     description = self.commands[cmd].description
     print('{}>>  Description 📚: {}{}'.format(COLORS.CYAN, description, COLORS.ENDC))
 
@@ -59,8 +52,6 @@ class CommandBase(BaseFunctions):
     if commands is not None and len(commands) > 0:
       print('{}>>  Commands 💻:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
       for cmd in commands:
-        # cmds_to_print.append('  - {}: {}'.format(cmd, commands[cmd].description))
-        # aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
         cmds_to_print.append(COLORS.FAIL + '  - {}: {}'.format(cmd, success(commands[cmd].description, ret=True)) + COLORS.ENDC)
       print('\n'.join(cmds_to_print))
 
