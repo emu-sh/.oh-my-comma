@@ -72,15 +72,8 @@ class Emu(BaseFunctions):
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
 
-  # def _flash(self):
-  #   r = run('make -C {}/panda/board recover'.format(OPENPILOT_PATH))
-  #   if not r:
-  #     error('Error running make command!')
-  #
-  # def _flash2(self):
-  #   if not run('pkill -f boardd'):
-  #     error('Error killing boardd! Is it running? (continuing...)')
-  #   importlib.import_module('panda', 'Panda').Panda().flash()
+
+
   #
   # def _debug(self):
   #   cmd = self.next_arg()

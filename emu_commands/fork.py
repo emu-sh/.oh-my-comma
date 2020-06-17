@@ -10,7 +10,7 @@ class Fork(CommandBase):
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
                                         flags=[Flag(['clone_url'], '🍴 URL of fork to clone', has_value=True),
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
-                                               Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', True)])}
+                                               Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', has_value=True)])}
 
   def _install(self):
     if self.next_arg(ingest=False) is None:
