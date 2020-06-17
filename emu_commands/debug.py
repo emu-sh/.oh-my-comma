@@ -9,10 +9,10 @@ class Debug(CommandBase):
                                           flags=[Flag(['log_file'], 'Name of file to save log to', has_value=True)])}
 
   def _controlsd(self):
-    if self.next_arg(ingest=False) is None:
-      error('You must supply command arguments!')
-      self._help('controlsd')
-      return
+    # if self.next_arg(ingest=False) is None:
+    #   error('You must supply command arguments!')
+    #   self._help('controlsd')
+    #   return
     flags, e = self.parse_flags(self.commands['controlsd'].parser)
     if e is not None:
       error(e)
