@@ -6,7 +6,9 @@ class Debug(CommandBase):
   def __init__(self, description):
     super().__init__(description)
     self.commands = {'controlsd': Command(description='🔬 logs controlsd to /data/output.log by default',
-                                          flags=[Flag(['-o', '--output'], 'Name of file to save log to', has_value=True)])}
+                                          flags=[Flag(['-o', '--output'], 'Name of file to save log to', has_value=True)]),
+                     'planner': Command(description='🔁 logs latcontrol to file',
+                                        flags=[Flag(['-o', '--output'], 'Name of file to save log to', has_value=True)])}
     self.default_path = '/data/output.log'
 
   def _controlsd(self):
