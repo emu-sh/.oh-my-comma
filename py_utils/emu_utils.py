@@ -8,8 +8,7 @@ import sys
 if __package__ is None:
   from os import path
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
-  from colors import COLORS
-from py_utils.colors import COLORS
+  from py_utils.colors import COLORS
 
 SYSTEM_BASHRC_PATH = '/home/.bashrc'
 COMMUNITY_PATH = '/data/community'
