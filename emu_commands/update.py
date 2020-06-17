@@ -1,8 +1,6 @@
-import shutil
-from os import path
-from emu_commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative, ArgumentParser
-from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH, EMU_ART
+from emu_commands.base import CommandBase
+from py_utils.emu_utils import run, error
+from py_utils.emu_utils import UPDATE_PATH
 
 class Update(CommandBase):
   def __init__(self, description):

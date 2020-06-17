@@ -16,6 +16,7 @@ if __package__ is None:
   from emu_commands.fork import Fork
   from emu_commands.update import Update
   from emu_commands.panda import Panda
+  from emu_commands.debug import Debug
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
@@ -24,13 +25,6 @@ DEBUG = not path.exists('/data/params/d')
 # class CommandClass:
 #   debug_commands = {'controlsd': Command(description='logs controlsd to /data/output.log')}
 #
-#   fork_commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
-#                                       flags=[Flag(['clone_url'], 'URL of fork to clone', has_value=True),
-#                                              Flag(['-l', '--lite'], 'Clones only the default branch with all commits flattened for quick cloning'),
-#                                              Flag(['-b', '--branch'], 'Specify the branch to clone after this flag 🎌', True)])}
-#
-#   panda_commands = {'flash':  Command(description='flashes 🐼 with make recover'),
-#                     'flash2': Command(description='flashes 🐼 using 🐼 module')}
 #
 #   # commands = {'update': Command(description='🎉 updates this tool, recommended to restart ssh session'),
 #   #             'panda':  Command(description='panda interfacing tools', commands=panda_commands),
@@ -44,7 +38,8 @@ class Emu(BaseFunctions):
     # self.cc = CommandClass()
     self.commands = {'fork': Fork('🍴 control installed forks, or clone a new one'),
                      'update': Update('🎉 updates this tool, recommended to restart ssh session'),
-                     'panda': Panda('🐼 panda interfacing tools')}
+                     'panda': Panda('🐼 panda interfacing tools'),
+                     'debug': Debug('de-🐛-ing tools')}
 
     # self.arg_idx = 0
     self.parse()
@@ -73,37 +68,6 @@ class Emu(BaseFunctions):
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
-
-
-
-  #
-  # def _debug(self):
-  #   cmd = self.next_arg()
-  #   if cmd is None:
-  #     self.print_commands('debug_commands', 'You must specify a command for emu debug. Some options are:')
-  #     return
-  #   if cmd not in self.cc.debug_commands:
-  #     self.print_commands('debug_commands', 'Unknown debug command! Try one of these:')
-  #     return
-  #   self.start_function_from_str(cmd)
-  #
-  # def _controlsd(self):
-  #   # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me if not needed
-  #   r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
-  #   if r is None:
-  #     warning('controlsd is already dead! (continuing...)')
-  #   run('python {}/selfdrive/controls/controlsd.py'.format(OPENPILOT_PATH), out_file='/data/output.log')
-  #
-  #
-  # def _panda(self):
-  #   cmd = self.next_arg()
-  #   if cmd is None:
-  #     self.print_commands('panda_commands', 'You must specify a command for emu panda. Some options are:')
-  #     return
-  #   if cmd not in self.cc.panda_commands:
-  #     self.print_commands('panda_commands', 'Unknown panda command! Try one of these:')
-  #     return
-  #   self.start_function_from_str(cmd)
 
   # def _help(self, commands=None):
   #   cmd = self.next_arg()
@@ -143,7 +107,6 @@ class Emu(BaseFunctions):
   #       # aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
   #       cmds_to_print.append(COLORS.FAIL + '  - {}: {}'.format(cmd, success(commands[cmd].description, ret=True)) + COLORS.ENDC)
   #     print('\n'.join(cmds_to_print))
-
 
 
 if __name__ == "__main__":
