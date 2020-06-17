@@ -1,12 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import time
 import psutil
 import requests
 import argparse
 import subprocess
 import sys
-t = time.time()
 if __package__ is None:
   from os import path
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
@@ -148,4 +146,3 @@ EMU_ART = r"""            _
         (       \    """ + COLORS.OKGREEN + """\___.|_|_|_|`___|""" + COLORS.CWHITE + """
                  \   
                  /""" + '\n'
-print(time.time() - t)

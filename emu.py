@@ -2,31 +2,20 @@
 # -*- coding: utf-8 -*-
 import time
 import sys
-if __package__ is None:
-  import sys
-  from os import path
-  sys.path.append(path.abspath(path.join(path.dirname(__file__), 'py_utils')))
-  sys.path.append(path.abspath(path.join(path.dirname(__file__), 'emu_commands')))
+t = time.time()
+# if __package__ is None:
+import sys
+from os import path
+# sys.path.append(path.abspath(path.join(path.dirname(__file__), 'py_utils')))
+# sys.path.append(path.abspath(path.join(path.dirname(__file__), 'emu_commands')))
 
-  t = time.time()
-  from py_utils.emu_utils import BaseFunctions
-  # print(time.time() - t)
-  t = time.time()
-  from py_utils.emu_utils import OPENPILOT_PATH
-  #print(time.time() - t)
-  t = time.time()
-  from emu_commands.fork import Fork
-  #print(time.time() - t)
-  t = time.time()
-  from emu_commands.update import Update
-  #print(time.time() - t)
-  t = time.time()
-  from emu_commands.panda import Panda
-  #print(time.time() - t)
-  t = time.time()
-  from emu_commands.debug import Debug
-  #print(time.time() - t)
-
+from py_utils.emu_utils import BaseFunctions
+from py_utils.emu_utils import OPENPILOT_PATH
+from emu_commands.fork import Fork
+from emu_commands.update import Update
+from emu_commands.panda import Panda
+from emu_commands.debug import Debug
+print(time.time() - t)
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
 
