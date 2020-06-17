@@ -47,19 +47,19 @@ class Emu(BaseFunctions):
       return
     self.commands[cmd].main(self.args, cmd)
 
-  # def print_commands(self, error_msg=None, ascii_art=False):
-  #   to_print = []
-  #   if ascii_art:
-  #     print(EMU_ART)
-  #
-  #   if error_msg is not None:
-  #     error(error_msg)
-  #   for cmd in self.commands:
-  #     desc = COLORS.CYAN + self.commands[cmd].description
-  #     # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
-  #     to_append = '- {:<7} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
-  #     to_print.append(COLORS.OKGREEN + to_append)
-  #   print('\n'.join(to_print) + COLORS.ENDC + '\n')
+  def print_commands(self, error_msg=None, ascii_art=False):
+    to_print = []
+    if ascii_art:
+      print(EMU_ART)
+
+    if error_msg is not None:
+      error(error_msg)
+    for cmd in self.commands:
+      desc = COLORS.CYAN + self.commands[cmd].description
+      # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
+      to_append = '- {:<7} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
+      to_print.append(COLORS.OKGREEN + to_append)
+    print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
 
   # def _help(self, commands=None):
