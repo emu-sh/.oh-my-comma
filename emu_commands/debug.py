@@ -18,6 +18,8 @@ class Debug(CommandBase):
       error(e)
       return
 
+    print(flags.log_file)
+
     # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me if not needed
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
     if r is None:
