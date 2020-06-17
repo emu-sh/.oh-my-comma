@@ -38,7 +38,7 @@ class BaseFunctions:
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
-        self._help(cmd, show_description=False, leading='')
+        self._help(cmd, show_description=False, leading='')  # todo: decide if leading is better than no leading
         print()
     print(COLORS.ENDC)
 
