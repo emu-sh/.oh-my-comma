@@ -11,7 +11,7 @@ This repo is very much in active development! Expect it to evolve greatly over t
 # Getting Started
 
 ```
- bash <(curl -fsSL https://install.emu.sh/)
+ bash <(curl -fsSL install.emu.sh)
  source /home/.bashrc
 ```
 
