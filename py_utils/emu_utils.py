@@ -13,16 +13,13 @@ if __package__ is None:
   from py_utils.colors import COLORS
 else:
   from py_utils.colors import COLORS
-print(time.time() - t)
-t = time.time()
+
 SYSTEM_BASHRC_PATH = '/home/.bashrc'
 COMMUNITY_PATH = '/data/community'
 COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
 OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
 UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
-print(time.time() - t)
-t = time.time()
 
 
 class ArgumentParser(argparse.ArgumentParser):
