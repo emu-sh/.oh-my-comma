@@ -33,7 +33,28 @@ class CommandBase(BaseFunctions):
     except Exception as e:
       return None, e
 
+  def _help(self, cmd, show_description=True):
+    description = self.commands[cmd].description
+    if show_description:
+      print('{}>>  Description 📚: {}{}'.format(COLORS.CYAN, description, COLORS.ENDC))
 
+    flags = self.commands[cmd].flags
+
+    flags_to_print = []
+    if flags is not None and len(flags) > 0:
+      print('{}>>  Flags 🎌:{}'.format(COLORS.WARNING, COLORS.ENDC))
+      for flag in flags:
+        aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
+        flags_to_print.append(COLORS.WARNING + '  - {}: {}'.format(aliases, flag.description) + COLORS.ENDC)
+      print('\n'.join(flags_to_print))
+
+    commands = self.commands[cmd].commands
+    cmds_to_print = []
+    if commands is not None and len(commands) > 0:
+      print('{}>>  Commands 💻:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
+      for cmd in commands:
+        cmds_to_print.append(COLORS.FAIL + '  - {}: {}'.format(cmd, success(commands[cmd].description, ret=True)) + COLORS.ENDC)
+      print('\n'.join(cmds_to_print))
 
 class Flag:
   def __init__(self, aliases, description, has_value=False):
