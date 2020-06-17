@@ -40,6 +40,7 @@ class BaseFunctions:
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
     if command is not None:
+      print('here')
       self._help(command)
 
   def next_arg(self, lower=True, ingest=True):
