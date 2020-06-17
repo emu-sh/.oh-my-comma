@@ -39,6 +39,7 @@ class BaseFunctions:
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
         self._help(cmd, show_description=False, leading='  ')
+        print()
     print(COLORS.ENDC)
 
   def next_arg(self, lower=True, ingest=True):
