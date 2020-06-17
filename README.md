@@ -11,7 +11,7 @@ This repo is very much in active development! Expect it to evolve greatly over t
 # Getting Started
 
 ```
- bash <(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)
+ bash <(curl -fsSL https://install.emu.sh/)
  source /home/.bashrc
 ```
 
