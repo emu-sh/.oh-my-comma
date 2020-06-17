@@ -35,11 +35,13 @@ class BaseFunctions:
       error(error_msg)
     max_cmd = max([len(_c) for _c in self.commands]) + 1
     for cmd in self.commands:
-      self._help(cmd)
+      # self._help(cmd)
       desc = COLORS.CYAN + self.commands[cmd].description
-      to_append = ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc)
-      to_print.append(COLORS.OKGREEN + to_append)
-    print('\n'.join(to_print) + COLORS.ENDC + '\n')
+      to_append = COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc)
+      print(to_append)
+      # to_print.append(COLORS.OKGREEN + to_append)
+    # print('\n'.join(to_print) + COLORS.ENDC + '\n')
+    print(COLORS.ENDC + '\n')
 
   def next_arg(self, lower=True, ingest=True):
     """
