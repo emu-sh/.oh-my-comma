@@ -132,8 +132,7 @@ def verify_fork_url(url):
     return False
 
 
-EMU_ART = r"""
-            _
+EMU_ART = r"""            _
          -=(""" + COLORS.RED + """'""" + COLORS.CWHITE + """)
            ;;
           //
