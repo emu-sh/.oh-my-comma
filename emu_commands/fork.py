@@ -8,7 +8,7 @@ class Fork(CommandBase):
   def __init__(self, description):
     super().__init__(description)
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
-                                        flags=[Flag(['clone_url'], 'URL of fork 🍴 to clone', has_value=True),
+                                        flags=[Flag(['clone_url'], '🍴 URL of fork to clone', has_value=True),
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', True)])}
 
