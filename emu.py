@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import time
-t = time.time()
 import sys
 if __package__ is None:
   import sys
@@ -9,16 +8,23 @@ if __package__ is None:
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'py_utils')))
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'emu_commands')))
 
+  t = time.time()
+  t = time.time()
   from py_utils.emu_utils import BaseFunctions
   print(time.time() - t)
+  t = time.time()
   from py_utils.emu_utils import OPENPILOT_PATH
   print(time.time() - t)
+  t = time.time()
   from emu_commands.fork import Fork
   print(time.time() - t)
+  t = time.time()
   from emu_commands.update import Update
   print(time.time() - t)
+  t = time.time()
   from emu_commands.panda import Panda
   print(time.time() - t)
+  t = time.time()
   from emu_commands.debug import Debug
   print(time.time() - t)
 
