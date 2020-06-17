@@ -7,6 +7,7 @@ from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BAS
 class Update(BaseCommand):
   def __init__(self, description):
     super().__init__(description)
+    self.commands = {}
 
   def _update(self):
     if not run(['sh', UPDATE_PATH]):
