@@ -14,6 +14,7 @@ if __package__ is None:
   from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH, EMU_ART
   from emu_commands.base import BaseCommand, Flag, Command
   from emu_commands.fork import Fork
+  from emu_commands.update import Update
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
@@ -33,7 +34,6 @@ DEBUG = not path.exists('/data/params/d')
 #   # commands = {'update': Command(description='🎉 updates this tool, recommended to restart ssh session'),
 #   #             'panda':  Command(description='panda interfacing tools', commands=panda_commands),
 #   #             'debug':  Command(description='de-🐛-ing tools', commands=debug_commands),
-#   #             'fork':   Command(description='Control installed forks, or clone a new one', commands=fork_commands),
 #   #             'help':   Command(description='Type `emu help command` to get flags 🚩 and syntax for command')}
 
 
@@ -41,7 +41,8 @@ class Emu(BaseFunctions):
   def __init__(self, args):
     self.args = args
     # self.cc = CommandClass()
-    self.commands = {'fork': Fork('Control installed forks, or clone a new one')}
+    self.commands = {'fork': Fork('Control installed forks, or clone a new one'),
+                     'update': Update('🎉 updates this tool, recommended to restart ssh session')}
 
     # self.arg_idx = 0
     self.parse()
