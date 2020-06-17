@@ -5,8 +5,8 @@ from py_utils.emu_utils import OPENPILOT_PATH
 class Debug(CommandBase):
   def __init__(self, description):
     super().__init__(description)
-    self.commands = {'controlsd': Command(description='🔬 logs controlsd to /data/output.log',
-                                          flags=[Flag(['log_file'], 'Name of file to save log to', has_value=True, required=False)])}
+    self.commands = {'controlsd': Command(description='🔬 logs controlsd to /data/output.log by default',
+                                          flags=[Flag(['-f', '--file'], 'Name of file to save log to', has_value=True)])}
 
   def _controlsd(self):
     # if self.next_arg(ingest=False) is None:
@@ -18,8 +18,8 @@ class Debug(CommandBase):
       error(e)
       return
 
-    print(flags.log_file)
-    print(type(flags.log_file))
+    print(flags.file)
+    print(type(flags.file))
     return
     # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me if not needed
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
