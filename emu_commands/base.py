@@ -57,7 +57,7 @@ class CommandBase(BaseFunctions):
     commands = self.commands[cmd].commands
     cmds_to_print = []
     if commands is not None and len(commands) > 0:
-      print('{}>>  Commands:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
+      print('{}>>  Commands 🌿:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
       for cmd in commands:
         # cmds_to_print.append('  - {}: {}'.format(cmd, commands[cmd].description))
         # aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
