@@ -54,7 +54,7 @@ class Emu(BaseFunctions):
     if cmd not in self.commands:
       self.print_commands(error_msg='Unknown command! Try one of these:')
       return
-    self.commands[cmd].main(self.args)
+    self.commands[cmd].main(self.args, cmd)
 
   def print_commands(self, error_msg=None, ascii_art=False):
     to_print = []

@@ -15,17 +15,6 @@ class Fork(BaseCommand):
                                                Flag(['-l', '--lite'], 'Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], 'Specify the branch to clone after this flag 🎌', True)])}
 
-  def main(self, args):
-    self.args = args
-    cmd = self.next_arg()
-    if cmd is None:
-      self.print_commands(error_msg='You must specify a command for emu fork. Some options are:')
-      return
-    if cmd not in self.commands:
-      self.print_commands(error_msg='Unknown command! Try one of these:')
-      return
-    self.start_function_from_str(cmd)
-
   def _install(self):
     if self.next_arg(ingest=False) is None:  # todo: show install help
       self._help('install')

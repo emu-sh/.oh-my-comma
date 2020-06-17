@@ -5,6 +5,17 @@ class BaseCommand(BaseFunctions):
   def __init__(self, description):
     self.description = description
 
+  def main(self, args, cmd_name):
+    self.args = args
+    cmd = self.next_arg()
+    if cmd is None:
+      self.print_commands(error_msg='You must specify a command for emu {}. Some options are:'.format(cmd_name))
+      return
+    if cmd not in self.commands:
+      self.print_commands(error_msg='Unknown command! Try one of these:')
+      return
+    self.start_function_from_str(cmd)
+
   def start_function_from_str(self, cmd):
     cmd = '_' + cmd
     if not hasattr(self, cmd):
