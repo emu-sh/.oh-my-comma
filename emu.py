@@ -13,7 +13,7 @@ if __package__ is None:
   from emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative
   from emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BASHRC_PATH, OH_MY_COMMA_PATH, UPDATE_PATH, OPENPILOT_PATH
 
-sys.path.append(OPENPILOT_PATH)
+sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not os.path.exists('/data/params/d')
 
 
@@ -67,17 +67,15 @@ class Emu:
   def _debug(self):
     cmd = self.get_next_arg()
     if cmd is None:
-      error("You must specify a command for emu debug. Some options are:")
-      self.print_commands('debug_commands')
+      self.print_commands('debug_commands', 'You must specify a command for emu debug. Some options are:')
       return
     if cmd not in self.cc.debug_commands:
-      error('Unknown debug command! Try one of these:')
-      self.print_commands('debug_commands')
+      self.print_commands('debug_commands', 'Unknown debug command! Try one of these:')
       return
     self.start_function_from_str(cmd)
 
   def _controlsd(self):
-    # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me
+    # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me if not needed
     r = kill('selfdrive.controls.controlsd')  # seems to work, some process names are weird
     if r is None:
       warning('controlsd is already dead! (continuing...)')
@@ -133,12 +131,10 @@ class Emu:
   def _help(self):
     cmd = self.get_next_arg()
     if cmd is None:
-      error('You must specify a command to get help with! Some are:')
-      self.print_commands()
+      self.print_commands(error_msg='You must specify a command to get help with! Some are:')
       return
     if cmd not in self.cc.commands:
-      error('Unknown command! Try one of these:')
-      self.print_commands('commands')
+      self.print_commands(error_msg='Unknown command! Try one of these:')
       return
 
     description = self.cc.commands[cmd].description
@@ -159,13 +155,12 @@ class Emu:
 
   def parse(self):
     if len(self.args) == 0:
-      error('You must specify a command for emu. Some options are:')
-      self.print_commands()
+      self.print_commands(error_msg='You must specify a command for emu. Some options are:')
       return
 
     cmd = self.get_next_arg()
     if cmd not in self.cc.commands:
-      self.print_commands(msg='Unknown command! Try one of these:')
+      self.print_commands(error_msg='Unknown command! Try one of these:')
       return
 
     self.start_function_from_str(cmd)
@@ -177,7 +172,7 @@ class Emu:
       return
     getattr(self, cmd)()  # call command's function
 
-  def print_commands(self, command='commands', msg=''):
+  def print_commands(self, command='commands', error_msg=None):
     cmd_list = getattr(self.cc, command)
     cmds = [cmd for cmd in cmd_list]
     to_print = []
@@ -195,8 +190,9 @@ class Emu:
       (       \    """+COLORS.OKGREEN+"""\___.|_|_|_|`___|"""+COLORS.CWHITE+"""
                \   
                /"""+'\n')
-    if len(msg):
-      error(msg)
+
+    if error_msg is not None:
+      error(error_msg)
     for cmd in cmds:
       desc = COLORS.CYAN + cmd_list[cmd].description
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
