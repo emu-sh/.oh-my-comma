@@ -1,4 +1,3 @@
-import shutil
 import importlib
 from emu_commands.base import CommandBase, Command
 from py_utils.emu_utils import run, kill, error, warning, success, verify_fork_url, is_affirmative, ArgumentParser
@@ -7,8 +6,8 @@ from py_utils.emu_utils import SYSTEM_BASHRC_PATH, COMMUNITY_PATH, COMMUNITY_BAS
 class Panda(CommandBase):
   def __init__(self, description):
     super().__init__(description)
-    self.commands = {'flash': Command(description='flashes 🐼 with make recover (usually works with the EON)'),
-                     'flash2': Command(description='flashes 🐼 using 🐼 module (usually works with the C2)')}
+    self.commands = {'flash': Command(description='🐼 flashes panda with make recover (usually works with the EON)'),
+                     'flash2': Command(description='🎍 flashes panda using Panda module (usually works with the C2)')}
 
   def _flash(self):
     r = run('make -C {}/panda/board recover'.format(OPENPILOT_PATH))
