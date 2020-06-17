@@ -1,3 +1,3 @@
 alias ll="ls -lhA"
-alias pf="emu pandaflash"
-alias controlsd="emu debug controls"
+alias pf="emu panda flash"
+alias controlsd="emu debug controlsd"
