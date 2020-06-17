@@ -32,10 +32,12 @@ class BaseFunctions:
 
     if error_msg is not None:
       error(error_msg)
+    max_cmd = max([len(_c) for _c in self.commands]) + 1
     for cmd in self.commands:
       desc = COLORS.CYAN + self.commands[cmd].description
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
-      to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
+      # to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
+      to_append = ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc)
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
