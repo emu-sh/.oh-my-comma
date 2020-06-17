@@ -15,6 +15,7 @@ if __package__ is None:
   from emu_commands.base import CommandBase, Flag, Command
   from emu_commands.fork import Fork
   from emu_commands.update import Update
+  from emu_commands.panda import Panda
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
@@ -43,7 +44,7 @@ class Emu(BaseFunctions):
     # self.cc = CommandClass()
     self.commands = {'fork': Fork('🍴 control installed forks, or clone a new one'),
                      'update': Update('🎉 updates this tool, recommended to restart ssh session'),
-                     'panda': '🐼 panda interfacing tools'}
+                     'panda': Panda('🐼 panda interfacing tools')}
 
     # self.arg_idx = 0
     self.parse()
