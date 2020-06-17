@@ -3,6 +3,8 @@ SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
+OH_MY_COMMA_PATH=/data/community/.oh-my-comma
+OMC_VERSION=0.1.0
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
@@ -108,3 +110,5 @@ fi
 if [ $update = false ]; then
   set +x
 fi
+
+echo "Current version: $OMC_VERSION"
