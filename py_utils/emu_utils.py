@@ -39,6 +39,7 @@ class BaseFunctions:
       desc = COLORS.CYAN + self.commands[cmd].description
       to_append = COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc)
       print(to_append)
+      print('here')
       # to_print.append(COLORS.OKGREEN + to_append)
     # print('\n'.join(to_print) + COLORS.ENDC + '\n')
     print(COLORS.ENDC + '\n')
