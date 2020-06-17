@@ -18,7 +18,7 @@ class Debug(CommandBase):
       error(e)
       return
 
-    print(flags.log_file)
+    print(flags.file)
     print(type(flags.file))
     return
     # r = run('pkill -f controlsd')  # terminates file for some reason  # todo: remove me if not needed
