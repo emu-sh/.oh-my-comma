@@ -4,17 +4,21 @@ from py_utils.emu_utils import ArgumentParser, BaseFunctions, warning, success
 class BaseCommand(BaseFunctions):
   def __init__(self, description):
     self.description = description
+    self.commands = {}
 
   def main(self, args, cmd_name):
     self.args = args
     cmd = self.next_arg()
-    if cmd is None:
-      self.print_commands(error_msg='You must specify a command for emu {}. Some options are:'.format(cmd_name))
-      return
-    if cmd not in self.commands:
-      self.print_commands(error_msg='Unknown command! Try one of these:')
-      return
-    self.start_function_from_str(cmd)
+    if len(self.commands) > 0:
+      if cmd is None:
+        self.print_commands(error_msg='You must specify a command for emu {}. Some options are:'.format(cmd_name))
+        return
+      if cmd not in self.commands:
+        self.print_commands(error_msg='Unknown command! Try one of these:')
+        return
+      self.start_function_from_str(cmd)
+    else:
+      self.start_function_from_str(cmd_name)
 
   def start_function_from_str(self, cmd):
     cmd = '_' + cmd
