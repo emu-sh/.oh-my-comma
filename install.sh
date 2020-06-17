@@ -102,6 +102,7 @@ else
   printf "\nSuccessfully installed emu utilities\n"
   printf "You may need to run the following to reflect the update:\n source ${OH_MY_COMMA_PATH}/emu-utils.sh"
 fi
+echo "Current version: $OMC_VERSION"
 printf "\033[0m"
 
 if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
@@ -110,5 +111,3 @@ fi
 if [ $update = false ]; then
   set +x
 fi
-
-echo "Current version: $OMC_VERSION"
