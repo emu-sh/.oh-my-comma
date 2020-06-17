@@ -1,22 +1,28 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import time
 import psutil
 import requests
 import argparse
 import subprocess
 import sys
+t = time.time()
 if __package__ is None:
   from os import path
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
   from py_utils.colors import COLORS
-from py_utils.colors import COLORS
-
+else:
+  from py_utils.colors import COLORS
+print(time.time() - t)
+t = time.time()
 SYSTEM_BASHRC_PATH = '/home/.bashrc'
 COMMUNITY_PATH = '/data/community'
 COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
 OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
 UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
+print(time.time() - t)
+t = time.time()
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -145,3 +151,4 @@ EMU_ART = r"""            _
         (       \    """ + COLORS.OKGREEN + """\___.|_|_|_|`___|""" + COLORS.CWHITE + """
                  \   
                  /""" + '\n'
+print(time.time() - t)
