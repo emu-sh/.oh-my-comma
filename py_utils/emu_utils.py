@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import psutil
 import requests
+import argparse
 import subprocess
+import sys
 if __package__ is None:
-  import sys
   from os import path
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
   from colors import COLORS
@@ -16,6 +17,44 @@ COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
 OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
 UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
+
+
+class ArgumentParser(argparse.ArgumentParser):
+  def error(self, message):
+    raise Exception('error: {}'.format(message))
+
+
+class BaseFunctions:
+  def print_commands(self, error_msg=None, ascii_art=False):
+    to_print = []
+    if ascii_art:
+      print(EMU_ART)
+
+    if error_msg is not None:
+      error(error_msg)
+    for cmd in self.commands:
+      desc = COLORS.CYAN + self.commands[cmd].description
+      # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
+      to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
+      to_print.append(COLORS.OKGREEN + to_append)
+    print('\n'.join(to_print) + COLORS.ENDC + '\n')
+
+  def next_arg(self, lower=True, ingest=True):
+    """
+    Returns next arg and deletes arg from self.args if ingest=True
+    :param lower: Returns arg.lower()
+    :param ingest: Deletes returned arg from self.arg
+    :return:
+    """
+    if len(self.args):
+      arg = self.args[0]
+      if lower:
+        arg = arg.lower()
+      if ingest:
+        del self.args[0]
+    else:
+      arg = None
+    return arg
 
 
 def run(cmd, out_file=None):
@@ -91,3 +130,19 @@ def verify_fork_url(url):
     return requests.get(url).status_code == 200
   except:
     return False
+
+
+EMU_ART = r"""
+            _
+         -=(""" + COLORS.RED + """'""" + COLORS.CWHITE + """)
+           ;;
+          //
+         //
+        : '.---.__
+        |  --_-_)__) 
+        `.____,'     
+           \  \      """ + COLORS.OKGREEN + """ ___ ._ _ _  _ _ """ + COLORS.CWHITE + """
+         ___\  \     """ + COLORS.OKGREEN + """/ ._>| ' ' || | |""" + COLORS.CWHITE + """
+        (       \    """ + COLORS.OKGREEN + """\___.|_|_|_|`___|""" + COLORS.CWHITE + """
+                 \   
+                 /""" + '\n'
