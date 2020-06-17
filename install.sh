@@ -5,48 +5,48 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 
 update=false
-if [ $# -ge 1 ] && [ $1 = "update" ]; then
+if [[ $# -ge 1 ]] && [[ $1 = "update" ]]; then
   update=true
 fi
 
-if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
+if [[ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]]; then
   printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
 fi
 
-if [ $update = false ]; then
-  [ "$DEBUG" == 'true' ] && set -x
+if [[ $update = false ]]; then
+  [[ "$DEBUG" == 'true' ]] && set -x
 fi
 
-if [ ! -d "/data/community" ]; then
+if [[ ! -d "/data/community" ]]; then
   mkdir /data/community
 fi
 
 cd /data/community
 
-if [ ! -d "$OH_MY_COMMA_PATH" ]; then
+if [[ ! -d "$OH_MY_COMMA_PATH" ]]; then
   echo "Cloning..."
-  git clone -b master-cli-updates https://github.com/AskAlice/.oh-my-comma.git
+  git clone -b master https://github.com/emu-sh/.oh-my-comma.git
 fi
 
 cd ${OH_MY_COMMA_PATH}
 
-if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
+if [[ ! -x "$(command -v powerline-shell)" ]] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[Y/n] > " choices
-  case $choices in
+  case ${choices} in
     y|Y ) pip install powerline-shell;;
     * ) echo "Skipping...";;
   esac
 fi
 
-if [ $update = true ]; then
+if [[ ${update} = true ]]; then
   echo "Installing emu utilities..."
 fi
 
 echo "Remounting /system as rewritable (until NEOS 15)"
 mount -o rw,remount /system
 
-if [ -f "$SYSTEM_BASHRC_PATH" ]; then
+if [[ -f "$SYSTEM_BASHRC_PATH" ]]; then
   echo "Your system /home/.bashrc exists..."
   if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
   then
@@ -64,7 +64,7 @@ else
 fi
 
 echo "Checking /home/.config symlink..."
-if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
+if [[ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]]; then
   echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
   ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
 else
@@ -75,7 +75,7 @@ echo "Remounting /system as read-only"
 mount -o r,remount /system
 
 #Coping user bashrc, outside of system partition
-if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
+if [[ -f "$COMMUNITY_BASHRC_PATH" ]]; then
   if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu-utils.sh'
   then
     echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
@@ -91,7 +91,7 @@ else
 fi
 
 #Post-install
-if [ $update = false ]; then
+if [[ ${update} = false ]]; then
   printf "Contents of system bashrc:\n"
   cat ${SYSTEM_BASHRC_PATH}
   printf "\nEnd of $SYSTEM_BASHRC_PATH\nContents of community bashrc:\n"
@@ -100,19 +100,19 @@ if [ $update = false ]; then
 fi
 
 printf "\033[92m"
-if [ $update = true ]; then
+if [[ $update = true ]]; then
   printf "\nSuccessfully updated emu utilities!\n"
 else
   echo "Sourcing /home/.bashrc to apply the changes made during installation"
   source /home/.bashrc
   printf "\nSuccessfully installed emu utilities\n"
+  printf "You may need to run the following to reflect the update:\n source ${OH_MY_COMMA_PATH}/emu-utils.sh"
 fi
 printf "\033[0m"
 
-if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
+if [[ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]]; then
   printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
 fi
-
-if [ $update = false ]; then
+if [[ ${update} = false ]]; then
   set +x
 fi

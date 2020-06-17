@@ -9,14 +9,22 @@ This repo is very much in active development! Expect it to evolve greatly over t
 <img src="https://emu.bz/xmf" alt="" />
 
 # Getting Started
+
 ```
- bash <(curl -fsSL https://raw.githubusercontent.com/AskAlice/.oh-my-comma/master/install.sh)
+ bash <(curl -fsSL https://install.emu.sh/)
  source /home/.bashrc
 ```
 
 <img src="https://thumbs.gfycat.com/VapidRipeAquaticleech-size_restricted.gif" alt ="" />
 
+# welcome to the family
+
+<img src="https://emu.bz/gay" alt="" height="250px" />
+
+You should now be able to use the `emu` command.
+
 # Updating
+
 Once you've installed, you can update via the utility
 
 ```
@@ -31,17 +39,22 @@ Read the README for <https://github.com/b-ryan/powerline-shell.> You will need t
 The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in.
 
 # Commands
+
 ### General
+
 - `emu installfork https://github.com/...`: Clones the fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` before cloning
 
 ### Panda
+
 - `emu pandaflash`: Flashes the panda
 - `emu pandaflash2`: Flashes the panda without `make recover`
 
 ### Debugging
+
 - `emu debug controls`: You can debug controlsd and output it to a log file `/data/output.log`
 
 # Git config
+
 While you're in a rw filesystem, you might as well edit your git config so you can push your changes up easily.
 
 ```
