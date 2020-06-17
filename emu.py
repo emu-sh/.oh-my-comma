@@ -4,26 +4,26 @@ import time
 t = time.time()
 import sys
 if __package__ is None:
-  print(time.time() - t)
   import sys
-  print(time.time() - t)
   from os import path
-  print(time.time() - t)
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'py_utils')))
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'emu_commands')))
-  print(time.time() - t)
 
   from py_utils.emu_utils import BaseFunctions
+  print(time.time() - t)
   from py_utils.emu_utils import OPENPILOT_PATH
+  print(time.time() - t)
   from emu_commands.fork import Fork
+  print(time.time() - t)
   from emu_commands.update import Update
+  print(time.time() - t)
   from emu_commands.panda import Panda
+  print(time.time() - t)
   from emu_commands.debug import Debug
-print(time.time() - t)
+  print(time.time() - t)
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
-print(time.time() - t)
 
 class Emu(BaseFunctions):
   def __init__(self, args):
@@ -48,12 +48,9 @@ class Emu(BaseFunctions):
 
 
 if __name__ == "__main__":
-  print(time.time() - t)
   args = sys.argv[1:]
-  print(time.time() - t)
   if DEBUG:
     args = input().split(' ')
     if '' in args:
       args.remove('')
-  print(time.time() - t)
   emu = Emu(args)
