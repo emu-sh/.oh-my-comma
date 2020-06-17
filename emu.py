@@ -57,7 +57,7 @@ class Emu(BaseFunctions):
     for cmd in self.commands:
       desc = COLORS.CYAN + self.commands[cmd].description
       # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
-      to_append = '- {:<7} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
+      to_append = '- {:<12} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
       to_print.append(COLORS.OKGREEN + to_append)
     print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
