@@ -23,25 +23,18 @@ DEBUG = not path.exists('/data/params/d')
 
 
 # class CommandClass:
-#   debug_commands = {'controlsd': Command(description='logs controlsd to /data/output.log')}
 #
 #
-#   # commands = {'update': Command(description='🎉 updates this tool, recommended to restart ssh session'),
-#   #             'panda':  Command(description='panda interfacing tools', commands=panda_commands),
-#   #             'debug':  Command(description='de-🐛-ing tools', commands=debug_commands),
 #   #             'help':   Command(description='Type `emu help command` to get flags 🚩 and syntax for command')}
 
 
 class Emu(BaseFunctions):
   def __init__(self, args):
     self.args = args
-    # self.cc = CommandClass()
     self.commands = {'fork': Fork('🍴 control installed forks, or clone a new one'),
                      'update': Update('🎉 updates this tool, recommended to restart ssh session'),
                      'panda': Panda('🐼 panda interfacing tools'),
                      'debug': Debug('de-🐛-ing tools')}
-
-    # self.arg_idx = 0
     self.parse()
 
   def parse(self):
@@ -54,19 +47,19 @@ class Emu(BaseFunctions):
       return
     self.commands[cmd].main(self.args, cmd)
 
-  def print_commands(self, error_msg=None, ascii_art=False):
-    to_print = []
-    if ascii_art:
-      print(EMU_ART)
-
-    if error_msg is not None:
-      error(error_msg)
-    for cmd in self.commands:
-      desc = COLORS.CYAN + self.commands[cmd].description
-      # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
-      to_append = '- {:<7} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
-      to_print.append(COLORS.OKGREEN + to_append)
-    print('\n'.join(to_print) + COLORS.ENDC + '\n')
+  # def print_commands(self, error_msg=None, ascii_art=False):
+  #   to_print = []
+  #   if ascii_art:
+  #     print(EMU_ART)
+  #
+  #   if error_msg is not None:
+  #     error(error_msg)
+  #   for cmd in self.commands:
+  #     desc = COLORS.CYAN + self.commands[cmd].description
+  #     # other format: to_append = '- {:>15}: {:>20}'.format(cmd, desc)
+  #     to_append = '- {:<7} {}'.format(cmd + ':', desc)  # 12 is length of longest command + 1
+  #     to_print.append(COLORS.OKGREEN + to_append)
+  #   print('\n'.join(to_print) + COLORS.ENDC + '\n')
 
 
   # def _help(self, commands=None):
