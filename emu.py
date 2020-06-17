@@ -41,8 +41,9 @@ class Emu(BaseFunctions):
   def __init__(self, args):
     self.args = args
     # self.cc = CommandClass()
-    self.commands = {'fork': Fork('Control installed forks, or clone a new one'),
-                     'update': Update('🎉 updates this tool, recommended to restart ssh session')}
+    self.commands = {'fork': Fork('🍴 control installed forks, or clone a new one'),
+                     'update': Update('🎉 updates this tool, recommended to restart ssh session'),
+                     'panda': '🐼 panda interfacing tools'}
 
     # self.arg_idx = 0
     self.parse()
