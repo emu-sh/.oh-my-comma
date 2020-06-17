@@ -9,7 +9,6 @@ if __package__ is None:
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'emu_commands')))
 
   t = time.time()
-  t = time.time()
   from py_utils.emu_utils import BaseFunctions
   print(time.time() - t)
   t = time.time()
