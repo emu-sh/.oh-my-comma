@@ -33,13 +33,14 @@ class BaseFunctions:
     if error_msg is not None:
       error(error_msg)
     max_cmd = max([len(_c) for _c in self.commands]) + 1
-    for cmd in self.commands:
+    for idx, cmd in enumerate(self.commands):
       desc = COLORS.CYAN + self.commands[cmd].description
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
         self._help(cmd, show_description=False, leading='')  # todo: decide if leading is better than no leading
-        print()
+        if idx < len(self.commands) - 1:  # removes double newlines at end of loop
+          print()
     print(COLORS.ENDC)
 
   def next_arg(self, lower=True, ingest=True):
