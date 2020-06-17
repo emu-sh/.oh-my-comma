@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import time
+t = time.time()
 import sys
 if __package__ is None:
   import sys
@@ -13,9 +15,11 @@ if __package__ is None:
   from emu_commands.update import Update
   from emu_commands.panda import Panda
   from emu_commands.debug import Debug
+print(time.time() - t)
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
+print(time.time() - t)
 
 class Emu(BaseFunctions):
   def __init__(self, args):
@@ -40,9 +44,12 @@ class Emu(BaseFunctions):
 
 
 if __name__ == "__main__":
+  print(time.time() - t)
   args = sys.argv[1:]
+  print(time.time() - t)
   if DEBUG:
     args = input().split(' ')
     if '' in args:
       args.remove('')
+  print(time.time() - t)
   emu = Emu(args)
