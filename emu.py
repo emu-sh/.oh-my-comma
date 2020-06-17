@@ -4,10 +4,14 @@ import time
 t = time.time()
 import sys
 if __package__ is None:
+  print(time.time() - t)
   import sys
+  print(time.time() - t)
   from os import path
+  print(time.time() - t)
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'py_utils')))
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'emu_commands')))
+  print(time.time() - t)
 
   from py_utils.emu_utils import BaseFunctions
   from py_utils.emu_utils import OPENPILOT_PATH
