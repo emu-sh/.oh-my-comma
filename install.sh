@@ -1,10 +1,27 @@
 #!/bin/bash
+
+#            _
+#         -=(')
+#           ;;
+#          //
+#         //
+#        : '.---.__
+#        |  --_-_)__)
+#        `.____,'
+#           \  \       ___ ._ _ _  _ _
+#         ___\  \     / ._>| ' ' || | |
+#        (       \    \___.|_|_|_|`___|
+#                 \
+#                 /
+
+# This is the install script for https://emu.sh/
+# Located on git at https://github.com/emu-sh/.oh-my-comma
+
 SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
-OH_MY_COMMA_PATH=/data/community/.oh-my-comma
-OMC_VERSION=0.1.0
+OMC_VERSION=0.1.1
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
@@ -19,9 +36,11 @@ if [ ! -d "/data/community" ]; then
   mkdir /data/community
 fi
 
+chmod 755 /data/community
+
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   echo "Cloning..."
-  git clone -b master https://github.com/emu-sh/.oh-my-comma.git ${OH_MY_COMMA_PATH}
+  git clone -b update-test https://github.com/emu-sh/.oh-my-comma.git ${OH_MY_COMMA_PATH}
 fi
 
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
@@ -70,27 +89,49 @@ mount -o r,remount /system
 
 #Coping user bashrc, outside of system partition
 if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
+  #bashrc found
   if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu-utils.sh'
+  then
+    # v0.1.0 -> v0.1.1
+    # Test for and patch Backwards compatibility issues with file rename
+    if grep -q '/data/community/.bashrc' -e '^### End of \.oh-my-comma magic ###$'
+    then
+      echo "There's something wrong with your community .bashrc ?? You should copy the one from ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community) to ${COMMUNITY_BASHRC_PATH}"
+    else
+    # Patch the current bashrc with the updated settings, without destroying user modifications
+    echo "Found old entrypoint filename. Removing that line"
+    rm .bashrc.lock
+    chmod 755 ${COMMUNITY_BASHRC_PATH}
+    mv ${COMMUNITY_BASHRC_PATH} ${COMMUNITY_PATH}/.bashrc.lock
+    sed -i.bak.$(date +"%Y-%m-%d-%T") -e "/^source \/data\/community\/\.oh-my-comma\/emu-utils\.sh$/d" ${COMMUNITY_BASHRC_PATH}.lock
+    echo "$(sed '/### End of \.oh-my-comma magic ###/q' ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n$(cat ${COMMUNITY_BASHRC_PATH}.lock)\n" >> ${COMMUNITY_BASHRC_PATH} 
+    rm ${COMMUNITY_BASHRC_PATH}.lock
+    chmod 755 ${COMMUNITY_BASHRC_PATH}
+    fi
+  fi
+
+  if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu.sh'
   then
     echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
-    printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
+    printf "\n$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
   fi
 else
   echo "Creating the community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   touch ${COMMUNITY_BASHRC_PATH}
-  printf '#!/bin/sh\n' >> ${COMMUNITY_BASHRC_PATH}
+  chmod 755 ${COMMUNITY_BASHRC_PATH}
   printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
 fi
-
+touch ${COMMUNITY_PATH}/.bash_history
+chmod 775 ${COMMUNITY_PATH}/.bash_history
 #Post-install
 if [ $update = false ]; then
-  printf "Contents of system bashrc:\n"
+  printf " Contents of system bashrc: \n"
   cat ${SYSTEM_BASHRC_PATH}
-  printf "\nEnd of $SYSTEM_BASHRC_PATH\nContents of community bashrc:\n"
+  printf "\n End of $SYSTEM_BASHRC_PATH \n\n Contents of community bashrc:  \n"
   cat ${COMMUNITY_BASHRC_PATH}
-  printf "End of $COMMUNITY_BASHRC_PATH\n"
+  printf "End of $COMMUNITY_BASHRC_PATH\n\n"
 fi
 
 printf "\033[92m"
@@ -99,14 +140,15 @@ if [ $update = true ]; then
 else
   echo "Sourcing /home/.bashrc to apply the changes made during installation"
   source /home/.bashrc
-  printf "\nSuccessfully installed emu utilities\n"
-  printf "You may need to run the following to reflect the update:\n source ${OH_MY_COMMA_PATH}/emu-utils.sh"
+  printf "\nSuccessfully installed emu utilities\n\n"
 fi
 echo "Current version: $OMC_VERSION"
+printf "\033[0mYou may need to run the following to reflect the update:\n\n \033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
 printf "\033[0m"
 
-if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
-  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
+CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
+if [ ${CURRENT_BRANCH} != "master" ]; then
+  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
 fi
 if [ $update = false ]; then
   set +x
