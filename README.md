@@ -15,7 +15,7 @@ This repo is very much in active development! Expect it to evolve greatly over t
  source /home/.bashrc
 ```
 
-<img src="https://thumbs.gfycat.com/VapidRipeAquaticleech-size_restricted.gif" alt ="" />
+<img src="https://thumbs.gfycat.com/DopeyHairyGeese-size_restricted.gif" alt ="" />
 
 # welcome to the family
 
