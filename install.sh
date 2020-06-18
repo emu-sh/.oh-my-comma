@@ -16,6 +16,11 @@
 
 # This is the install script for https://emu.sh/
 # Located on git at https://github.com/emu-sh/.oh-my-comma
+# To install this, ssh into your comma device and paste: '
+'
+bash <(curl -fsSL install.emu.sh) # the brain of the bird
+source /home/.bashrc
+'
 
 SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
@@ -129,11 +134,11 @@ touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
 #Post-install
 if [ $update = false ]; then
-  printf " Contents of system bashrc: \n"
+  printf "    Contents of system bashrc:   \n"
   cat ${SYSTEM_BASHRC_PATH}
-  printf "\n End of $SYSTEM_BASHRC_PATH \n\n Contents of community bashrc:  \n"
+  printf "      End of $SYSTEM_BASHRC_PATH       \n\n  Contents of community bashrc:  \n"
   cat ${COMMUNITY_BASHRC_PATH}
-  printf "End of $COMMUNITY_BASHRC_PATH\n\n"
+  printf " End of $COMMUNITY_BASHRC_PATH  \n\n"
 fi
 
 printf "\033[92m"
