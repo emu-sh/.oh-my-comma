@@ -10,8 +10,8 @@ This repo is very much in active development! Expect it to evolve greatly over t
 
 # Getting Started
 
-```
- bash <(curl -fsSL https://install.emu.sh/)
+```bash
+ bash <(curl -fsSL install.emu.sh) # the brain of the bird
  source /home/.bashrc
 ```
 
@@ -27,7 +27,7 @@ You should now be able to use the `emu` command.
 
 Once you've installed, you can update via the utility
 
-```
+```bash
 emu update
 ```
 
@@ -57,7 +57,7 @@ The default directory of your bash/ssh session is now `/data/openpilot`. Much ea
 
 While you're in a rw filesystem, you might as well edit your git config so you can push your changes up easily.
 
-```
+```bash
 git config --global user.name "your_username"
 git config --global user.email "your_email_address@example.com"
 git config --global credential.helper store
