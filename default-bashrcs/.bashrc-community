@@ -28,6 +28,9 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 
 source /data/community/.oh-my-comma/emu.sh
 
+# Change active histfile to a writable directory outside of the /system partition
+HISTFILE="/data/community/.bash_history"
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -35,8 +38,6 @@ HISTCONTROL=ignoreboth
 # append to the history file, don't overwrite it
 shopt -s histappend
 
-# Change active histfile to a writable directory outside of the /system partition
-HISTFILE="/data/community/.bash_history"
 
 ### End of .oh-my-comma magic ###
 
