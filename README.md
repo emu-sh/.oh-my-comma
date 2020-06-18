@@ -42,12 +42,12 @@ The default directory of your bash/ssh session is now `/data/openpilot`. Much ea
 
 ### General
 
-- `emu installfork https://github.com/...`: Clones the fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` before cloning
+- `emu fork install https://github.com/...`: Clones the fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` before cloning
 
 ### Panda
 
-- `emu pandaflash`: Flashes the panda
-- `emu pandaflash2`: Flashes the panda without `make recover`
+- `emu panda flash`: Flashes the panda
+- `emu panda flash2`: Flashes the panda without `make recover`
 
 ### Debugging
 
