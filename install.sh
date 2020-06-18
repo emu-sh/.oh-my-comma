@@ -3,45 +3,41 @@ SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
+OH_MY_COMMA_PATH=/data/community/.oh-my-comma
+OMC_VERSION=0.1.0
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
 fi
 
-if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
-  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
-fi
-
-if [ ! update ]; then
-  [ "$DEBUG" == 'true' ] && set -x
+if [ $update = false ]; then
+  [[ "$DEBUG" == 'true' ]] && set -x
 fi
 
 if [ ! -d "/data/community" ]; then
   mkdir /data/community
 fi
 
-cd /data/community
-
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   echo "Cloning..."
-  git clone -b master https://github.com/emu-sh/.oh-my-comma.git
+  git clone -b master https://github.com/emu-sh/.oh-my-comma.git ${OH_MY_COMMA_PATH}
 fi
-
-cd ${OH_MY_COMMA_PATH}
 
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[Y/n] > " choices
-  case $choices in
+  case ${choices} in
     y|Y ) pip install powerline-shell;;
     * ) echo "Skipping...";;
   esac
 fi
 
-echo "Installing emu utilities..."
+if [ $update = true ]; then
+  echo "Installing emu utilities..."
+fi
 
-echo "Remounting /system as rewritable (until neos 15)"
+echo "Remounting /system as rewritable (until NEOS 15)"
 mount -o rw,remount /system
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
@@ -50,8 +46,8 @@ if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   then
     echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
   else
-    echo "Your bashrc file is different than the one on the repo. neos 15 will redirect all users to store their bashrc in /data/community"
-    echo "moving your current bashrc to /data/community"
+    echo "Your bashrc file is different than the one on the repo. NEOS 15 will redirect all users to store their bashrc in /data/community"
+    echo "Moving your current bashrc to /data/community"
     mv ${SYSTEM_BASHRC_PATH} ${COMMUNITY_BASHRC_PATH}
     echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
@@ -97,19 +93,21 @@ if [ $update = false ]; then
   printf "End of $COMMUNITY_BASHRC_PATH\n"
 fi
 
-echo "Sourcing /home/.bashrc to init the changes made during installation"
-source /home/.bashrc
+printf "\033[92m"
 if [ $update = true ]; then
   printf "\nSuccessfully updated emu utilities!\n"
 else
-  printf "\nSuccessfully installed emu utilities!\n"
+  echo "Sourcing /home/.bashrc to apply the changes made during installation"
+  source /home/.bashrc
+  printf "\nSuccessfully installed emu utilities\n"
+  printf "You may need to run the following to reflect the update:\n source ${OH_MY_COMMA_PATH}/emu-utils.sh"
 fi
-
+echo "Current version: $OMC_VERSION"
+printf "\033[0m"
 
 if [ "$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)" != "master" ]; then
   printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is $(git rev-parse --abbrev-ref HEAD). Run cd /data/community/.oh-my-comma && git checkout master if this is unintentional\n"
 fi
-
-if [ ! update ]; then
+if [ $update = false ]; then
   set +x
 fi
