@@ -9,7 +9,7 @@ source ${OH_MY_COMMA_PATH}/aliases.sh
 
 function _updateohmycomma(){  # good to keep a backup in case python CLI is broken
   source ${OH_MY_COMMA_PATH}/update.sh
-  source ${OH_MY_COMMA_PATH}/emu-utils.sh
+  source ${OH_MY_COMMA_PATH}/emu.sh
 }
 
 function emu(){  # main wrapper function
