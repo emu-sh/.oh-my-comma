@@ -11,8 +11,8 @@ This repo is very much in active development! Expect it to evolve greatly over t
 # Getting Started
 
 ```bash
- bash <(curl -fsSL install.emu.sh) # the brain of the bird
- source /home/.bashrc
+bash <(curl -fsSL install.emu.sh) # the brain of the bird
+source /home/.bashrc
 ```
 
 <img src="https://thumbs.gfycat.com/DopeyHairyGeese-size_restricted.gif" alt ="" />
