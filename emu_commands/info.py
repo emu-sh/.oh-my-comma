@@ -32,4 +32,4 @@ class Info(CommandBase):
         value = str(value) + '%'
       value = COLORS.SUCCESS + str(value)
 
-      print('-  {}: {}{}'.format(name, value, COLORS.ENDC))
+      print('- {}: {}{}'.format(name, value, COLORS.ENDC))
