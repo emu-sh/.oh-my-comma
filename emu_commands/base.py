@@ -1,9 +1,8 @@
 from py_utils.colors import COLORS
-from py_utils.emu_utils import ArgumentParser, BaseFunctions, warning, success
+from py_utils.emu_utils import ArgumentParser, BaseFunctions, success, error
 
 class CommandBase(BaseFunctions):
-  def __init__(self, description):
-    self.description = description
+  def __init__(self):
     self.commands = {}
 
   def main(self, args, cmd_name):
@@ -23,7 +22,7 @@ class CommandBase(BaseFunctions):
   def start_function_from_str(self, cmd):
     cmd = '_' + cmd
     if not hasattr(self, cmd):
-      print('Command has not been implemented yet, please try updating.')
+      error('Command has not been implemented yet, please try updating.')
       return
     getattr(self, cmd)()  # call command's function
 

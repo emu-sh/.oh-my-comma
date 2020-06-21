@@ -61,6 +61,21 @@ class BaseFunctions:
     return arg
 
 
+def check_output(cmd):
+  """
+  If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
+  The status is returned, True being success, False for failure
+  """
+  if isinstance(cmd, str):
+    cmd = cmd.split()
+
+  try:
+    return subprocess.check_output(cmd)
+  except Exception as e:
+    # print(e)
+    return False
+
+
 def run(cmd, out_file=None):
   """
   If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
@@ -77,7 +92,7 @@ def run(cmd, out_file=None):
     r = subprocess.call(cmd, stdout=f)
     return not r
   except Exception as e:
-    print(e)
+    # print(e)
     return False
 
 
