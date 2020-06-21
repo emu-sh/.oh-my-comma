@@ -21,11 +21,12 @@ class Info(CommandBase):
     for name in battery_idxs:
       idx = battery_idxs[name]
       info = r[idx]
-      value = info.split(': ')[1]
-      print('{}{}{}{}{}'.format(COLORS.WARNING, name.title(), COLORS.SUCCESS, value, COLORS.ENDC))
+
+      name = COLORS.WARNING + name.title()
+      value = COLORS.SUCCESS + info.split(': ')[1]
+
+      print('{}{}: {}%{}{}'.format(COLORS.WARNING, name.title(), COLORS.SUCCESS, value, COLORS.ENDC))
+      print('{}: {}%{}'.format(name, value, COLORS.ENDC))
 
 
-    print('START')
-    print(r)
-    print('END')
     # print('{}{}{}'.format(COLORS.SUCCESS, r.decode("utf-8"), COLORS.ENDC))
