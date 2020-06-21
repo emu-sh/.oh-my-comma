@@ -161,5 +161,4 @@ printf "\033[0m\n\n"
 
 if [ $update = false ]; then
   set +x
-  exec $SHELL
 fi
