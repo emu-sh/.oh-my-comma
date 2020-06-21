@@ -1,5 +1,5 @@
 from emu_commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, warning, error, check_output, COLORS
+from py_utils.emu_utils import run, warning, error, check_output, COLORS, success
 
 class Info(CommandBase):
   def __init__(self):
@@ -14,6 +14,17 @@ class Info(CommandBase):
     if not r:
       error('Unable to get battery status!')
       return
+    r = r.decode('utf-8').split('\n')
+    r = [i.strip() for i in r if i != ''][1:]
+    battery_idxs = {'level': 7}
+    success('Battery info:')
+    for name in battery_idxs:
+      idx = battery_idxs[name]
+      info = r[idx]
+      value = info.split(': ')[1]
+      print('{}{}{}{}{}'.format(COLORS.WARNING, name.title(), COLORS.SUCCESS, value, COLORS.ENDC))
+
+
     print('START')
     print(r)
     print('END')
