@@ -20,4 +20,4 @@ printf "Version \033[92m${PREV_VERSION}\033[0m | branch \033[92m${PREV_BRANCH}\0
 printf "Version \033[92m${CURRENT_VERSION}\033[0m | branch \033[92m${CURRENT_BRANCH}\033[0m | remote \033[92m${CURRENT_REMOTE}\033[0m\n"
 echo "======= TO ======="
 
-exec $SHELL # auto source
+#exec $SHELL  # auto source
