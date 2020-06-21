@@ -16,17 +16,20 @@ class Info(CommandBase):
       return
     r = r.decode('utf-8').split('\n')
     r = [i.strip() for i in r if i != ''][1:]
-    battery_idxs = {'level': 7}
+    battery_idxs = {'level': 7, 'temperature': 10}
     success('Battery info:')
     for name in battery_idxs:
       idx = battery_idxs[name]
       info = r[idx]
 
       name = COLORS.WARNING + name.title()
-      value = COLORS.SUCCESS + info.split(': ')[1]
+      value = float(info.split(': ')[1])
 
-      print('{}{}: {}%{}{}'.format(COLORS.WARNING, name.title(), COLORS.SUCCESS, value, COLORS.ENDC))
-      print('{}: {}%{}'.format(name, value, COLORS.ENDC))
+      if name == 'temperature':
+        value /= 10
+        value = str(value) + ' °C'
+      else:
+        value = str(value) + '%'
+      value = COLORS.SUCCESS + str(value)
 
-
-    # print('{}{}{}'.format(COLORS.SUCCESS, r.decode("utf-8"), COLORS.ENDC))
+      print('  {}: {}{}'.format(name, value, COLORS.ENDC))
