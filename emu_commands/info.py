@@ -14,4 +14,7 @@ class Info(CommandBase):
     if not r:
       error('Unable to get battery status!')
       return
-    print('{}{}{}'.format(COLORS.SUCCESS, r.decode("utf-8"), COLORS.ENDC))
+    print('START')
+    print(r)
+    print('END')
+    # print('{}{}{}'.format(COLORS.SUCCESS, r.decode("utf-8"), COLORS.ENDC))
