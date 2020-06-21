@@ -22,14 +22,13 @@ class Info(CommandBase):
       idx = battery_idxs[name]
       info = r[idx]
 
-      name = COLORS.WARNING + name.title()
       value = float(info.split(': ')[1])
-
       if name == 'temperature':
         value /= 10
         value = str(value) + ' °C'
       else:
         value = str(value) + '%'
-      value = COLORS.SUCCESS + str(value)
 
+      value = COLORS.SUCCESS + str(value)
+      name = COLORS.WARNING + name.title()
       print('- {}: {}{}'.format(name, value, COLORS.ENDC))
