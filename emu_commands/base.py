@@ -8,6 +8,7 @@ class CommandBase(BaseFunctions):
   def main(self, args, cmd_name):
     self.args = args
     cmd = self.next_arg()
+    print(cmd)
     if len(self.commands) > 0:
       if cmd is None:
         self.print_commands(error_msg='You must specify a command for emu {}. Some options are:'.format(cmd_name))

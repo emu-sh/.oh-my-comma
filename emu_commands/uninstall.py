@@ -8,5 +8,5 @@ class Uninstall(CommandBase):
     self.description = 'Uninstalls emu'
 
   def _uninstall(self):
-    print('Are you sure you want to uninstall?')
+    print('Are you sure you want to uninstall emu?')
     input()
