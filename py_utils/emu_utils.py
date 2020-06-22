@@ -18,6 +18,7 @@ COMMUNITY_PATH = '/data/community'
 COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
 OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'
 UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
+UNINSTALL_PATH = '{}/uninstall.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
 
 
