@@ -5,7 +5,7 @@ class Uninstall(CommandBase):
   def __init__(self):
     super().__init__()
     self.name = 'uninstall'
-    self.description = 'Uninstalls emu'
+    self.description = '👋 Uninstalls emu'
 
   def _uninstall(self):
     print('Are you sure you want to uninstall emu?')
