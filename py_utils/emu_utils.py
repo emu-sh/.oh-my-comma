@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import sys
 import psutil
+import difflib
 import requests
 import argparse
 import subprocess
-import sys
 if __package__ is None:
   from os import path
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
@@ -59,6 +60,22 @@ class BaseFunctions:
     else:
       arg = None
     return arg
+
+
+def input_with_options(options, default=None):
+  """
+  Takes in a list of options and asks user to make a choice.
+  The most similar option list index is returned along with the similarity percentage from 0 to 1
+  """
+  def str_sim(a, b):
+    return difflib.SequenceMatcher(a=a, b=b).ratio()
+
+  user_input = input('[{}]: '.format('/'.join(options))).lower().strip()
+  if not user_input:
+    return default, 0.0
+  sims = [str_sim(i.lower().strip(), user_input) for i in options]
+  argmax = sims.index(max(sims))
+  return argmax, sims[argmax]
 
 
 def check_output(cmd):
