@@ -43,7 +43,7 @@ The default directory of your bash/ssh session is now `/data/openpilot`. Much ea
 ### General
 
 - `emu fork`: 🍴 manage installed forks, or clone a new one
-  - `fork install`: Clones a fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` after cloning
+  - `install`: Clones a fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` after cloning
 - `emu update`: 🎉 updates this tool
 - `emu info`: 📈 Statistics about your device
   - `battery`: 🔋 see information about the state of your battery
