@@ -9,10 +9,7 @@ if __package__ is None:
 
   from py_utils.emu_utils import BaseFunctions
   from py_utils.emu_utils import OPENPILOT_PATH
-  from emu_commands.fork import Fork
-  from emu_commands.update import Update
-  from emu_commands.panda import Panda
-  from emu_commands.debug import Debug
+  from emu_commands import EMU_COMMANDS
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
@@ -20,10 +17,7 @@ DEBUG = not path.exists('/data/params/d')
 class Emu(BaseFunctions):
   def __init__(self, args):
     self.args = args
-    self.commands = {'fork': Fork('🍴 control installed forks, or clone a new one'),
-                     'update': Update('🎉 updates this tool, recommended to restart ssh session'),
-                     'panda': Panda('🐼 panda interfacing tools'),
-                     'debug': Debug('de-🐛-ing tools')}
+    self.commands = {cmd.name: cmd for cmd in EMU_COMMANDS}
     self.parse()
 
   def parse(self):

@@ -5,8 +5,11 @@ from py_utils.emu_utils import run, error, warning, success, verify_fork_url, is
 from py_utils.emu_utils import OPENPILOT_PATH
 
 class Fork(CommandBase):
-  def __init__(self, description):
-    super().__init__(description)
+  def __init__(self):
+    super().__init__()
+    self.name = 'fork'
+    self.description = '🍴 manage installed forks, or clone a new one'
+
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
                                         flags=[Flag(['clone_url'], '🍴 URL of fork to clone', has_value=True),
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),

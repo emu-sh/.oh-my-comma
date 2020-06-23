@@ -11,8 +11,8 @@ This repo is very much in active development! Expect it to evolve greatly over t
 # Getting Started
 
 ```bash
- bash <(curl -fsSL install.emu.sh) # the brain of the bird
- source /home/.bashrc
+bash <(curl -fsSL install.emu.sh) # the brain of the bird
+source /home/.bashrc
 ```
 
 <img src="https://thumbs.gfycat.com/DopeyHairyGeese-size_restricted.gif" alt ="" />
@@ -42,16 +42,23 @@ The default directory of your bash/ssh session is now `/data/openpilot`. Much ea
 
 ### General
 
-- `emu fork install https://github.com/...`: Clones the fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` before cloning
+- `emu fork`: 🍴 manage installed forks, or clone a new one
+  - `install`: Clones a fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` after cloning
+- `emu update`: 🎉 updates this tool
+- `emu info`: 📈 Statistics about your device
+  - `battery`: 🔋 see information about the state of your battery
+- `emu uninstall`: 👋 Uninstalls emu
 
 ### Panda
 
-- `emu panda flash`: Flashes the panda
-- `emu panda flash2`: Flashes the panda without `make recover`
+- `emu panda`: 🐼 panda interfacing tools
+  - `flash`: 🐼 flashes panda with make recover (usually works with the C2)
+  - `flash2`:  🎍 flashes panda using Panda module (usually works with the EON)
 
 ### Debugging
 
-- `emu debug controls`: You can debug controlsd and output it to a log file `/data/output.log`
+- `emu debug`: de-🐛-ing tools
+  - `controlsd`: 🔬 logs controlsd to /data/output.log by default
 
 # Git config
 

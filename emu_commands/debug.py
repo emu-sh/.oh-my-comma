@@ -3,8 +3,11 @@ from py_utils.emu_utils import run, kill, warning, error
 from py_utils.emu_utils import OPENPILOT_PATH
 
 class Debug(CommandBase):
-  def __init__(self, description):
-    super().__init__(description)
+  def __init__(self):
+    super().__init__()
+    self.name = 'debug'
+    self.description = 'de-🐛-ing tools'
+
     self.commands = {'controlsd': Command(description='🔬 logs controlsd to /data/output.log by default',
                                           flags=[Flag(['-o', '--output'], 'Name of file to save log to', has_value=True)])}
     self.default_path = '/data/output.log'
