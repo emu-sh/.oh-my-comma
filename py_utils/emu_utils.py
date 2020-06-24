@@ -42,7 +42,6 @@ class BaseFunctions:
         self._help(cmd, show_description=False, leading='')  # todo: decide if leading is better than no leading
         if idx == len(self.commands) - 1:  # removes double newlines at end of loop
           print()
-          print('end')
     print(COLORS.ENDC, end='')
 
   def next_arg(self, lower=True, ingest=True):
