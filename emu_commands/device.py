@@ -29,7 +29,7 @@ class Device(CommandBase):
       value = float(info.split(': ')[1])
       if name == 'temperature':
         value /= 10
-        value = str(value) + ' °C'
+        value = str(value) + '°C'
       else:
         value = str(value) + '%'
 
