@@ -1,6 +1,6 @@
 ## comma.ai command-line additions and practical tooling for all
 
-improving the dev workflow friction is paramount to innovating openpilot
+improving the dev workflow friction is paramount to innovating commaai/openpilot
 
 ***PRs accepted!** What cool shit do you do to your ssh session with your car??*
 
