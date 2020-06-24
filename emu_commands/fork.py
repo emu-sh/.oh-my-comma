@@ -1,7 +1,7 @@
 import shutil
 from os import path
 from emu_commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, error, warning, success, verify_fork_url, is_affirmative
+from py_utils.emu_utils import run, error, warning, success, is_affirmative
 from py_utils.emu_utils import OPENPILOT_PATH
 
 class Fork(CommandBase):
@@ -28,9 +28,6 @@ class Fork(CommandBase):
 
     if flags.clone_url is None:
       error('You must specify a fork URL to clone!')
-      return
-    if not verify_fork_url(flags.clone_url):  # verify we can clone before moving folder!
-      error('The specified fork URL is not valid!')
       return
 
     OPENPILOT_TEMP_PATH = '{}.temp'.format(OPENPILOT_PATH)

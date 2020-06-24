@@ -3,7 +3,6 @@
 import sys
 import psutil
 import difflib
-import requests
 import argparse
 import subprocess
 if __package__ is None:
@@ -158,15 +157,6 @@ def success(msg, end='\n', ret=False):
   if ret:
     return s
   print(s, end=end)
-
-
-def verify_fork_url(url):
-  if url[:4].lower() != 'http':
-    url = 'http://' + url
-  try:
-    return requests.get(url).status_code == 200
-  except:
-    return False
 
 
 EMU_ART = r"""            _
