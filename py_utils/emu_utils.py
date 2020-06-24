@@ -3,7 +3,6 @@
 import sys
 import psutil
 import difflib
-import requests
 import argparse
 import subprocess
 if __package__ is None:
@@ -41,9 +40,9 @@ class BaseFunctions:
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
         self._help(cmd, show_description=False, leading='')  # todo: decide if leading is better than no leading
-        if idx < len(self.commands) - 1:  # removes double newlines at end of loop
+        if idx == len(self.commands) - 1:  # removes double newlines at end of loop
           print()
-    print(COLORS.ENDC)
+    print(COLORS.ENDC, end='')
 
   def next_arg(self, lower=True, ingest=True):
     """
@@ -158,15 +157,6 @@ def success(msg, end='\n', ret=False):
   if ret:
     return s
   print(s, end=end)
-
-
-def verify_fork_url(url):
-  if url[:4].lower() != 'http':
-    url = 'http://' + url
-  try:
-    return requests.get(url).status_code == 200
-  except:
-    return False
 
 
 EMU_ART = r"""            _
