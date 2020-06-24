@@ -1,13 +1,17 @@
 from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, warning, error, check_output, COLORS, success
 
-class Info(CommandBase):
+class Device(CommandBase):
   def __init__(self):
     super().__init__()
-    self.name = 'info'
+    self.name = 'device'
     self.description = '📈 Statistics about your device'
 
-    self.commands = {'battery': Command(description='🔋 see information about the state of your battery')}
+    self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
+                     'reboot': Command(description='🔌 safely reboot your device')}
+
+  def _reboot(self):
+    run('am start -a android.intent.action.REBOOT')
 
   def _battery(self):
     r = check_output('dumpsys batterymanager')
