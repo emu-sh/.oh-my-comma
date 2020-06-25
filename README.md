@@ -21,6 +21,7 @@ source /home/.bashrc
 
 <img src="https://emu.bz/gay" alt="" height="250px" />
 
+Emu my neo!
 You should now be able to use the `emu` command.
 
 # Updating
