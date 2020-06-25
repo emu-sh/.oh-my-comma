@@ -37,6 +37,8 @@ This will essentially perform a git pull and replace all current files in the `/
 ---
 Read the README for <https://github.com/b-ryan/powerline-shell.> You will need to [install the fonts on the computer/terminal emulator that you SSH from](https://github.com/powerline/fonts)
 
+Alternately, you can install [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts), as it provides more icons than powerline fonts, and is more maintained.
+
 The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in.
 
 # Commands
