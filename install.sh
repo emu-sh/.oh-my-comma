@@ -28,9 +28,13 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 GIT_BRANCH_NAME=master
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
-OMC_VERSION=0.1.2
-
+OMC_VERSION=0.1.3
 update=false
+
+eval $(echo $(cat /data/openpilot/launch_chffrplus.sh  | grep "export NEOS_VERSION.*$"))
+
+SHOULD_UPDATE_SYSTEM_PARTITION=$(echo "$NEOS_VERSION" | awk '{if (substr($0,0,2) < 15) print  1; else print 0}')
+
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
 fi
@@ -50,50 +54,52 @@ if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
-if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
-  echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
-  read -p "[Y/n] > " choices
-  case ${choices} in
-    y|Y ) pip install powerline-shell;;
-    * ) echo "Skipping...";;
-  esac
-fi
-
 if [ $update = true ]; then
   echo "Installing emu utilities..."
 fi
 
 echo "Remounting /system as rewritable (until NEOS 15)"
 mount -o rw,remount /system
+if [ $SHOULD_UPDATE_SYSTEM_PARTITION == 1 ]; then
 
-if [ -f "$SYSTEM_BASHRC_PATH" ]; then
-  echo "Your system /home/.bashrc exists..."
-  if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
-  then
-    echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
+  if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
+    echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
+    read -p "[Y/n] > " choices
+    case ${choices} in
+      y|Y ) pip install powerline-shell;;
+      * ) echo "Skipping...";;
+    esac
+  fi
+
+  if [ -f "$SYSTEM_BASHRC_PATH" ]; then
+    echo "Your system /home/.bashrc exists..."
+    if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
+    then
+      echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
+    else
+      echo "Your bashrc file is different than the one on the repo. NEOS 15 will redirect all users to store their bashrc in /data/community"
+      echo "Moving your current bashrc to /data/community"
+      mv ${SYSTEM_BASHRC_PATH} ${COMMUNITY_BASHRC_PATH}
+      echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
+      cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
+    fi
   else
-    echo "Your bashrc file is different than the one on the repo. NEOS 15 will redirect all users to store their bashrc in /data/community"
-    echo "Moving your current bashrc to /data/community"
-    mv ${SYSTEM_BASHRC_PATH} ${COMMUNITY_BASHRC_PATH}
-    echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
+    echo "Creating a .bashrc in /home/ that sources the community bashrc in /data/community/"
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
   fi
-else
-  echo "Creating a .bashrc in /home/ that sources the community bashrc in /data/community/"
-  cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
-fi
 
-echo "Checking /home/.config symlink..."
-if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
-  echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
-  ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
-else
-  echo "Symlink check passed"
-fi
+  echo "Checking /home/.config symlink..."
+  if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
+    echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
+    ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
+  else
+    echo "Symlink check passed"
+  fi
 
-echo "Remounting /system as read-only"
+  echo "Remounting /system as read-only"
 mount -o r,remount /system
 
+fi
 #Coping user bashrc, outside of system partition
 if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
   #bashrc found
