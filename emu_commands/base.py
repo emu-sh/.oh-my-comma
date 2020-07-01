@@ -32,7 +32,7 @@ class CommandBase(BaseFunctions):
     except Exception as e:
       return None, e
 
-  def _help(self, cmd, show_description=True, leading=''):
+  def _help(self, cmd, show_description=True, leading='  '):
     description = self.commands[cmd].description
     if show_description:
       print('{}>>  Description 📚: {}{}'.format(COLORS.CYAN, description, COLORS.ENDC))
