@@ -60,7 +60,8 @@ class Fork(CommandBase):
                      'init': Command(description='run this command once to init emu fork management')}
 
   def _switch(self):
-    self._init()
+    if not self._init():
+      return
     flags, e = self.parse_flags(self.commands['switch'].parser)
     if e is not None:
       error(e)
@@ -71,22 +72,23 @@ class Fork(CommandBase):
 
   def _init(self):
     if self.fork_params.get('setup_complete'):
-      return  # already set up
+      return True  # already set up
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Please confirm you would like to continue')
 
     if not is_affirmative():
       error('Stopping initialization!')
-      return
+      return False
     info('Cloning commaai/openpilot into /data/community/forks')
     r = check_output('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
     if not r:
       error('Error while cloning, please try again')
-      return
+      return False
     if 'already exists and is not an empty directory' in r:
       warning('Already cloned commaai/openpilot, assuming already set up.')
     self.fork_params.put('setup_complete', True)
     success('Fork management set up successfully!')
+    return True
 
   # def _install(self):  # todo: to be replaced with switch command
   #   if self.next_arg(ingest=False) is None:
