@@ -23,7 +23,7 @@ class Fork(CommandBase):
                                        flags=[Flag('fork_or_branch', 'Switch between branches or forks?', has_value=True)]),
                      'init': Command(description='run this command once to init emu fork management')}
 
-  def switch(self):
+  def _switch(self):
     flags, e = self.parse_flags(self.commands['switch'].parser)
     print(flags)
     if e is not None:
