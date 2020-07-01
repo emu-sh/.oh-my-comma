@@ -49,7 +49,6 @@ class Fork(CommandBase):
     self.description = '🍴 manage installed forks, or clone a new one'
 
     self.fork_params = ForkParams()
-    self._init()
 
     # todo: remove install, add list command, allow switch command to install before switching
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
@@ -61,6 +60,7 @@ class Fork(CommandBase):
                      'init': Command(description='run this command once to init emu fork management')}
 
   def _switch(self):
+    self._init()
     flags, e = self.parse_flags(self.commands['switch'].parser)
     if e is not None:
       error(e)
