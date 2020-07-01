@@ -56,8 +56,7 @@ class Fork(CommandBase):
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', has_value=True)]),
                      'switch': Command(description='Switch between downloaded openpilot forks',
-                                       flags=[Flag('switch_type', 'Switch between branches or forks?', has_value=True)]),
-                     'init': Command(description='run this command once to init emu fork management')}
+                                       flags=[Flag('switch_type', 'Switch between branches or forks?', has_value=True)])}
 
   def _switch(self):
     if not self._init():
