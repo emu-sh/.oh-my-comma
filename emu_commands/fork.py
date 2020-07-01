@@ -1,7 +1,7 @@
 import shutil
 from os import path
 from emu_commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, error, warning, success, is_affirmative
+from py_utils.emu_utils import run, error, warning, success, warning, is_affirmative
 from py_utils.emu_utils import OPENPILOT_PATH
 
 class Fork(CommandBase):
@@ -15,7 +15,16 @@ class Fork(CommandBase):
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', has_value=True)]),
                      'switch': Command(description='Switch between downloaded openpilot forks',
-                                       flags=[Flag('fork', 'test')])}
+                                       flags=[Flag('fork', 'test')]),
+                     'init': Command(description='run this command once to init emu fork management')}
+
+  def _init(self):
+    warning('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
+    warning('Please confirm you would like to continue')
+    if not is_affirmative():
+      error('Stopping initialization!')
+      return
+    print('cloning')
 
   def _install(self):
     if self.next_arg(ingest=False) is None:
