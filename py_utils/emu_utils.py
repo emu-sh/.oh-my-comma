@@ -20,6 +20,9 @@ UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
 UNINSTALL_PATH = '{}/uninstall.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
 
+FORKS_PATH = '/data/community/forks'
+# FORK_PARAM_PATH = '/data/community/forks/forks.json'
+
 
 class ArgumentParser(argparse.ArgumentParser):
   def error(self, message):
@@ -124,7 +127,7 @@ def kill(procname):
 
 def is_affirmative():
   i = None
-  print(COLORS.PROMPT)
+  print(COLORS.PROMPT, end='')
   while i not in ['y', 'n', 'yes', 'no']:
     i = input('[Y/n]: ').lower().strip()
   print(COLORS.ENDC)
@@ -154,6 +157,12 @@ def warning(msg, end='\n', ret=False):
 
 def success(msg, end='\n', ret=False):
   s = '{}{}{}'.format(COLORS.SUCCESS, msg, COLORS.ENDC)
+  if ret:
+    return s
+  print(s, end=end)
+
+def info(msg, end='\n', ret=False):
+  s = '{}{}{}'.format(COLORS.PROMPT, msg, COLORS.ENDC)
   if ret:
     return s
   print(s, end=end)

@@ -1,8 +1,13 @@
 import shutil
-from os import path
+import os
 from emu_commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, error, warning, success, warning, is_affirmative
-from py_utils.emu_utils import OPENPILOT_PATH
+from py_utils.emu_utils import run, error, warning, success, warning, info, is_affirmative
+from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH
+
+
+COMMAAI_PATH = FORKS_PATH + '/commaai'
+GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
+
 
 class Fork(CommandBase):
   def __init__(self):
@@ -18,13 +23,20 @@ class Fork(CommandBase):
                                        flags=[Flag('fork', 'test')]),
                      'init': Command(description='run this command once to init emu fork management')}
 
-  def _init(self):
-    warning('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
-    warning('Please confirm you would like to continue')
+  def _init(self):  # todo: put this code into actual __init__ function and detect if needed to be run
+    info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
+    info('Please confirm you would like to continue')
     if not is_affirmative():
       error('Stopping initialization!')
       return
-    print('cloning')
+    info('Setting up emu fork management...')
+    if not os.path.exists(FORKS_PATH):
+      os.mkdir(FORKS_PATH)
+      info('Created forks directory')
+    info('Cloning commaai/openpilot into /data/community/forks')
+    r = run('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
+    if r:
+      success('Cloned successfully!')
 
   def _install(self):
     if self.next_arg(ingest=False) is None:
@@ -42,7 +54,7 @@ class Fork(CommandBase):
       return
 
     OPENPILOT_TEMP_PATH = '{}.temp'.format(OPENPILOT_PATH)
-    if path.exists(OPENPILOT_TEMP_PATH):
+    if os.path.exists(OPENPILOT_TEMP_PATH):
       warning('{} already exists, should it be deleted to continue?'.format(OPENPILOT_TEMP_PATH))
       if is_affirmative():
         shutil.rmtree(OPENPILOT_TEMP_PATH)
@@ -70,19 +82,19 @@ class Fork(CommandBase):
     # todo: make a folder that holds all installed forks and provide an interface of switching between them
     bak_dir = '{}.bak'.format(OPENPILOT_PATH)
     bak_count = 0
-    while path.exists(bak_dir):
+    while os.path.exists(bak_dir):
       bak_count += 1
       bak_dir = '{}.{}'.format(bak_dir, bak_count)
 
     if r:
       success('Cloned successfully! Installing fork...')
-      if path.exists(OPENPILOT_PATH):
+      if os.path.exists(OPENPILOT_PATH):
         shutil.move(OPENPILOT_PATH, bak_dir)  # move current installation to old dir
       shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
       success("Installed! Don't forget to restart your device")
     else:
       error('\nError cloning specified fork URL!', end='')
-      if path.exists(OPENPILOT_TEMP_PATH):  # git usually does this for us
+      if os.path.exists(OPENPILOT_TEMP_PATH):  # git usually does this for us
         error(' Cleaning up...')
         shutil.rmtree(OPENPILOT_TEMP_PATH)
       else:
