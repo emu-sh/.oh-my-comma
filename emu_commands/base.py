@@ -32,7 +32,7 @@ class CommandBase(BaseFunctions):
     except Exception as e:
       return None, e
 
-  def _help(self, cmd, show_description=True, leading='  '):
+  def _help(self, cmd, show_description=True, leading=''):
     description = self.commands[cmd].description
     if show_description:
       print('{}>>  Description 📚: {}{}'.format(COLORS.CYAN, description, COLORS.ENDC))
@@ -41,7 +41,7 @@ class CommandBase(BaseFunctions):
 
     flags_to_print = []
     if flags is not None and len(flags) > 0:
-      print(leading + '{}>>  Flags 🎌:{}'.format(COLORS.WARNING, COLORS.ENDC))
+      print(leading + '  {}>>  Flags 🎌:{}'.format(COLORS.WARNING, COLORS.ENDC))
       for flag in flags:
         aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
         flags_to_print.append(leading + COLORS.WARNING + '  - {}: {}'.format(aliases, flag.description) + COLORS.ENDC)
