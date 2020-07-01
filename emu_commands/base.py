@@ -57,7 +57,10 @@ class CommandBase(BaseFunctions):
 
 class Flag:
   def __init__(self, aliases, description, has_value=False):
-    self.aliases = aliases
+    if isinstance(aliases, str):
+      self.aliases = [aliases]
+    else:
+      self.aliases = aliases
     self.description = description
     self.has_value = has_value
 
