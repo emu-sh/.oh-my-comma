@@ -1,12 +1,45 @@
 import shutil
 import os
+import json
 from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, warning, success, warning, info, is_affirmative
-from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH
+from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
 
 
 COMMAAI_PATH = FORKS_PATH + '/commaai'
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
+
+
+class ForkParams:
+  def __init__(self):
+    self.default_params = {'current_fork': None,
+                           'installed_forks': [],
+                           'setup_complete': False}
+    self._init()
+
+  def _init(self):
+    if not os.path.exists(FORKS_PATH):
+      os.mkdir(FORKS_PATH)
+    self.params = self.default_params  # start with default params
+    if not os.path.exists(FORK_PARAM_PATH):  # if first time running, just write default
+      self._write()
+      return
+    self._read()
+
+  def get(self, key):
+    return self.params[key]
+
+  def put(self, key, value):
+    self.params.update({key: value})
+    self._write()
+
+  def _read(self):
+    with open(FORK_PARAM_PATH, "r") as f:
+      self.params = json.loads(f.read())
+
+  def _write(self):
+    with open(FORK_PARAM_PATH, "w") as f:
+      f.write(json.dumps(self.params, indent=2))
 
 
 class Fork(CommandBase):
@@ -15,47 +48,45 @@ class Fork(CommandBase):
     self.name = 'fork'
     self.description = '🍴 manage installed forks, or clone a new one'
 
+    self.fork_params = ForkParams()
+    self._init()
+
+    # todo: remove install, add list command, allow switch command to install before switching
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
                                         flags=[Flag(['clone_url'], '🍴 URL of fork to clone', has_value=True),
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', has_value=True)]),
                      'switch': Command(description='Switch between downloaded openpilot forks',
-                                       flags=[Flag('fork_or_branch', 'Switch between branches or forks?', has_value=True)]),
+                                       flags=[Flag('switch_type', 'Switch between branches or forks?', has_value=True)]),
                      'init': Command(description='run this command once to init emu fork management')}
 
   def _switch(self):
     flags, e = self.parse_flags(self.commands['switch'].parser)
-    print(flags)
     if e is not None:
       error(e)
       return
+    if flags.switch_type not in ['fork', 'branch']:
+      error('Please specify whether you want to switch between a fork or a branch')
+      return
 
-    # fork_or_branch = self.next_arg()
-    # if fork_or_branch not in ['fork', 'branch']:
-    #   error('Please specify whether you want to switch between a fork or a branch')
-
-  def _init(self):  # todo: put this code into actual __init__ function and detect if needed to be run
+  def _init(self):
+    if self.fork_params.get('setup_complete'):
+      return  # already set up
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Please confirm you would like to continue')
 
     if not is_affirmative():
       error('Stopping initialization!')
       return
-    info('Setting up emu fork management...')
-
-    if not os.path.exists(FORKS_PATH):
-      os.mkdir(FORKS_PATH)
-      info('Created forks directory')
     info('Cloning commaai/openpilot into /data/community/forks')
-
     r = run('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
     if not r:
       error('Error while cloning, please try again')
       return
+    self.fork_params.put('setup_complete', True)
+    success('Fork management set up successfully!')
 
-    success('Cloned successfully!')
-
-  # def _install(self):
+  # def _install(self):  # todo: to be replaced with switch command
   #   if self.next_arg(ingest=False) is None:
   #     error('You must supply command arguments!')
   #     self._help('install')
