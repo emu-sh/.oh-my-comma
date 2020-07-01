@@ -81,6 +81,7 @@ class Fork(CommandBase):
       return False
     info('Cloning commaai/openpilot into /data/community/forks')
     r = check_output('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
+    print(r)
     if not r:
       error('Error while cloning, please try again')
       return False
