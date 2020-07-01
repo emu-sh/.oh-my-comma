@@ -81,12 +81,9 @@ class Fork(CommandBase):
       return False
     info('Cloning commaai/openpilot into /data/community/forks')
     r = check_output('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
-    print(r)
     if not r:
       error('Error while cloning, please try again')
       return False
-    if 'already exists and is not an empty directory' in r:
-      warning('Already cloned commaai/openpilot, assuming already set up.')
     self.fork_params.put('setup_complete', True)
     success('Fork management set up successfully!')
     return True
