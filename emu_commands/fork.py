@@ -127,7 +127,7 @@ class Fork(CommandBase):
       default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
       end_default_branch = default_branch.index('\n')
       default_branch = default_branch[:end_default_branch]
-      info('No branch specified, checking out: {}/{}...'.format(flags.username, default_branch))
+      info('No branch specified, checking out: {}/{}'.format(flags.username, default_branch))
       fork_branch = '{}_{}'.format(username, default_branch)
       branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
     elif len(flags.branch) > 0:
@@ -140,7 +140,7 @@ class Fork(CommandBase):
     installed_forks = self.fork_params.get('installed_forks')
     remote_branch = f'{username}/{branch}'
     if branch not in installed_forks[username]['installed_branches']:
-      info('New branch! Tracking and checking out {} from {}...'.format(fork_branch, remote_branch))
+      info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
       if not r.success:
         error(r.error)
