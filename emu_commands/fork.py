@@ -20,7 +20,6 @@ def valid_fork_url(url):
     urllib.request.urlopen(request)
     return True
   except Exception as e:
-    print(e)
     return False
 
 class ForkParams:
@@ -116,7 +115,7 @@ class Fork(CommandBase):
       print('"{}"'.format(r.output))
 
     if fork_in_params:
-      success('Fork already installed! Switching now')
+      success('Remote already exists! Switching now')
     # todo: probably should write a function that checks installed forks, but should be fine for now
     pass  # user has already cloned this fork, switch to it
 
