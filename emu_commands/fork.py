@@ -151,7 +151,7 @@ class Fork(CommandBase):
               cb = COLORS.OKGREEN + cb
             else:
               cb = COLORS.CYAN + cb
-            print(' - {}{}'.format(cb, COLORS.ENDC)
+            print(' - {}{}'.format(cb, COLORS.ENDC))
         return
 
     else:
