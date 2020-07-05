@@ -78,8 +78,10 @@ class Fork(CommandBase):
       error(e)
       return
     username = flags.username.lower()
+
     if username in self.stock_aliases:
       username = 'commaai'
+      flags.username = 'commaai'
 
     fork_in_params = True
     if username not in self.fork_params.get('installed_forks'):
@@ -119,7 +121,7 @@ class Fork(CommandBase):
 
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
     if not r.success:
-      error(r.error)
+      error(r.output)
       return
 
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
@@ -158,15 +160,14 @@ class Fork(CommandBase):
       info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
       if not r.success:
-        error(r.error)
+        error(r.output)
         return
       installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
       self.fork_params.put('installed_forks', installed_forks)
-    else:
-      # info('Already installed branch! Checking out {} from {}...'.format(fork_branch, remote_branch))
+    else:  # already installed branch, checking out fork_branch from remote_branch
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', fork_branch])
       if not r.success:
-        error(r.error)
+        error(r.output)
         return
 
     success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
@@ -186,7 +187,7 @@ class Fork(CommandBase):
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
     if not r.success:
-      error(r.error)
+      error(r.output)
       return
     start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
     remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
@@ -229,6 +230,13 @@ class Fork(CommandBase):
       error('Error while cloning, please try again')
       return False
 
+    # so it's easy to switch to stock without any extra logic for origin
+    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
+    print(r.output)
+    print(r.success)
+    if not r.success:
+      error(r.output)
+      return
     self.fork_params.put('setup_complete', True)
     success('Fork management set up successfully!')
     return True

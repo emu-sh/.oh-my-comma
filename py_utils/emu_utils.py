@@ -91,18 +91,16 @@ def most_similar(find, options):
 
 def check_output(cmd, cwd=None):
   class Output:
-    def __init__(self, output='', s=True, e=None):
+    def __init__(self, output='', s=True):
       self.output = output
       self.success = s
-      self.error = e
   if isinstance(cmd, str):
     cmd = cmd.split()
-  print(cmd)
   try:
     return Output(subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8'))
   except subprocess.CalledProcessError as e:
     if e.output is None:
-      return Output(s=False, e=e)  # command failed to execute
+      return Output(e, s=False)  # command failed to execute
     return Output(e.output)  # command executed but it resulted in error
 
 
