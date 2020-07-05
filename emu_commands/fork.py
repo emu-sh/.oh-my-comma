@@ -79,7 +79,8 @@ class Fork(CommandBase):
       error(e)
       return
     flags.username = flags.username.lower()
-    flags.branch = flags.branch.lower()
+    if flags.branch is not None:
+      flags.branch = flags.branch.lower()
     print('username: {}'.format(flags.username))
     print('branch: {}'.format(flags.branch))
 
