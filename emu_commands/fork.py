@@ -15,7 +15,9 @@ REMOTE_ALREADY_EXISTS = 'already exists'
 
 def valid_fork_url(url):
   try:
-    urllib.request.Request(url)
+    request = urllib.request.Request(url)
+    request.get_method = lambda: 'HEAD'
+    urllib.request.urlopen(request)
     return True
   except Exception as e:
     print(e)
