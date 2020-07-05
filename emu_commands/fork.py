@@ -75,8 +75,11 @@ class Fork(CommandBase):
         branches = check_output(['git', '-C', '/data/openpilot1', 'branch'])
         if branches.success and 'master' in branches.output:
           print('param set but checking: {}'.format(branches.output))
-          return True
-      return True  # already set up
+          return True  # already set up
+      self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+      warning('There was an error with your clone of commaai/openpilot, restarting initialization')
+      shutil.rmtree(COMMAAI_PATH)
+
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Please confirm you would like to continue')
     if not is_affirmative():
