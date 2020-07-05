@@ -93,13 +93,13 @@ class Fork(CommandBase):
       r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', username, clone_url])
       if r.success and r.output == '':
         success('Remote added successfully!')
-        # remote added successfully
-        if flags.branch is None:
-          # no branch specified, just checkout default branch after adding remote
-          pass
-        else:
-          # branch specified, switch to it after adding remote
-          pass
+        # # remote added successfully  # todo: handled below
+        # if flags.branch is None:
+        #   # no branch specified, just checkout default branch after adding remote
+        #   pass
+        # else:
+        #   # branch specified, switch to it after adding remote
+        #   pass
       elif r.success and REMOTE_ALREADY_EXISTS in r.output:
         # remote already added, update params
         success('Fork exists but wasn\'t in params, updating now')
@@ -111,8 +111,8 @@ class Fork(CommandBase):
         return
 
     # fork has been added as a remote, switch to it
-    if fork_in_params:  # todo: probably should write a function that checks installed forks, but should be fine for now
-      success('Remote already exists! Switching now...')
+    # if fork_in_params:  # todo: probably should write a function that checks installed forks, but should be fine for now
+    #   success('Remote already exists! Switching now...')
     info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
     if not r.success:
@@ -127,7 +127,7 @@ class Fork(CommandBase):
       default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
       end_default_branch = default_branch.index('\n')
       default_branch = default_branch[:end_default_branch]
-      warning('No branch specified, checking out: {}/{}...'.format(flags.username, default_branch))
+      info('No branch specified, checking out: {}/{}...'.format(flags.username, default_branch))
       fork_branch = '{}_{}'.format(username, default_branch)
       branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
     elif len(flags.branch) > 0:
