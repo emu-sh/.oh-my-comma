@@ -84,7 +84,10 @@ def input_with_options(options, default=None):
 def check_output(cmd, cwd=None):
   if isinstance(cmd, str):
     cmd = cmd.split()
-  return subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8')
+  try:
+    return subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8')
+  except subprocess.CalledProcessError as e:
+    return e
 
 
 def run(cmd, out_file=None):
