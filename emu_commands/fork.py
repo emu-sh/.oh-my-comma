@@ -111,7 +111,6 @@ class Fork(CommandBase):
       info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
 
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
-    print(r.output)
     if not r.success:
       error(r.output)
       return
@@ -187,9 +186,6 @@ class Fork(CommandBase):
     if not r.success:
       error(r.output)
       return
-    print('===')
-    print(r.output)
-    print('===')
     start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
     remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
     remote_branches = []
@@ -203,10 +199,10 @@ class Fork(CommandBase):
       return
     return remote_branches
 
-  def _reset_hard(self):  # todo: this functionality
-    # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
-    # git reset --hard arne182/075-clean
-    pass
+  # def _reset_hard(self):  # todo: this functionality
+  #   # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
+  #   # git reset --hard arne182/075-clean
+  #   pass
 
   def _init(self):
     if self.fork_params.get('setup_complete'):
@@ -226,15 +222,12 @@ class Fork(CommandBase):
 
     info('Cloning commaai/openpilot into /data/community/forks, please wait...')
     r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
-    print('output: {}'.format(r.output))  # todo: remove, just need to see the output of without depth 1
     if not r.success or 'done' not in r.output:
       error('Error while cloning, please try again')
       return
 
     # so it's easy to switch to stock without any extra logic for origin
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
-    print(r.output)
-    print(r.success)
     if not r.success:
       error(r.output)
       return
