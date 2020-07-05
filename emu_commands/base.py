@@ -77,28 +77,23 @@ class Command:
       for flag in flags:
         # for each flag, add it as argument with aliases.
         # if flag.has_value, parse value as string, if not, assume flag is boolean
-        nargs = None
-        action = None
+        parser_args = {}
         if not flag.required and flag.dtype not in ['bool']:
-          nargs = '?'
+          parser_args['nargs'] = '?'
 
         if flag.dtype != 'bool':
-          action = 'store'
+          parser_args['action'] = 'store'
         elif flag.dtype == 'bool':
-          action = 'store_true'
+          parser_args['action'] = 'store_true'
 
-        if flag.dtype == 'bool':
+        if flag.dtype == 'bool':  # type bool is not required when store_true
           pass
-          # dtype = bool
         elif flag.dtype == 'str':
-          dtype = str
+          parser_args['type'] = str
         elif flag.dtype == 'int':
-          dtype = int
+          parser_args['type'] = int
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
-        parser_args = {'action': action, 'nargs': nargs}
-        if nargs is None:
-          del parser_args['nargs']
-        # print('parser_args: {}'.format(parser_args))
+        print('parser_args: {}'.format(parser_args))
         self.parser.add_argument(*flag.aliases, help=flag.description, **parser_args)
