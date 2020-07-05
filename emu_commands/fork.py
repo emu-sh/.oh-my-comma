@@ -98,9 +98,7 @@ class Fork(CommandBase):
       elif r.success and REMOTE_ALREADY_EXISTS in r.output:
         # remote already added, update params
         info('Fork exists but wasn\'t in params, updating now...')
-        installed_forks = self.fork_params.get('installed_forks')
-        installed_forks[username] = {'installed_branches': []}
-        self.fork_params.put('installed_forks', installed_forks)
+        self.__add_fork(username)
       else:
         error(r.output)
         return
@@ -117,6 +115,7 @@ class Fork(CommandBase):
     if not r.success:
       error(r.output)
       return
+    self.__add_fork(username)
 
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
     remote_branches = self.__get_remote_branches(r)
@@ -165,6 +164,11 @@ class Fork(CommandBase):
         return
 
     success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
+
+  def __add_fork(self, username):
+    installed_forks = self.fork_params.get('installed_forks')
+    installed_forks[username] = {'installed_branches': []}
+    self.fork_params.put('installed_forks', installed_forks)
 
   def __show_similar_branches(self, branch, branches):
     if len(branches) > 0:
