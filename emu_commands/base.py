@@ -79,22 +79,17 @@ class Command:
         # if flag.has_value, parse value as string, if not, assume flag is boolean
         nargs = None
         action = None
-        dtype = None
         if not flag.required and flag.dtype not in ['bool']:
           nargs = '?'
-        elif flag.dtype is not None:
+        if flag.dtype not in ['bool']:
           action = 'store'
-          if flag.dtype == 'bool':
-            dtype = bool
-          elif flag.dtype == 'str':
-            dtype = str
-          elif flag.dtype == 'int':
-            dtype = int
-          else:
-            error('Unsupported dtype: {}'.format(flag.dtype))
-            return
+        if flag.dtype == 'bool':
+          dtype = bool
+        elif flag.dtype == 'str':
+          dtype = str
+        elif flag.dtype == 'int':
+          dtype = int
         else:
-          print(flag.aliases)
-          error('Unknown flag error!')
+          error('Unsupported dtype: {}'.format(flag.dtype))
           return
         self.parser.add_argument(*flag.aliases, help=flag.description, action=action, nargs=nargs, type=dtype)
