@@ -18,7 +18,7 @@ class Device(CommandBase):
     run('am start -n android/com.android.internal.app.ShutdownActivity')
 
   def _battery(self):
-    r = check_output('dumpsys batterymanager')  # todo, fix
+    r = check_output('dumpsys batterymanager')
     if not r:
       error('Unable to get battery status!')
       return
