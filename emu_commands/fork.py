@@ -150,8 +150,8 @@ class Fork(CommandBase):
             if idx == 0:
               cb = COLORS.OKGREEN + cb
             else:
-              cb = COLORS.CYAN + cb + COLORS.ENDC
-            print(' - ' + cb)
+              cb = COLORS.CYAN + cb
+            print(' - {}{}'.format(cb, COLORS.ENDC)
         return
 
     else:
