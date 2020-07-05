@@ -132,6 +132,7 @@ class Fork(CommandBase):
       branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
+      branch = flags.branch
     else:
       error('Error with branch!')
       return
