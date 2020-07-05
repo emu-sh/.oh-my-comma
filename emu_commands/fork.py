@@ -125,15 +125,13 @@ class Fork(CommandBase):
       error(r.error)
       return
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
-    # print('"{}"'.format(r.output))
     start_default_branch = r.output.index(DEFAULT_BRANCH_START)
     print('default branch idx: {}'.format(start_default_branch))
     default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
     end_default_branch = default_branch.index('\n')
     default_branch = default_branch[:end_default_branch]
     print(default_branch)
-
-    print(r.output)
+    print('"{}"'.format(default_branch))
     # todo: probably should write a function that checks installed forks, but should be fine for now
     pass  # user has already cloned this fork, switch to it
 
