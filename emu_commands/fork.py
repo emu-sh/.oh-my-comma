@@ -152,6 +152,7 @@ class Fork(CommandBase):
         return
       info('New branch to local, adding to {}\'s installed branches'.format(flags.username))
       installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
+      self.fork_params.put('installed_forks', installed_forks)
     else:
       info('Already installed branch, checking out {}'.format(fork_branch))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', fork_branch])
