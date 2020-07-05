@@ -9,6 +9,8 @@ from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
 COMMAAI_PATH = FORKS_PATH + '/commaai'
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
+REMOTE_ALREADY_EXISTS = 'already exists'
+
 
 class ForkParams:
   def __init__(self):
@@ -68,23 +70,35 @@ class Fork(CommandBase):
       return
     print(flags.username)
     print(flags.branch)
-    if flags.username.lower() in self.fork_params.get('installed_forks'):  # todo: probably should write a function that checks installed forks, but should be fine for now
-      pass  # user has already cloned this fork, switch to it
-    else:  # fork not installed, add to remote now
+    if flags.username.lower() not in self.fork_params.get('installed_forks'):
       print('fork not installed!')
       clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
       r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
-      if not r.success:
-        print('error: {}'.format(r.error))
+      if r.success and r.output == '':
+        success('Remote added successfully!')
+        # remote added successfully
+        if flags.branch is None:
+          # no branch specified, just checkout default branch after adding remote
+          pass
+        else:
+          # branch specified, switch to it after adding remote
+          pass
+      elif r.success and REMOTE_ALREADY_EXISTS in r.output:
+        # remote already added, update params
+        info('Fork exists but wasn\'t in params, updating now')
+        installed_forks = self.fork_params.get('installed_forks')
+        installed_forks.append(flags.username.lower())
+        self.fork_params.put('installed_forks', installed_forks)
       else:
-        print(r.success)
-        print('"{}"'.format(r.output))
-      if flags.branch is None:
-        # no branch specified, just checkout default branch after adding remote
-        pass
-      else:
-        # branch specified, switch to it after adding remote
-        pass
+        error(r.error)
+        return
+
+      print(r.success)
+      print('"{}"'.format(r.output))
+
+
+    # todo: probably should write a function that checks installed forks, but should be fine for now
+    pass  # user has already cloned this fork, switch to it
 
 
   def _init(self):
