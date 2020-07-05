@@ -36,7 +36,6 @@ class ForkParams:
       os.mkdir(FORKS_PATH)
     self.params = self.default_params  # start with default params
     if not os.path.exists(FORK_PARAM_PATH):  # if first time running, just write default
-      print('Here')
       self._write()
       return
     self._read()
@@ -51,6 +50,7 @@ class ForkParams:
   def _read(self):
     with open(FORK_PARAM_PATH, "r") as f:
       self.params = json.loads(f.read())
+    print(self.params)
 
   def _write(self):
     with open(FORK_PARAM_PATH, "w") as f:
