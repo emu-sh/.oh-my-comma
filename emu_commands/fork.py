@@ -83,8 +83,11 @@ class Fork(CommandBase):
       print('fork not installed!')
       fork_in_params = False
       clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
+
       if not valid_fork_url(clone_url):
         error('Invalid username! {} does not exists'.format(clone_url))
+        return
+
       r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
       if r.success and r.output == '':
         success('Remote added successfully!')
