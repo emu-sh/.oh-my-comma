@@ -88,7 +88,8 @@ class Command:
           action = 'store_true'
 
         if flag.dtype == 'bool':
-          dtype = bool
+          pass
+          # dtype = bool
         elif flag.dtype == 'str':
           dtype = str
         elif flag.dtype == 'int':
