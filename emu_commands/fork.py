@@ -77,8 +77,8 @@ class Fork(CommandBase):
     if e is not None:
       error(e)
       return
-    username = flags.username.lower()
 
+    username = flags.username.lower()
     if username in self.stock_aliases:
       username = 'commaai'
       flags.username = 'commaai'
