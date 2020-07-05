@@ -2,7 +2,7 @@ import shutil
 import os
 import json
 from emu_commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, error, warning, success, warning, info, is_affirmative, check_output
+from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
 
 
@@ -80,12 +80,9 @@ class Fork(CommandBase):
       error(e)
       return
     username = flags.username.lower()
-    print('username: {}'.format(username))
-    print('branch: {}'.format(flags.branch))
 
     fork_in_params = True
     if username not in self.fork_params.get('installed_forks'):
-      print('fork not installed!')
       fork_in_params = False
       clone_url = 'https://github.com/{}/openpilot'.format(username)
 
@@ -130,7 +127,7 @@ class Fork(CommandBase):
       default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
       end_default_branch = default_branch.index('\n')
       default_branch = default_branch[:end_default_branch]
-      info('{}\'s default branch: {}'.format(flags.username, default_branch))
+      warning('No branch specified, checking out: {}/{}...'.format(flags.username, default_branch))
       fork_branch = '{}_{}'.format(username, default_branch)
       branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
     elif len(flags.branch) > 0:
@@ -143,16 +140,15 @@ class Fork(CommandBase):
     installed_forks = self.fork_params.get('installed_forks')
     remote_branch = f'{username}/{branch}'
     if branch not in installed_forks[username]['installed_branches']:
-      info('New branch, tracking and checking out {} from {}...'.format(fork_branch, remote_branch))
+      info('New branch! Tracking and checking out {} from {}...'.format(fork_branch, remote_branch))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
       if not r.success:
         error(r.error)
         return
-      info('New branch to local, adding to {}\'s installed branches'.format(flags.username))
       installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
       self.fork_params.put('installed_forks', installed_forks)
     else:
-      info('Already installed branch, checking out {} from {}...'.format(fork_branch, remote_branch))
+      info('Already installed branch! Checking out {} from {}...'.format(fork_branch, remote_branch))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', fork_branch])
       if not r.success:
         error(r.error)
@@ -187,64 +183,64 @@ class Fork(CommandBase):
     success('Fork management set up successfully!')
     return True
 
-  def _install(self):  # todo: to be replaced with switch command
-    if self.next_arg(ingest=False) is None:
-      error('You must supply command arguments!')
-      self._help('install')
-      return
-
-    flags, e = self.parse_flags(self.commands['install'].parser)
-    if e is not None:
-      error(e)
-      return
-
-    if flags.clone_url is None:
-      error('You must specify a fork URL to clone!')
-      return
-
-    OPENPILOT_TEMP_PATH = '{}.temp'.format(OPENPILOT_PATH)
-    if os.path.exists(OPENPILOT_TEMP_PATH):
-      warning('{} already exists, should it be deleted to continue?'.format(OPENPILOT_TEMP_PATH))
-      if is_affirmative():
-        shutil.rmtree(OPENPILOT_TEMP_PATH)
-      else:
-        error('Exiting...')
-        return
-
-    # Clone fork to temp folder
-    warning('Fork will be installed to {}'.format(OPENPILOT_PATH))
-    clone_flags = []
-    if flags.lite:
-      warning('- Performing a lite clone! (--depth 1)')
-      clone_flags.append('--depth 1')
-    if flags.branch is not None:
-      warning('- Only cloning branch: {}'.format(flags.branch))
-      clone_flags.append('-b {} --single-branch'.format(flags.branch))
-    if len(clone_flags):
-      clone_flags.append('')
-    try:  # catch ctrl+c and clean up after
-      r = run('git clone {}{} {}'.format(' '.join(clone_flags), flags.clone_url, OPENPILOT_TEMP_PATH))  # clone to temp folder
-    except:
-      r = False
-
-    # If openpilot.bak exists, determine a good non-exiting path
-    # todo: make a folder that holds all installed forks and provide an interface of switching between them
-    bak_dir = '{}.bak'.format(OPENPILOT_PATH)
-    bak_count = 0
-    while os.path.exists(bak_dir):
-      bak_count += 1
-      bak_dir = '{}.{}'.format(bak_dir, bak_count)
-
-    if r:
-      success('Cloned successfully! Installing fork...')
-      if os.path.exists(OPENPILOT_PATH):
-        shutil.move(OPENPILOT_PATH, bak_dir)  # move current installation to old dir
-      shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
-      success("Installed! Don't forget to restart your device")
-    else:
-      error('\nError cloning specified fork URL!', end='')
-      if os.path.exists(OPENPILOT_TEMP_PATH):  # git usually does this for us
-        error(' Cleaning up...')
-        shutil.rmtree(OPENPILOT_TEMP_PATH)
-      else:
-        print()
+  # def _install(self):  # todo: to be replaced with switch command
+  #   if self.next_arg(ingest=False) is None:
+  #     error('You must supply command arguments!')
+  #     self._help('install')
+  #     return
+  #
+  #   flags, e = self.parse_flags(self.commands['install'].parser)
+  #   if e is not None:
+  #     error(e)
+  #     return
+  #
+  #   if flags.clone_url is None:
+  #     error('You must specify a fork URL to clone!')
+  #     return
+  #
+  #   OPENPILOT_TEMP_PATH = '{}.temp'.format(OPENPILOT_PATH)
+  #   if os.path.exists(OPENPILOT_TEMP_PATH):
+  #     warning('{} already exists, should it be deleted to continue?'.format(OPENPILOT_TEMP_PATH))
+  #     if is_affirmative():
+  #       shutil.rmtree(OPENPILOT_TEMP_PATH)
+  #     else:
+  #       error('Exiting...')
+  #       return
+  #
+  #   # Clone fork to temp folder
+  #   warning('Fork will be installed to {}'.format(OPENPILOT_PATH))
+  #   clone_flags = []
+  #   if flags.lite:
+  #     warning('- Performing a lite clone! (--depth 1)')
+  #     clone_flags.append('--depth 1')
+  #   if flags.branch is not None:
+  #     warning('- Only cloning branch: {}'.format(flags.branch))
+  #     clone_flags.append('-b {} --single-branch'.format(flags.branch))
+  #   if len(clone_flags):
+  #     clone_flags.append('')
+  #   try:  # catch ctrl+c and clean up after
+  #     r = run('git clone {}{} {}'.format(' '.join(clone_flags), flags.clone_url, OPENPILOT_TEMP_PATH))  # clone to temp folder
+  #   except:
+  #     r = False
+  #
+  #   # If openpilot.bak exists, determine a good non-exiting path
+  #   # todo: make a folder that holds all installed forks and provide an interface of switching between them
+  #   bak_dir = '{}.bak'.format(OPENPILOT_PATH)
+  #   bak_count = 0
+  #   while os.path.exists(bak_dir):
+  #     bak_count += 1
+  #     bak_dir = '{}.{}'.format(bak_dir, bak_count)
+  #
+  #   if r:
+  #     success('Cloned successfully! Installing fork...')
+  #     if os.path.exists(OPENPILOT_PATH):
+  #       shutil.move(OPENPILOT_PATH, bak_dir)  # move current installation to old dir
+  #     shutil.move(OPENPILOT_TEMP_PATH, OPENPILOT_PATH)  # move new clone temp folder to main installation dir
+  #     success("Installed! Don't forget to restart your device")
+  #   else:
+  #     error('\nError cloning specified fork URL!', end='')
+  #     if os.path.exists(OPENPILOT_TEMP_PATH):  # git usually does this for us
+  #       error(' Cleaning up...')
+  #       shutil.rmtree(OPENPILOT_TEMP_PATH)
+  #     else:
+  #       print()
