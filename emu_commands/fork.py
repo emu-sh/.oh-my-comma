@@ -138,6 +138,8 @@ class Fork(CommandBase):
       branch = flags.branch
       remote_branches = self.__get_remote_branches(username, branch)
       print(remote_branches)
+      if remote_branches is None:
+        return
       if branch not in remote_branches:
         error('The branch you specified does not exist!')
         return
@@ -170,7 +172,7 @@ class Fork(CommandBase):
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])  # get remote's branches to verify
     if not r.success:
       error(r.error)
-      return []
+      return
     start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
     remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
     remote_branches = []
@@ -181,7 +183,7 @@ class Fork(CommandBase):
       remote_branches.append(b)
     if len(remote_branches) == 0:
       error('Error getting remote branches!')
-      return []
+      return
     return remote_branches
 
   def _reset_hard(self):
