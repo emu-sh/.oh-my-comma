@@ -151,7 +151,7 @@ class Fork(CommandBase):
               cb = COLORS.OKGREEN + cb
             else:
               cb = COLORS.CYAN + cb + COLORS.ENDC
-            print('  ' + cb)
+            print(' - ' + cb)
         return
 
     else:
