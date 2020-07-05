@@ -10,7 +10,7 @@ COMMAAI_PATH = FORKS_PATH + '/commaai'
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
-DEFAULT_BRANCH_START = 'HEAD branch '
+DEFAULT_BRANCH_START = 'HEAD branch: '
 
 
 def valid_fork_url(url):
