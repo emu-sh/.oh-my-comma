@@ -1,6 +1,7 @@
 import shutil
 import os
 import json
+import urllib
 from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, warning, success, warning, info, is_affirmative, check_output
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
@@ -11,6 +12,13 @@ GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 
+
+def valid_fork_url(url):
+  try:
+    urllib.request.urlopen(url)
+    return True
+  except:
+    return False
 
 class ForkParams:
   def __init__(self):
@@ -75,6 +83,8 @@ class Fork(CommandBase):
       print('fork not installed!')
       fork_in_params = False
       clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
+      if not valid_fork_url(clone_url):
+        error('Invalid username! {} does not exists'.format(clone_url))
       r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
       if r.success and r.output == '':
         success('Remote added successfully!')
