@@ -146,6 +146,7 @@ class Fork(CommandBase):
       if len(remote_branches) == 0:
         error('Error getting remote branches!')
         return
+      print('-------')
       for b in remote_branches:
         print(b.strip())
       return
