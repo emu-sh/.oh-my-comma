@@ -128,7 +128,7 @@ class Fork(CommandBase):
     print('"{}"'.format(r.output))
     print(r.output.index(DEFAULT_BRANCH_START))
     default_branch = r.output[:r.output.index(DEFAULT_BRANCH_START)]
-    # print(default_branch)
+    print(default_branch)
 
     print(r.output)
     # todo: probably should write a function that checks installed forks, but should be fine for now
