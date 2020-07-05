@@ -142,14 +142,19 @@ class Fork(CommandBase):
         return
       print(r.output)
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
-      remote_branches = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
-      if len(remote_branches) == 0:
+      remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
+      if len(remote_branches_txt) == 0:
         error('Error getting remote branches!')
         return
       print('-------')
-      for b in remote_branches[1:]:  # remove first useless line
-        print(b.replace('tracked', '').strip())
-      return
+      remote_branches = []
+      for b in remote_branches_txt[1:]:  # remove first useless line
+        b = b.replace('tracked', '').strip()
+        print(b)
+        remote_branches.append(b)
+        if ' ' in b:  # end of branches
+          break
+      return  # todo: temp
     else:
       error('Error with branch!')
       return
