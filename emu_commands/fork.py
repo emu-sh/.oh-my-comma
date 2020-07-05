@@ -63,9 +63,9 @@ class Fork(CommandBase):
     self.description = '🍴 manage installed forks, or clone a new one'
 
     self.fork_params = ForkParams()
-    self.stock_aliases = ['stock', 'commaai']
+    self.stock_aliases = ['stock', 'commaai', 'origin']
 
-    # todo: remove install, add list command, allow switch command to install before switching
+    # todo: add list command
     self.commands = {'switch': Command(description='🍴 Switch between forks or install a new one',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to install', required=True, dtype='str'),
                                               Flag('branch', '🌿 Branch to switch to', dtype='str')])}
@@ -95,13 +95,6 @@ class Fork(CommandBase):
       r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', username, clone_url])
       if r.success and r.output == '':
         success('Remote added successfully!')
-        # # remote added successfully  # todo: handled below
-        # if flags.branch is None:
-        #   # no branch specified, just checkout default branch after adding remote
-        #   pass
-        # else:
-        #   # branch specified, switch to it after adding remote
-        #   pass
       elif r.success and REMOTE_ALREADY_EXISTS in r.output:
         # remote already added, update params
         info('Fork exists but wasn\'t in params, updating now...')
