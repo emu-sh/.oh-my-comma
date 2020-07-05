@@ -56,7 +56,7 @@ class CommandBase(BaseFunctions):
       print('\n'.join(cmds_to_print))
 
 class Flag:
-  def __init__(self, aliases, description, required=True, dtype=None):
+  def __init__(self, aliases, description, required=True, dtype='bool'):
     if isinstance(aliases, str):
       self.aliases = [aliases]
     else:
@@ -80,11 +80,13 @@ class Command:
         nargs = None
         action = None
         dtype = None
-        if not flag.required and flag.dtype is not None:
+        if not flag.required and flag.dtype not in ['bool']:
           nargs = '?'
         elif flag.dtype is not None:
           action = 'store'
-          if flag.dtype == 'str':
+          if flag.dtype == 'bool':
+            dtype = bool
+          elif flag.dtype == 'str':
             dtype = str
           elif flag.dtype == 'int':
             dtype = int
