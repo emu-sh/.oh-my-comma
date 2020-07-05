@@ -97,12 +97,8 @@ class Command:
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
-        print(flag.aliases)
-        print(nargs)
-        print(action)
-        print(dtype)
         parser_args = {'action': action, 'nargs': nargs}
         if nargs is None:
           del parser_args['nargs']
-        print('parser_args: {}'.format(parser_args))
+        # print('parser_args: {}'.format(parser_args))
         self.parser.add_argument(*flag.aliases, help=flag.description, **parser_args)
