@@ -113,45 +113,36 @@ class Fork(CommandBase):
     # fork has been added as a remote, switch to it
     # todo: probably should write a function that checks installed forks, but should be fine for now
     if fork_in_params:
-      # success('Remote already exists! Switching now...')
       info('Fetching {}\'s latest changes...'.format(flags.username))
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
+
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
     if not r.success:
       error(r.error)
       return
-    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
-    if DEFAULT_BRANCH_START not in r.output:
+
+    remote_branches = self.__get_remote_branches(username)
+    if DEFAULT_BRANCH_START not in remote_branches:
       error('Error: Cannot find default branch from fork!')
       return
+
     if flags.branch is None:
       start_default_branch = r.output.index(DEFAULT_BRANCH_START)
       default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
       end_default_branch = default_branch.index('\n')
       default_branch = default_branch[:end_default_branch]
-      # info('No branch specified, checking out: {}/{}'.format(flags.username, default_branch))
       fork_branch = '{}_{}'.format(username, default_branch)
       branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
+
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
       branch = flags.branch
-      remote_branches = self.__get_remote_branches(username, branch)
-      print(remote_branches)
       if remote_branches is None:
         return
       if branch not in remote_branches:
         error('The branch you specified does not exist!')
-        if len(remote_branches) > 0:
-          info('Did you mean:')
-          close_branches = most_similar(branch, remote_branches)[:5]
-          for idx in range(len(close_branches)):
-            cb = close_branches[idx]
-            if idx == 0:
-              cb = COLORS.OKGREEN + cb
-            else:
-              cb = COLORS.CYAN + cb
-            print(' - {}{}'.format(cb, COLORS.ENDC))
+        self.__show_similar_branches(branch, remote_branches)  # if possible
         return
 
     else:
@@ -178,7 +169,19 @@ class Fork(CommandBase):
 
     success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
 
-  def __get_remote_branches(self, username, branch):
+  def __show_similar_branches(self, branch, branches):
+    if len(branches) > 0:
+      info('Did you mean:')
+      close_branches = most_similar(branch, branches)[:5]
+      for idx in range(len(close_branches)):
+        cb = close_branches[idx]
+        if idx == 0:
+          cb = COLORS.OKGREEN + cb
+        else:
+          cb = COLORS.CYAN + cb
+        print(' - {}{}'.format(cb, COLORS.ENDC))
+
+  def __get_remote_branches(self, username):
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])  # get remote's branches to verify
     if not r.success:
       error(r.error)
@@ -196,13 +199,13 @@ class Fork(CommandBase):
       return
     return remote_branches
 
-  def _reset_hard(self):
+  def _reset_hard(self):  # todo: this functionality
     # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
     # git reset --hard arne182/075-clean
     pass
 
   def _init(self):
-    if self.fork_params.get('setup_complete'):  # todo: temp
+    if self.fork_params.get('setup_complete'):
       if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
         branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
         if branches.success and 'master' in branches.output:
@@ -216,12 +219,14 @@ class Fork(CommandBase):
     if not is_affirmative():
       error('Stopping initialization!')
       return False
+
     info('Cloning commaai/openpilot into /data/community/forks, please wait...')
     r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH, '--depth', '1'])
     print('output: {}'.format(r.output))  # todo: remove, just need to see the output of without depth 1
     if not r.success or 'done' not in r.output:
       error('Error while cloning, please try again')
       return False
+
     self.fork_params.put('setup_complete', True)
     success('Fork management set up successfully!')
     return True
