@@ -94,7 +94,7 @@ class Command:
           parser_args['type'] = str
         elif flag.dtype == 'int':
           # parser_args['type'] = int
-        pass
+          pass
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
