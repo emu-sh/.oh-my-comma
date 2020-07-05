@@ -187,6 +187,9 @@ class Fork(CommandBase):
     if not r.success:
       error(r.output)
       return
+    print('===')
+    print(r.output)
+    print('===')
     start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
     remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
     remote_branches = []
