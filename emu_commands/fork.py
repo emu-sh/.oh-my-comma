@@ -233,6 +233,7 @@ class Fork(CommandBase):
       return
 
     # backup and create symlink
+    info('Backing up openpilot and creating symlink to {}'.format(COMMAAI_PATH))
     bak_dir = '{}.bak'.format(OPENPILOT_PATH)
     idx = 0
     while os.path.exists(bak_dir):
