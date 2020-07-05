@@ -56,13 +56,14 @@ class CommandBase(BaseFunctions):
       print('\n'.join(cmds_to_print))
 
 class Flag:
-  def __init__(self, aliases, description, has_value=False):
+  def __init__(self, aliases, description, has_value=False, required=True):
     if isinstance(aliases, str):
       self.aliases = [aliases]
     else:
       self.aliases = aliases
     self.description = description
     self.has_value = has_value
+    self.required = required
 
 class Command:
   def __init__(self, description=None, commands=None, flags=None):
@@ -77,4 +78,5 @@ class Command:
         # for each flag, add it as argument with aliases.
         # if flag.has_value, parse value as string, if not, assume flag is boolean
         action = 'store_true' if not flag.has_value else None
-        self.parser.add_argument(*flag.aliases, help=flag.description, action=action)
+        nargs = '?' if not flag.required else None
+        self.parser.add_argument(*flag.aliases, help=flag.description, action=action, nargs=nargs)

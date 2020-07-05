@@ -57,7 +57,7 @@ class Fork(CommandBase):
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', has_value=True)]),
                      'switch': Command(description='Switch between forks or install a new one',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to install their fork', has_value=True),
-                                              Flag('branch', 'The branch to switch to', has_value=True)])}
+                                              Flag('branch', 'The branch to switch to', has_value=True, required=False)])}
 
   def _switch(self):
     if not self._init():
