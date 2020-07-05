@@ -3,7 +3,7 @@ import os
 import json
 from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
-from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
+from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH, COLORS
 
 
 COMMAAI_PATH = FORKS_PATH + '/commaai'
@@ -145,7 +145,16 @@ class Fork(CommandBase):
         if len(remote_branches) > 0:
           info('Did you mean:')
           close_branches = most_similar(branch, remote_branches)[:5]
-          print('\n'.join(close_branches))
+          for idx in range(len(close_branches)):
+            cb = close_branches[idx]
+            if idx == 0:
+              cb = COLORS.OKGREEN + cb
+            elif idx == 1:
+              cb = COLORS.OKBLUE + cb
+            else:
+              cb = COLORS.YELLOW + cb
+            print('  ' + cb)
+          print(COLORS.ENDC)
         return
 
     else:
