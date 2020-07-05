@@ -79,8 +79,7 @@ class Command:
         # if flag.has_value, parse value as string, if not, assume flag is boolean
         parser_args = {}
         if not flag.required and flag.dtype not in ['bool']:
-          # parser_args['nargs'] = '?'
-          parser_args['required'] = True
+          parser_args['nargs'] = 1
 
         if flag.dtype != 'bool':
           parser_args['action'] = 'store'
