@@ -8,7 +8,7 @@ class Device(CommandBase):
     self.description = '📈 Statistics about your device'
 
     self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
-                     'reboot': Command(description='☯ safely reboot your device'),
+                     'reboot': Command(description='⚡ safely reboot your device'),
                      'shutdown': Command(description='🔌 safely shutdown your device')}
 
   def _reboot(self):
