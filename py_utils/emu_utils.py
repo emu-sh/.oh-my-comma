@@ -94,7 +94,7 @@ def check_output(cmd, cwd=None):
   except subprocess.CalledProcessError as e:
     if e.output is None:
       return Output(s=False, e=e)  # command failed to execute
-    return Output(e=e.output)  # command executed but it resulted in error
+    return Output(e.output)  # command executed but it resulted in error
 
 
 def run(cmd, out_file=None):
