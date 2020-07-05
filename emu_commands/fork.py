@@ -149,12 +149,9 @@ class Fork(CommandBase):
             cb = close_branches[idx]
             if idx == 0:
               cb = COLORS.OKGREEN + cb
-            elif idx == 1:
-              cb = COLORS.OKBLUE + cb
             else:
-              cb = COLORS.CBLUE + cb
+              cb = COLORS.CYAN + cb + COLORS.ENDC
             print('  ' + cb)
-          print(COLORS.ENDC)
         return
 
     else:
