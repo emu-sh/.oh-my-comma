@@ -79,7 +79,9 @@ class Command:
         # if flag.has_value, parse value as string, if not, assume flag is boolean
         parser_args = {}
         if not flag.required and flag.dtype not in ['bool']:
-          parser_args['nargs'] = '+'
+          parser_args['nargs'] = '?'
+        elif flag.required:
+          parser_args['required'] = True
 
         if flag.dtype != 'bool':
           parser_args['action'] = 'store'
@@ -95,4 +97,5 @@ class Command:
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
+        print(parser_args)
         self.parser.add_argument(*flag.aliases, help=flag.description, **parser_args)
