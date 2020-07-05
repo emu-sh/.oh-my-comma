@@ -50,7 +50,6 @@ class ForkParams:
   def _read(self):
     with open(FORK_PARAM_PATH, "r") as f:
       self.params = json.loads(f.read())
-    print(self.params)
 
   def _write(self):
     with open(FORK_PARAM_PATH, "w") as f:
@@ -170,8 +169,9 @@ class Fork(CommandBase):
 
   def __add_fork(self, username):
     installed_forks = self.fork_params.get('installed_forks')
-    installed_forks[username] = {'installed_branches': []}
-    self.fork_params.put('installed_forks', installed_forks)
+    if username not in installed_forks:
+      installed_forks[username] = {'installed_branches': []}
+      self.fork_params.put('installed_forks', installed_forks)
 
   def __show_similar_branches(self, branch, branches):
     if len(branches) > 0:
