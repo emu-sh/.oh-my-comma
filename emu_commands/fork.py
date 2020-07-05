@@ -1,7 +1,7 @@
 import shutil
 import os
 import json
-import urllib2
+import urllib
 from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, warning, success, warning, info, is_affirmative, check_output
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
@@ -15,7 +15,7 @@ REMOTE_ALREADY_EXISTS = 'already exists'
 
 def valid_fork_url(url):
   try:
-    urllib2.request.Request(url)
+    urllib.request.Request(url)
     return True
   except Exception as e:
     print(e)
