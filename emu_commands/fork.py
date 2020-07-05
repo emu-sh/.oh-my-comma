@@ -157,17 +157,20 @@ class Fork(CommandBase):
 
     success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
 
-
+  def _reset_hard(self):
+    # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
+    # git reset --hard arne182/075-clean
+    pass
 
   def _init(self):
-    # if self.fork_params.get('setup_complete'):  # todo: temp
-    if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
-      branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
-      if branches.success and 'master' in branches.output:
-        return True  # already set up
-    self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
-    warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
-    shutil.rmtree(COMMAAI_PATH)  # clean slate
+    if self.fork_params.get('setup_complete'):  # todo: temp
+      if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
+        branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
+        if branches.success and 'master' in branches.output:
+          return True  # already set up
+      self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+      warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
+      shutil.rmtree(COMMAAI_PATH)  # clean slate
 
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Please confirm you would like to continue')
