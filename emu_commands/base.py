@@ -91,10 +91,10 @@ class Command:
         if flag.dtype == 'bool':  # type bool is not required when store_true
           pass
         elif flag.dtype == 'str':
-          parser_args['type'] = str
-        elif flag.dtype == 'int':
-          # parser_args['type'] = int
+          # parser_args['type'] = str
           pass
+        elif flag.dtype == 'int':
+          parser_args['type'] = int
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
