@@ -149,6 +149,7 @@ class Fork(CommandBase):
     installed_forks = self.fork_params.get('installed_forks')
     remote_branch = f'{username}/{branch}'
     print(branch)
+    print(username)
     print(installed_forks[username]['installed_branches'])
     if branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
