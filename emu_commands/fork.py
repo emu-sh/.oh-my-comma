@@ -137,6 +137,7 @@ class Fork(CommandBase):
       fork_branch = f'{username}_{flags.branch}'
       branch = flags.branch
       remote_branches = self.__get_remote_branches(username, branch)
+      print(remote_branches)
       if branch not in remote_branches:
         error('The branch you specified does not exist!')
         return
