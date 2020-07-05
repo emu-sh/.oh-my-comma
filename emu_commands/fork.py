@@ -72,8 +72,9 @@ class Fork(CommandBase):
       pass  # user has already cloned this fork, switch to it
     else:  # fork not installed, add to remote now
       clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
-      o = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
-      print('"{}"'.format(o))
+      r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
+      print('"{}"'.format(r.output))
+      print(r.success)
       if flags.branch is None:
         # no branch specified, just checkout default branch after adding remote
         pass
