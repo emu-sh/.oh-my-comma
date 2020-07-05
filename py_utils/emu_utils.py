@@ -147,7 +147,7 @@ def error(msg, end='\n', ret=False):
 
 
 def warning(msg, end='\n', ret=False):
-  w = '{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC)
+  w = '{}{}{}'.format(COLORS.PROMPT, msg, COLORS.ENDC)
   if ret:
     return w
   print(w, end=end)
@@ -159,8 +159,9 @@ def success(msg, end='\n', ret=False):
     return s
   print(s, end=end)
 
+
 def info(msg, end='\n', ret=False):
-  s = '{}{}{}'.format(COLORS.PROMPT, msg, COLORS.ENDC)
+  s = '{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC)
   if ret:
     return s
   print(s, end=end)
