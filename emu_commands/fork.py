@@ -26,7 +26,7 @@ def valid_fork_url(url):
 class ForkParams:
   def __init__(self):
     self.default_params = {'current_fork': None,
-                           'installed_forks': [],
+                           'installed_forks': {},
                            'setup_complete': False}
     self._init()
 
@@ -111,13 +111,13 @@ class Fork(CommandBase):
         # remote already added, update params
         success('Fork exists but wasn\'t in params, updating now')
         installed_forks = self.fork_params.get('installed_forks')
-        installed_forks.append(username)
+        installed_forks[username] = {'installed_branches': {}}
         self.fork_params.put('installed_forks', installed_forks)
       else:
         error(r.error)
         return
 
-    if fork_in_params:
+    if fork_in_params:  # todo: probably should write a function that checks installed forks, but should be fine for now
       success('Remote already exists! Switching now...')
     info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
@@ -125,14 +125,15 @@ class Fork(CommandBase):
       error(r.error)
       return
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
+    if DEFAULT_BRANCH_START not in r.output:
+      error('Error: Cannot find default branch from fork!')
+      return
     start_default_branch = r.output.index(DEFAULT_BRANCH_START)
     print('default branch idx: {}'.format(start_default_branch))
     default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
     end_default_branch = default_branch.index('\n')
     default_branch = default_branch[:end_default_branch]
-    print(default_branch)
-    print('"{}"'.format(default_branch))
-    # todo: probably should write a function that checks installed forks, but should be fine for now
+
     pass  # user has already cloned this fork, switch to it
 
 
