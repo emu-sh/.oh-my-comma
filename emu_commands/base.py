@@ -56,14 +56,14 @@ class CommandBase(BaseFunctions):
       print('\n'.join(cmds_to_print))
 
 class Flag:
-  def __init__(self, aliases, description, has_value=False, required=True):
+  def __init__(self, aliases, description, required=True, dtype=None):
     if isinstance(aliases, str):
       self.aliases = [aliases]
     else:
       self.aliases = aliases
     self.description = description
-    self.has_value = has_value
     self.required = required
+    self.dtype = dtype
 
 class Command:
   def __init__(self, description=None, commands=None, flags=None):
@@ -77,7 +77,21 @@ class Command:
       for flag in flags:
         # for each flag, add it as argument with aliases.
         # if flag.has_value, parse value as string, if not, assume flag is boolean
-        action = 'store_true' if not flag.has_value else None
+        nargs = None
         action = None
-        nargs = '?' if not flag.required else None
-        self.parser.add_argument(*flag.aliases, help=flag.description, action=action, nargs=nargs)
+        dtype = None
+        if not flag.required and flag.dtype is not None:
+          nargs = '?'
+        elif flag.dtype is not None:
+          action = 'store'
+          if flag.dtype == 'str':
+            dtype = str
+          elif flag.dtype == 'int':
+            dtype = int
+          else:
+            error('Unsupported dtype: {}'.format(flag.dtype))
+            return
+        else:
+          error('Unknown flag error!')
+          return
+        self.parser.add_argument(*flag.aliases, help=flag.description, action=action, nargs=nargs, type=dtype)
