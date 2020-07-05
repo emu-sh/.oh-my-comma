@@ -22,7 +22,7 @@ class Device(CommandBase):
     if not r:
       error('Unable to get battery status!')
       return
-    r = r.decode('utf-8').split('\n')
+    r = r.output.split('\n')
     r = [i.strip() for i in r if i != ''][1:]
     battery_idxs = {'level': 7, 'temperature': 10}
     success('Battery info:')
