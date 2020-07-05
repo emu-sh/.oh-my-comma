@@ -71,6 +71,9 @@ class Fork(CommandBase):
 
   def _init(self):
     if self.fork_params.get('setup_complete'):
+      if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
+        r = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
+        print('param set but checking: {}'.format(r))
       return True  # already set up
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Please confirm you would like to continue')
