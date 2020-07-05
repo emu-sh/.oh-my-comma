@@ -74,7 +74,6 @@ class Fork(CommandBase):
       if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
         branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
         if branches.success and 'master' in branches.output:
-          print('param set but checking: {}'.format(branches.output))
           return True  # already set up
       self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
       warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
@@ -87,8 +86,9 @@ class Fork(CommandBase):
       return False
     info('Cloning commaai/openpilot into /data/community/forks')
     r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
-    print('output: {}'.format(r))
-    r = run('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
+    print('output: {}'.format(r.output))
+    print('output type: {}'.format(type(r.output)))
+    # r = run('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
     if not r:
       error('Error while cloning, please try again')
       return False
