@@ -98,7 +98,7 @@ class Fork(CommandBase):
         #   pass
       elif r.success and REMOTE_ALREADY_EXISTS in r.output:
         # remote already added, update params
-        success('Fork exists but wasn\'t in params, updating now')
+        info('Fork exists but wasn\'t in params, updating now...')
         installed_forks = self.fork_params.get('installed_forks')
         installed_forks[username] = {'installed_branches': []}
         self.fork_params.put('installed_forks', installed_forks)
@@ -107,9 +107,12 @@ class Fork(CommandBase):
         return
 
     # fork has been added as a remote, switch to it
-    # if fork_in_params:  # todo: probably should write a function that checks installed forks, but should be fine for now
-    #   success('Remote already exists! Switching now...')
-    info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
+    # todo: probably should write a function that checks installed forks, but should be fine for now
+    if fork_in_params:
+      success('Remote already exists! Switching now...')
+      info('Fetching {}\'s latest changes...'.format(flags.username))
+    else:
+      info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
     if not r.success:
       error(r.error)
