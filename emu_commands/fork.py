@@ -147,6 +147,7 @@ class Fork(CommandBase):
         error('Error getting remote branches!')
         return
       print(remote_branches)
+      return
     else:
       error('Error with branch!')
       return
