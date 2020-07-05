@@ -122,9 +122,10 @@ class Fork(CommandBase):
       error(r.error)
       return
 
-    remote_branches = self.__get_remote_branches(username)
-    print(DEFAULT_BRANCH_START)
-    if DEFAULT_BRANCH_START not in remote_branches:
+    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
+    remote_branches = self.__get_remote_branches(r)
+
+    if DEFAULT_BRANCH_START not in r.output:
       error('Error: Cannot find default branch from fork!')
       return
 
@@ -182,8 +183,8 @@ class Fork(CommandBase):
           cb = COLORS.CYAN + cb
         print(' - {}{}'.format(cb, COLORS.ENDC))
 
-  def __get_remote_branches(self, username):
-    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])  # get remote's branches to verify
+  def __get_remote_branches(self, r):
+    # get remote's branches to verify from output of command in parent function
     if not r.success:
       error(r.error)
       return
