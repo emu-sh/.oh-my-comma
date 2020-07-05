@@ -100,4 +100,7 @@ class Command:
         print(nargs)
         print(action)
         print(dtype)
-        self.parser.add_argument(*flag.aliases, help=flag.description, action=action, nargs=nargs, type=dtype)
+        parser_args = {'action': action, 'nargs': nargs, 'dtype': dtype}
+        if dtype is None:
+          del parser_args['nargs']
+        self.parser.add_argument(*flag.aliases, help=flag.description, **parser_args)
