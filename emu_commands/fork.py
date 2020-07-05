@@ -71,7 +71,7 @@ class Fork(CommandBase):
                                               Flag('branch', '🌿 Branch to switch to', dtype='str')])}
 
   def _switch(self):
-    shutil.copytree(OPENPILOT_PATH, '/data/openpilot')
+    shutil.copytree(OPENPILOT_PATH, '/data/openpilot.bak')
     os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
     if not self._init():
       return
