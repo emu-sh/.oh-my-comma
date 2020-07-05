@@ -150,10 +150,10 @@ class Fork(CommandBase):
       remote_branches = []
       for b in remote_branches_txt[1:]:  # remove first useless line
         b = b.replace('tracked', '').strip()
-        print(b)
-        remote_branches.append(b)
         if ' ' in b:  # end of branches
           break
+        remote_branches.append(b)
+        print(b)
       return  # todo: temp
     else:
       error('Error with branch!')
