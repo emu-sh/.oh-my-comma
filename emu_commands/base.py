@@ -96,5 +96,5 @@ class Command:
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
-        print(flags.aliases)
+        print(flag.aliases)
         self.parser.add_argument(*flag.aliases, help=flag.description, action=action, nargs=nargs, type=dtype)
