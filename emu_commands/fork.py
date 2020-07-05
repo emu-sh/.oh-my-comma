@@ -10,6 +10,7 @@ COMMAAI_PATH = FORKS_PATH + '/commaai'
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
+DEFAULT_BRANCH_START = 'HEAD branch '
 
 
 def valid_fork_url(url):
@@ -125,6 +126,8 @@ class Fork(CommandBase):
       return
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
     print('"{}"'.format(r.output))
+    default_branch = r.output[:r.output.index(DEFAULT_BRANCH_START)]
+    print(default_branch)
 
     print(r.output)
     # todo: probably should write a function that checks installed forks, but should be fine for now
