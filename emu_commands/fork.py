@@ -70,8 +70,10 @@ class Fork(CommandBase):
       return
     print(flags.username)
     print(flags.branch)
+    fork_in_params = True
     if flags.username.lower() not in self.fork_params.get('installed_forks'):
       print('fork not installed!')
+      fork_in_params = False
       clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
       r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
       if r.success and r.output == '':
@@ -96,7 +98,8 @@ class Fork(CommandBase):
       print(r.success)
       print('"{}"'.format(r.output))
 
-
+    if fork_in_params:
+      success('Fork already installed! Switching now')
     # todo: probably should write a function that checks installed forks, but should be fine for now
     pass  # user has already cloned this fork, switch to it
 
