@@ -80,10 +80,6 @@ class Fork(CommandBase):
       error(e)
       return
     username = flags.username.lower()
-    if flags.branch is not None:
-      branch = flags.branch.lower()
-    else:
-      branch = None
     print('username: {}'.format(username))
     print('branch: {}'.format(flags.branch))
 
@@ -117,6 +113,7 @@ class Fork(CommandBase):
         error(r.error)
         return
 
+    # fork has been added as a remote, switch to it
     if fork_in_params:  # todo: probably should write a function that checks installed forks, but should be fine for now
       success('Remote already exists! Switching now...')
     info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
@@ -128,13 +125,45 @@ class Fork(CommandBase):
     if DEFAULT_BRANCH_START not in r.output:
       error('Error: Cannot find default branch from fork!')
       return
-    start_default_branch = r.output.index(DEFAULT_BRANCH_START)
-    print('default branch idx: {}'.format(start_default_branch))
-    default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
-    end_default_branch = default_branch.index('\n')
-    default_branch = default_branch[:end_default_branch]
+    if flags.branch is None:
+      start_default_branch = r.output.index(DEFAULT_BRANCH_START)
+      default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
+      end_default_branch = default_branch.index('\n')
+      default_branch = default_branch[:end_default_branch]
+      info('{}\'s default branch: {}'.format(flags.username, default_branch))
+      fork_branch = '{}_{}'.format(username, default_branch)
+      branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
+    elif len(flags.branch) > 0:
+      fork_branch = f'{username}_{flags.branch}'
+    else:
+      error('Error with branch!')
+      return
 
-    pass  # user has already cloned this fork, switch to it
+    # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
+    installed_forks = self.fork_params.get('installed_forks')
+    if branch not in installed_forks[username]['installed_branches']:
+      info('New branch, tracking and checking out {} from'.format(fork_branch, f'{username}/{branch}'))
+      r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, f'{username}/{branch}'])
+      print(r.success)
+      print(r.output)
+      print(r.error)
+      if not r.success:
+        error(r.error)
+        return
+      info('New branch to local, adding to {}\'s installed branches'.format(flags.username))
+      installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
+    else:
+      info('Already installed branch, checking out {}'.format(fork_branch))
+      r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', fork_branch])
+      print(r.success)
+      print(r.output)
+      print(r.error)
+      if not r.success:
+        error(r.error)
+        return
+
+    success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
+
 
 
   def _init(self):
