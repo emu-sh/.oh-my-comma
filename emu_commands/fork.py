@@ -225,7 +225,7 @@ class Fork(CommandBase):
       return
 
     info('Cloning commaai/openpilot into /data/community/forks, please wait...')
-    r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH, '--depth', '1'])
+    r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
     print('output: {}'.format(r.output))  # todo: remove, just need to see the output of without depth 1
     if not r.success or 'done' not in r.output:
       error('Error while cloning, please try again')
