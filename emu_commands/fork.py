@@ -78,11 +78,13 @@ class Fork(CommandBase):
     if e is not None:
       error(e)
       return
+    flags.username = flags.username.lower()
+    flags.branch = flags.branch.lower()
     print('username: {}'.format(flags.username))
     print('branch: {}'.format(flags.branch))
 
     fork_in_params = True
-    if flags.username.lower() not in self.fork_params.get('installed_forks'):
+    if flags.username not in self.fork_params.get('installed_forks'):
       print('fork not installed!')
       fork_in_params = False
       clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
@@ -105,7 +107,7 @@ class Fork(CommandBase):
         # remote already added, update params
         info('Fork exists but wasn\'t in params, updating now')
         installed_forks = self.fork_params.get('installed_forks')
-        installed_forks.append(flags.username.lower())
+        installed_forks.append(flags.username)
         self.fork_params.put('installed_forks', installed_forks)
       else:
         error(r.error)
