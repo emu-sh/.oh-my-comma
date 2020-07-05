@@ -85,7 +85,7 @@ class Fork(CommandBase):
       error('Stopping initialization!')
       return False
     info('Cloning commaai/openpilot into /data/community/forks')
-    r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
+    r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH, '--depth', '1'])
     print('output: {}'.format(r.output))
     print('output type: {}'.format(type(r.output)))
     # r = run('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
