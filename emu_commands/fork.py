@@ -233,7 +233,6 @@ class Fork(CommandBase):
       return
 
     # backup and create symlink
-    info('Backing up openpilot and creating symlink to {}'.format(COMMAAI_PATH))
     bak_dir = '{}.bak'.format(OPENPILOT_PATH)
     idx = 0
     while os.path.exists(bak_dir):
@@ -241,7 +240,6 @@ class Fork(CommandBase):
       idx += 1
     shutil.move(OPENPILOT_PATH, bak_dir)
     os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
-
-
-    self.fork_params.put('setup_complete', True)
+    success('Backed up openpilot to {} and created symlink to {}'.format(bak_dir, COMMAAI_PATH))
     success('Fork management set up successfully!')
+    self.fork_params.put('setup_complete', True)
