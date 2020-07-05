@@ -52,12 +52,12 @@ class Fork(CommandBase):
 
     # todo: remove install, add list command, allow switch command to install before switching
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
-                                        flags=[Flag(['clone_url'], '🍴 URL of fork to clone', dtype='str', required=True),
+                                        flags=[Flag(['clone_url'], '🍴 URL of fork to clone', required=True, dtype='str'),
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', dtype='str')]),
                      'switch': Command(description='Switch between forks or install a new one',
-                                       flags=[Flag('username', '👤 The username of the fork\'s owner to install their fork', dtype='str'),
-                                              Flag('branch', 'The branch to switch to', required=False, dtype='str',)])}
+                                       flags=[Flag('username', '👤 The username of the fork\'s owner to install their fork', required=True, dtype='str'),
+                                              Flag('branch', 'The branch to switch to', dtype='str')])}
 
   def _switch(self):
     if not self._init():
@@ -68,11 +68,18 @@ class Fork(CommandBase):
       return
     print(flags.username)
     print(flags.branch)
-    if flags.username.lower() in self.fork_params.get('installed_forks'):
+    if flags.username.lower() in self.fork_params.get('installed_forks'):  # todo: probably should write a function that checks installed forks, but should be fine for now
       pass  # user has already cloned this fork, switch to it
-    # if flags.switch_type.lower() not in ['fork', 'branch']:
-    #   error('Please specify whether you want to switch between a fork or a branch')
-    #   return
+    else:  # fork not installed, add to remote now
+      o = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, flags.clone_url])
+      print('"{}"'.format(o))
+      if flags.branch is None:
+        # no branch specified, just checkout default branch after adding remote
+        pass
+      else:
+        # branch specified, switch to it after adding remote
+        pass
+
 
   def _init(self):
     if self.fork_params.get('setup_complete'):

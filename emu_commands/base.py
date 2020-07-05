@@ -78,8 +78,7 @@ class Command:
       self.has_flags = True
       for flag in flags:
         # for each flag, add it as argument with aliases.
-        # if flag.has_value, parse value as string, if not, assume flag is boolean
-        parser_args = {}
+        parser_args = {}  # handle various conditions
         if not flag.required and flag.dtype not in ['bool']:
           parser_args['nargs'] = '?'
 
@@ -97,5 +96,4 @@ class Command:
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
-        print('parser_args: {}'.format(parser_args))
         self.parser.add_argument(*flag.aliases, help=flag.description, **parser_args)
