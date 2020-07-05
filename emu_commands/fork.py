@@ -159,6 +159,7 @@ class Fork(CommandBase):
     pass
 
   def _init(self):
+    self.fork_params.put('setup_complete', True)
     if self.fork_params.get('setup_complete'):  # todo: temp
       if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
         branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
