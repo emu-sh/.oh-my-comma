@@ -55,8 +55,9 @@ class Fork(CommandBase):
                                         flags=[Flag(['clone_url'], '🍴 URL of fork to clone', has_value=True),
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', has_value=True)]),
-                     'switch': Command(description='Switch between downloaded openpilot forks',
-                                       flags=[Flag('switch_type', 'Switch between branches or forks?', has_value=True)])}
+                     'switch': Command(description='Switch between forks or install a new one',
+                                       flags=[Flag('username', '👤 The username of the fork\'s owner to install their fork', has_value=True),
+                                              Flag('branch', 'The branch to switch to')])}
 
   def _switch(self):
     if not self._init():
@@ -65,9 +66,13 @@ class Fork(CommandBase):
     if e is not None:
       error(e)
       return
-    if flags.switch_type not in ['fork', 'branch']:
-      error('Please specify whether you want to switch between a fork or a branch')
-      return
+    print(flags.username)
+    print(flags.branch)
+    if flags.username.lower() in self.fork_params.get('installed_forks'):
+      pass  # user has already cloned this fork, switch to it
+    # if flags.switch_type.lower() not in ['fork', 'branch']:
+    #   error('Please specify whether you want to switch between a fork or a branch')
+    #   return
 
   def _init(self):
     if self.fork_params.get('setup_complete'):
@@ -84,12 +89,10 @@ class Fork(CommandBase):
     if not is_affirmative():
       error('Stopping initialization!')
       return False
-    info('Cloning commaai/openpilot into /data/community/forks')
+    info('Cloning commaai/openpilot into /data/community/forks, please wait...')
     r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH, '--depth', '1'])
-    print('output: {}'.format(r.output))
-    print('output type: {}'.format(type(r.output)))
-    # r = run('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
-    if not r:
+    print('output: {}'.format(r.output))  # todo: remove, just need to see the output of without depth 1
+    if not r.success or 'done' not in r.output:
       error('Error while cloning, please try again')
       return False
     self.fork_params.put('setup_complete', True)
