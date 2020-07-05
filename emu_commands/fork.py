@@ -11,7 +11,7 @@ GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
-REMOTE_BRANCHES_START = 'Remote branches'
+REMOTE_BRANCHES_START = 'Remote branches: '
 
 
 def valid_fork_url(url):
@@ -147,8 +147,8 @@ class Fork(CommandBase):
         error('Error getting remote branches!')
         return
       print('-------')
-      for b in remote_branches:
-        print(b.strip())
+      for b in remote_branches[1:]:  # remove first useless line
+        print(b.replace('tracked', '').strip())
       return
     else:
       error('Error with branch!')
