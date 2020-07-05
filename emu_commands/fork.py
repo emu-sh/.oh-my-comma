@@ -1,7 +1,6 @@
 import shutil
 import os
 import json
-import urllib.request
 from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, warning, success, warning, info, is_affirmative, check_output
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
@@ -57,6 +56,7 @@ class ForkParams:
 class Fork(CommandBase):
   def __init__(self):
     super().__init__()
+    import urllib.request
     self.name = 'fork'
     self.description = '🍴 manage installed forks, or clone a new one'
 
