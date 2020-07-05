@@ -17,7 +17,8 @@ def valid_fork_url(url):
   try:
     urllib.request.urlopen(url)
     return True
-  except:
+  except Exception as e:
+    print(e)
     return False
 
 class ForkParams:
@@ -86,7 +87,7 @@ class Fork(CommandBase):
       clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
 
       if not valid_fork_url(clone_url):
-        error('Invalid username! {} does not exists'.format(clone_url))
+        error('Invalid username! {} does not exist'.format(clone_url))
         return
 
       r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
