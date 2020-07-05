@@ -101,7 +101,7 @@ class Command:
         print(nargs)
         print(action)
         print(dtype)
-        parser_args = {'action': action, 'nargs': nargs, 'type': dtype}
+        parser_args = {'action': action, 'nargs': nargs}
         if nargs is None:
           del parser_args['nargs']
         print('parser_args: {}'.format(parser_args))
