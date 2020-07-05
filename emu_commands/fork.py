@@ -106,7 +106,7 @@ class Fork(CommandBase):
           pass
       elif r.success and REMOTE_ALREADY_EXISTS in r.output:
         # remote already added, update params
-        info('Fork exists but wasn\'t in params, updating now')
+        success('Fork exists but wasn\'t in params, updating now')
         installed_forks = self.fork_params.get('installed_forks')
         installed_forks.append(flags.username)
         self.fork_params.put('installed_forks', installed_forks)
@@ -119,6 +119,8 @@ class Fork(CommandBase):
 
     if fork_in_params:
       success('Remote already exists! Switching now')
+    r = check_output(['git', 'fetch', flags.username])
+    print(r.output)
     # todo: probably should write a function that checks installed forks, but should be fine for now
     pass  # user has already cloned this fork, switch to it
 
