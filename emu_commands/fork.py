@@ -78,6 +78,7 @@ class Fork(CommandBase):
       return
     print('username: {}'.format(flags.username))
     print('branch: {}'.format(flags.branch))
+
     fork_in_params = True
     if flags.username.lower() not in self.fork_params.get('installed_forks'):
       print('fork not installed!')
@@ -118,14 +119,14 @@ class Fork(CommandBase):
 
 
   def _init(self):
-    if self.fork_params.get('setup_complete'):
-      if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
-        branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
-        if branches.success and 'master' in branches.output:
-          return True  # already set up
-      self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
-      warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
-      shutil.rmtree(COMMAAI_PATH)  # clean slate
+    # if self.fork_params.get('setup_complete'):  # todo: temp
+    if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
+      branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
+      if branches.success and 'master' in branches.output:
+        return True  # already set up
+    self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+    warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
+    shutil.rmtree(COMMAAI_PATH)  # clean slate
 
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Please confirm you would like to continue')
