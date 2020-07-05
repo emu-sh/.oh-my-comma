@@ -140,6 +140,7 @@ class Fork(CommandBase):
       if not r.success:
         error(r.error)
         return
+      print(r.output)
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
       remote_branches = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
       if len(remote_branches) == 0:
