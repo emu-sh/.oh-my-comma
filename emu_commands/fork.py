@@ -109,7 +109,7 @@ class Fork(CommandBase):
         installed_forks[username] = {'installed_branches': []}
         self.fork_params.put('installed_forks', installed_forks)
       else:
-        error(r.error)
+        error(r.output)
         return
 
     # fork has been added as a remote, switch to it
