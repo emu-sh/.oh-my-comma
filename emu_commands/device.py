@@ -8,10 +8,14 @@ class Device(CommandBase):
     self.description = '📈 Statistics about your device'
 
     self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
-                     'reboot': Command(description='🔌 safely reboot your device')}
+                     'reboot': Command(description='☯ safely reboot your device'),
+                     'shutdown': Command(description='🔌 safely shutdown your device')}
 
   def _reboot(self):
     run('am start -a android.intent.action.REBOOT')
+
+  def _shutdown(self):
+    run('am start -n android/com.android.internal.app.ShutdownActivity')
 
   def _battery(self):
     r = check_output('dumpsys batterymanager')  # todo, fix
