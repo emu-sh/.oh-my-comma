@@ -136,7 +136,7 @@ class Fork(CommandBase):
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
       branch = flags.branch
-      r = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
+      r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])  # get remote's branches to verify
       if not r.success:
         error(r.error)
         return
