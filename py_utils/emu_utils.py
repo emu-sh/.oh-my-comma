@@ -89,6 +89,7 @@ def check_output(cmd, cwd=None):
       self.error = e
   if isinstance(cmd, str):
     cmd = cmd.split()
+  print(cmd)
   try:
     return Output(subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8'))
   except subprocess.CalledProcessError as e:
