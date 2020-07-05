@@ -141,12 +141,10 @@ class Fork(CommandBase):
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     installed_forks = self.fork_params.get('installed_forks')
+    remote_branch = f'{username}/{branch}'
     if branch not in installed_forks[username]['installed_branches']:
-      info('New branch, tracking and checking out {} from {}'.format(fork_branch, f'{username}/{branch}'))
-      r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, f'{username}/{branch}'])
-      print(r.success)
-      print(r.output)
-      print(r.error)
+      info('New branch, tracking and checking out {} from {}...'.format(fork_branch, remote_branch))
+      r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
       if not r.success:
         error(r.error)
         return
@@ -154,11 +152,8 @@ class Fork(CommandBase):
       installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
       self.fork_params.put('installed_forks', installed_forks)
     else:
-      info('Already installed branch, checking out {}'.format(fork_branch))
+      info('Already installed branch, checking out {} from {}...'.format(fork_branch, remote_branch))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', fork_branch])
-      print(r.success)
-      print(r.output)
-      print(r.error)
       if not r.success:
         error(r.error)
         return
