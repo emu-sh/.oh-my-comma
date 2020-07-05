@@ -119,7 +119,7 @@ class Fork(CommandBase):
 
     if fork_in_params:
       success('Remote already exists! Switching now')
-    r = check_output(['git', 'fetch', flags.username])
+    r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', flags.username])
     print(r.output)
     # todo: probably should write a function that checks installed forks, but should be fine for now
     pass  # user has already cloned this fork, switch to it
