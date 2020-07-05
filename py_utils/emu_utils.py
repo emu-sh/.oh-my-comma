@@ -81,19 +81,10 @@ def input_with_options(options, default=None):
   return argmax, sims[argmax]
 
 
-def check_output(cmd):
-  """
-  If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
-  The status is returned, True being success, False for failure
-  """
+def check_output(cmd, cwd=None):
   if isinstance(cmd, str):
     cmd = cmd.split()
-
-  try:
-    return subprocess.check_output(cmd)
-  except Exception as e:
-    # print(e)
-    return False
+  return subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8')
 
 
 def run(cmd, out_file=None):

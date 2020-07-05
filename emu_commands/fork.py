@@ -74,11 +74,12 @@ class Fork(CommandBase):
       return True  # already set up
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Please confirm you would like to continue')
-
     if not is_affirmative():
       error('Stopping initialization!')
       return False
     info('Cloning commaai/openpilot into /data/community/forks')
+    r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
+    print('output: {}'.format(r))
     r = run('git clone {} {}'.format(GIT_OPENPILOT_URL, COMMAAI_PATH))
     if not r:
       error('Error while cloning, please try again')

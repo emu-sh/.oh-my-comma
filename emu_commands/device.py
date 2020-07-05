@@ -14,7 +14,7 @@ class Device(CommandBase):
     run('am start -a android.intent.action.REBOOT')
 
   def _battery(self):
-    r = check_output('dumpsys batterymanager')
+    r = check_output('dumpsys batterymanager')  # todo, fix
     if not r:
       error('Unable to get battery status!')
       return
