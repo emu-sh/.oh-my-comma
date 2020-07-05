@@ -71,6 +71,8 @@ class Fork(CommandBase):
                                               Flag('branch', '🌿 Branch to switch to', dtype='str')])}
 
   def _switch(self):
+    shutil.copytree(OPENPILOT_PATH, '/data/openpilot')
+    os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
@@ -226,10 +228,21 @@ class Fork(CommandBase):
       error('Error while cloning, please try again')
       return
 
-    # so it's easy to switch to stock without any extra logic for origin
+    # rename origin to commaai so it's easy to switch to stock without any extra logic for url checking, etc
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
     if not r.success:
       error(r.output)
       return
+
+    # backup and create symlink
+    bak_dir = '{}.bak'.format(OPENPILOT_PATH)
+    idx = 0
+    while os.path.exists(bak_dir):
+      bak_dir = '{}{}'.format(bak_dir, idx)
+      idx += 1
+    shutil.copytree(OPENPILOT_PATH, bak_dir)
+    os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
+
+
     self.fork_params.put('setup_complete', True)
     success('Fork management set up successfully!')
