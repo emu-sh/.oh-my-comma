@@ -148,7 +148,7 @@ class Fork(CommandBase):
       installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
       self.fork_params.put('installed_forks', installed_forks)
     else:
-      info('Already installed branch! Checking out {} from {}...'.format(fork_branch, remote_branch))
+      # info('Already installed branch! Checking out {} from {}...'.format(fork_branch, remote_branch))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', fork_branch])
       if not r.success:
         error(r.error)
