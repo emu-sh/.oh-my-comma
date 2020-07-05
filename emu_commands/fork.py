@@ -245,4 +245,6 @@ class Fork(CommandBase):
       success('Created symlink to {}'.format(COMMAAI_PATH))
     os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
     success('Fork management set up successfully!')
+    success('To get started, try running: emu fork switch stock release2')
     self.fork_params.put('setup_complete', True)
+    self.__add_fork('commaai')
