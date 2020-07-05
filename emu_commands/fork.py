@@ -78,23 +78,25 @@ class Fork(CommandBase):
     if e is not None:
       error(e)
       return
-    flags.username = flags.username.lower()
+    username = flags.username.lower()
     if flags.branch is not None:
-      flags.branch = flags.branch.lower()
-    print('username: {}'.format(flags.username))
+      branch = flags.branch.lower()
+    else:
+      branch = None
+    print('username: {}'.format(username))
     print('branch: {}'.format(flags.branch))
 
     fork_in_params = True
-    if flags.username not in self.fork_params.get('installed_forks'):
+    if username not in self.fork_params.get('installed_forks'):
       print('fork not installed!')
       fork_in_params = False
-      clone_url = 'https://github.com/{}/openpilot'.format(flags.username)
+      clone_url = 'https://github.com/{}/openpilot'.format(username)
 
       if not valid_fork_url(clone_url):
         error('Invalid username! {} does not exist'.format(clone_url))
         return
 
-      r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', flags.username, clone_url])
+      r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', username, clone_url])
       if r.success and r.output == '':
         success('Remote added successfully!')
         # remote added successfully
@@ -108,7 +110,7 @@ class Fork(CommandBase):
         # remote already added, update params
         success('Fork exists but wasn\'t in params, updating now')
         installed_forks = self.fork_params.get('installed_forks')
-        installed_forks.append(flags.username)
+        installed_forks.append(username)
         self.fork_params.put('installed_forks', installed_forks)
       else:
         error(r.error)
@@ -119,7 +121,12 @@ class Fork(CommandBase):
 
     if fork_in_params:
       success('Remote already exists! Switching now')
-    r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', flags.username])
+    print('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
+    r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
+    if not r.success:
+      error(r.error)
+      return
+
     print(r.output)
     # todo: probably should write a function that checks installed forks, but should be fine for now
     pass  # user has already cloned this fork, switch to it
