@@ -116,16 +116,15 @@ class Fork(CommandBase):
         error(r.error)
         return
 
-      print(r.success)
-      print('"{}"'.format(r.output))
-
     if fork_in_params:
-      success('Remote already exists! Switching now')
-    print('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
+      success('Remote already exists! Switching now...')
+    info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
     if not r.success:
       error(r.error)
       return
+    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
+    print('"{}"'.format(r.output))
 
     print(r.output)
     # todo: probably should write a function that checks installed forks, but should be fine for now
