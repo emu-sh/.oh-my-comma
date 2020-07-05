@@ -68,8 +68,8 @@ class Fork(CommandBase):
     if e is not None:
       error(e)
       return
-    print(flags.username)
-    print(flags.branch)
+    print('username: {}'.format(flags.username))
+    print('branch: {}'.format(flags.branch))
     fork_in_params = True
     if flags.username.lower() not in self.fork_params.get('installed_forks'):
       print('fork not installed!')
