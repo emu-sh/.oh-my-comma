@@ -64,6 +64,8 @@ class Flag:
     self.description = description
     self.required = required
     self.dtype = dtype
+    if self.required and self.aliases[0][0] == '-':
+      raise Exception('Positional arguments cannot be required!')
 
 class Command:
   def __init__(self, description=None, commands=None, flags=None):
@@ -80,8 +82,6 @@ class Command:
         parser_args = {}
         if not flag.required and flag.dtype not in ['bool']:
           parser_args['nargs'] = '?'
-        elif flag.required:
-          parser_args['required'] = True
 
         if flag.dtype != 'bool':
           parser_args['action'] = 'store'
@@ -91,12 +91,11 @@ class Command:
         if flag.dtype == 'bool':  # type bool is not required when store_true
           pass
         elif flag.dtype == 'str':
-          # parser_args['type'] = str
-          pass
+          parser_args['type'] = str
         elif flag.dtype == 'int':
           parser_args['type'] = int
         else:
           error('Unsupported dtype: {}'.format(flag.dtype))
           return
-        print(parser_args)
+        print('parser_args: {}'.format(parser_args))
         self.parser.add_argument(*flag.aliases, help=flag.description, **parser_args)
