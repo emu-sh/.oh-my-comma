@@ -136,25 +136,11 @@ class Fork(CommandBase):
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
       branch = flags.branch
-      r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])  # get remote's branches to verify
-      if not r.success:
-        error(r.error)
+      remote_branches = self.__get_remote_branches(username, branch)
+      if branch not in remote_branches:
+        error('The branch you specified does not exist!')
         return
-      print(r.output)
-      start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
-      remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
-      if len(remote_branches_txt) == 0:
-        error('Error getting remote branches!')
-        return
-      print('-------')
-      remote_branches = []
-      for b in remote_branches_txt[1:]:  # remove first useless line
-        b = b.replace('tracked', '').strip()
-        if ' ' in b:  # end of branches
-          break
-        remote_branches.append(b)
-        print(b)
-      return  # todo: temp
+
     else:
       error('Error with branch!')
       return
@@ -178,6 +164,24 @@ class Fork(CommandBase):
         return
 
     success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
+
+  def __get_remote_branches(self, username, branch):
+    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])  # get remote's branches to verify
+    if not r.success:
+      error(r.error)
+      return []
+    start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
+    remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
+    remote_branches = []
+    for b in remote_branches_txt[1:]:  # remove first useless line
+      b = b.replace('tracked', '').strip()
+      if ' ' in b:  # end of branches
+        break
+      remote_branches.append(b)
+    if len(remote_branches) == 0:
+      error('Error getting remote branches!')
+      return []
+    return remote_branches
 
   def _reset_hard(self):
     # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
