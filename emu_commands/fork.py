@@ -141,7 +141,7 @@ class Fork(CommandBase):
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     installed_forks = self.fork_params.get('installed_forks')
-    if branch not in installed_forks[username]['installed_branches']:
+    if fork_branch not in installed_forks[username]['installed_branches']:
       info('New branch, tracking and checking out {} from {}'.format(fork_branch, f'{username}/{branch}'))
       r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, f'{username}/{branch}'])
       print(r.success)
