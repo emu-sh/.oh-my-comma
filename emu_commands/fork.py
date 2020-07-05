@@ -13,6 +13,7 @@ REMOTE_ALREADY_EXISTS = 'already exists'
 
 
 def valid_fork_url(url):
+  import urllib.request
   try:
     request = urllib.request.Request(url)
     request.get_method = lambda: 'HEAD'
@@ -56,7 +57,6 @@ class ForkParams:
 class Fork(CommandBase):
   def __init__(self):
     super().__init__()
-    import urllib.request
     self.name = 'fork'
     self.description = '🍴 manage installed forks, or clone a new one'
 
