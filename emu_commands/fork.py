@@ -2,7 +2,7 @@ import shutil
 import os
 import json
 from emu_commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output
+from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH
 
 
@@ -142,6 +142,10 @@ class Fork(CommandBase):
         return
       if branch not in remote_branches:
         error('The branch you specified does not exist!')
+        if len(remote_branches) > 0:
+          info('Did you mean:')
+          close_branches = most_similar(branch, remote_branches)[:5]
+          print('\n'.format(close_branches))
         return
 
     else:

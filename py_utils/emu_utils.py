@@ -65,13 +65,15 @@ class BaseFunctions:
     return arg
 
 
+def str_sim(a, b):
+  return difflib.SequenceMatcher(a=a, b=b).ratio()
+
+
 def input_with_options(options, default=None):
   """
   Takes in a list of options and asks user to make a choice.
   The most similar option list index is returned along with the similarity percentage from 0 to 1
   """
-  def str_sim(a, b):
-    return difflib.SequenceMatcher(a=a, b=b).ratio()
 
   user_input = input('[{}]: '.format('/'.join(options))).lower().strip()
   if not user_input:
@@ -79,6 +81,12 @@ def input_with_options(options, default=None):
   sims = [str_sim(i.lower().strip(), user_input) for i in options]
   argmax = sims.index(max(sims))
   return argmax, sims[argmax]
+
+
+def most_similar(find, options):
+  sims = [[str_sim(i.lower().strip(), find.lower().strip())] for i in options]
+  sims = sorted(sims, reverse=True)
+  return [o[1] for o in sims]
 
 
 def check_output(cmd, cwd=None):
