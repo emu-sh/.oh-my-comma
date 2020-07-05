@@ -11,6 +11,7 @@ GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
+REMOTE_BRANCHES_START = 'Remote branches'
 
 
 def valid_fork_url(url):
@@ -62,6 +63,7 @@ class Fork(CommandBase):
     self.description = '🍴 manage installed forks, or clone a new one'
 
     self.fork_params = ForkParams()
+    self.stock_aliases = ['stock', 'commaai']
 
     # todo: remove install, add list command, allow switch command to install before switching
     self.commands = {'switch': Command(description='🍴 Switch between forks or install a new one',
@@ -76,6 +78,8 @@ class Fork(CommandBase):
       error(e)
       return
     username = flags.username.lower()
+    if username in self.stock_aliases:
+      username = 'commaai'
 
     fork_in_params = True
     if username not in self.fork_params.get('installed_forks'):
@@ -109,7 +113,7 @@ class Fork(CommandBase):
     # fork has been added as a remote, switch to it
     # todo: probably should write a function that checks installed forks, but should be fine for now
     if fork_in_params:
-      success('Remote already exists! Switching now...')
+      # success('Remote already exists! Switching now...')
       info('Fetching {}\'s latest changes...'.format(flags.username))
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
@@ -132,6 +136,16 @@ class Fork(CommandBase):
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
       branch = flags.branch
+      r = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
+      if not r.success:
+        error(r.error)
+        return
+      start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
+      remote_branches = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
+      if len(remote_branches) == 0:
+        error('Error getting remote branches!')
+        return
+      print(remote_branches)
     else:
       error('Error with branch!')
       return
