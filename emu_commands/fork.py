@@ -123,6 +123,7 @@ class Fork(CommandBase):
       return
 
     remote_branches = self.__get_remote_branches(username)
+    print(DEFAULT_BRANCH_START)
     if DEFAULT_BRANCH_START not in remote_branches:
       error('Error: Cannot find default branch from fork!')
       return
