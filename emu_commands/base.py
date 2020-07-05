@@ -81,8 +81,12 @@ class Command:
         action = None
         if not flag.required and flag.dtype not in ['bool']:
           nargs = '?'
-        if flag.dtype not in ['bool']:
+
+        if flag.dtype != 'bool':
           action = 'store'
+        elif flag.dtype == 'bool':
+          action = 'store_true'
+
         if flag.dtype == 'bool':
           dtype = bool
         elif flag.dtype == 'str':
