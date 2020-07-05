@@ -52,7 +52,7 @@ class Fork(CommandBase):
 
     # todo: remove install, add list command, allow switch command to install before switching
     self.commands = {'install': Command(description='🦉 Whoooose fork do you wanna install?',
-                                        flags=[Flag(['clone_url'], '🍴 URL of fork to clone', dtype='str'),
+                                        flags=[Flag(['clone_url'], '🍴 URL of fork to clone', dtype='str', required=True),
                                                Flag(['-l', '--lite'], '💡 Clones only the default branch with all commits flattened for quick cloning'),
                                                Flag(['-b', '--branch'], '🌿 Specify the branch to clone after this flag', dtype='str')]),
                      'switch': Command(description='Switch between forks or install a new one',

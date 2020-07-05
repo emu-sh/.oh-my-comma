@@ -56,7 +56,7 @@ class CommandBase(BaseFunctions):
       print('\n'.join(cmds_to_print))
 
 class Flag:
-  def __init__(self, aliases, description, required=True, dtype='bool'):
+  def __init__(self, aliases, description, required=False, dtype='bool'):
     if isinstance(aliases, str):
       self.aliases = [aliases]
     else:
