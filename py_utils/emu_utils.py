@@ -92,7 +92,7 @@ def check_output(cmd, cwd=None):
   try:
     return Output(subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8'))
   except subprocess.CalledProcessError as e:
-    return Output(s=False if e.output is not None else True, e=e.output)
+    return Output(s=False if e.output is None else True, e=e.output)
 
 
 def run(cmd, out_file=None):
