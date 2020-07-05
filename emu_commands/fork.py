@@ -144,9 +144,9 @@ class Fork(CommandBase):
         error('The branch you specified does not exist!')
         if len(remote_branches) > 0:
           info('Did you mean:')
-          close_branches = most_similar(branch, remote_branches)
-          print(close_branches)
-          print('\n'.format(close_branches))
+          print(most_similar(branch, remote_branches))
+          # print(close_branches)
+          # print('\n'.format(close_branches))
         return
 
     else:
