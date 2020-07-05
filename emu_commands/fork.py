@@ -145,6 +145,7 @@ class Fork(CommandBase):
         if len(remote_branches) > 0:
           info('Did you mean:')
           close_branches = most_similar(branch, remote_branches)[:5]
+          print(close_branches)
           print('\n'.format(close_branches))
         return
 
