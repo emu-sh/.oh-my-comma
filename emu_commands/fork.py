@@ -216,7 +216,7 @@ class Fork(CommandBase):
       shutil.rmtree(COMMAAI_PATH)  # clean slate
 
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
-    info('Please confirm you would like to continue')
+    info('Confirm you would like to continue')
     if not is_affirmative():
       error('Stopping initialization!')
       return
