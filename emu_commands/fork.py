@@ -127,7 +127,7 @@ class Fork(CommandBase):
       default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
       end_default_branch = default_branch.index('\n')
       default_branch = default_branch[:end_default_branch]
-      info('No branch specified, checking out: {}/{}'.format(flags.username, default_branch))
+      # info('No branch specified, checking out: {}/{}'.format(flags.username, default_branch))
       fork_branch = '{}_{}'.format(username, default_branch)
       branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
     elif len(flags.branch) > 0:
