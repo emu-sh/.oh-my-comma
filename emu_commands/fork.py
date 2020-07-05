@@ -113,6 +113,7 @@ class Fork(CommandBase):
       info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
 
     r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
+    print(r.output)
     if not r.success:
       error(r.output)
       return
@@ -214,14 +215,14 @@ class Fork(CommandBase):
     info('Please confirm you would like to continue')
     if not is_affirmative():
       error('Stopping initialization!')
-      return False
+      return
 
     info('Cloning commaai/openpilot into /data/community/forks, please wait...')
     r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH, '--depth', '1'])
     print('output: {}'.format(r.output))  # todo: remove, just need to see the output of without depth 1
     if not r.success or 'done' not in r.output:
       error('Error while cloning, please try again')
-      return False
+      return
 
     # so it's easy to switch to stock without any extra logic for origin
     r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
@@ -232,4 +233,3 @@ class Fork(CommandBase):
       return
     self.fork_params.put('setup_complete', True)
     success('Fork management set up successfully!')
-    return True
