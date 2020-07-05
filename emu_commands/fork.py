@@ -152,7 +152,7 @@ class Fork(CommandBase):
             elif idx == 1:
               cb = COLORS.OKBLUE + cb
             else:
-              cb = COLORS.CBlUE + cb
+              cb = COLORS.CBLUE + cb
             print('  ' + cb)
           print(COLORS.ENDC)
         return
