@@ -11,7 +11,7 @@ GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
-REMOTE_BRANCHES_START = 'Remote branches: '
+REMOTE_BRANCHES_START = 'Remote branches:'
 
 
 def valid_fork_url(url):
