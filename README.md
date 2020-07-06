@@ -44,19 +44,27 @@ This will essentially perform a git pull and replace all current files in the `/
 # Commands
 
 ### General
-- `emu fork`: 🍴 Manage installed forks, or install a new one
 - `emu update`: 🎉 Updates this tool, recommended to restart ssh session
-- `emu device`: 📈 Statistics about your device
+- `emu uninstall`: 👋 Uninstalls emu
+### Fork management
+- [`emu fork`](#emu-fork): 🍴 Manage installed forks, or install a new one
+### Panda
 - `emu panda`: 🐼 panda interfacing tools
+### Debugging
 - `emu debug`: de-🐛-ing tools
-- `emu uninstall`: 👋 Uninstalls emu
+- `emu device`: 📈 Statistics about your device
 
-- `emu fork`: 🍴 manage installed forks, or clone a new one
-  - `switch`: Uses remotes and one global-repository to quickly get yourself up and running with any fork in seconds
-- `emu update`: 🎉 updates this tool
-- `emu info`: 📈 Statistics about your device
-  - `battery`: 🔋 see information about the state of your battery
-- `emu uninstall`: 👋 Uninstalls emu
+#### `emu fork`: 🍴 Manage installed forks, or install a new one
+- `emu fork switch`:
+  - Arguments 💢:
+    - username: 👤 The username of the fork's owner to install
+    - branch: 🌿 Branch to switch to
+  - Example 📚:
+    - `emu fork switch stock devel`
+- `emu fork list`:
+  - Arguments 💢:
+    - fork (optional): 🌿 See branches of specified fork
+    
 
 ### Panda
 
