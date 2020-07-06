@@ -46,7 +46,7 @@ This will essentially perform a git pull and replace all current files in the `/
 ### General
 - `emu update`: 🎉 Updates this tool, recommended to restart ssh session
 - `emu uninstall`: 👋 Uninstalls emu
-### Fork management
+### [Fork management](#fork-management)
 - `emu fork`: 🍴 Manage installed forks, or install a new one
   - `emu fork switch`: 🍴 Switch between any openpilot fork
   - `emu fork list`: 📜 See a list of installed forks and branches
@@ -65,6 +65,11 @@ This will essentially perform a git pull and replace all current files in the `/
 To see more information about each command and its arguments, checkout the full [command documentation here.](/commands/README.md)
 
 ---
+
+# Fork management
+When you first run any `emu fork` command, `emu` will ask you to perform a one-time setup of cloning the base repository of openpilot from commaai. This may take a while, but upon finishing the setup you will be able to switch to any openpilot fork much quicker than the time it usually takes to full-clone a new fork the old fashioned way.
+
+For each new fork you install with the `emu fork switch` command, Git is able to re-use blobs already downloaded from commaai/openpilot and other similar installed forks, enabling quicker install times.
 
 # Git config
 
