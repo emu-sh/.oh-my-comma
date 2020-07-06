@@ -5,9 +5,7 @@ from py_utils.emu_utils import error
 EMU_COMMANDS = []
 basedir = os.path.dirname(__file__)
 for module_name in os.listdir(basedir):
-  print(module_name)
-  print(os.path.isdir(os.path.join(basedir, module_name)))
-  if module_name.endswith('.py') or module_name == '__pycache__':
+  if module_name.endswith('.py') or module_name == '__pycache__' or not os.path.isdir(os.path.join(basedir, module_name)):
     continue
   try:
     module = importlib.import_module('commands.{}'.format(module_name))
