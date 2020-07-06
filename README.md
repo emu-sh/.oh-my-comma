@@ -47,7 +47,7 @@ This will essentially perform a git pull and replace all current files in the `/
 - `emu update`: 🎉 Updates this tool, recommended to restart ssh session
 - `emu uninstall`: 👋 Uninstalls emu
 ### Fork management
-- [`emu fork`](#emu-fork-manage-installed-forks-or-install-a-new-one): 🍴 Manage installed forks, or install a new one
+- [`emu fork`](#emu-fork): 🍴 Manage installed forks, or install a new one
 ### Panda
 - [`emu panda`](#emu-panda): 🐼 panda interfacing tools
 ### Debugging
@@ -55,7 +55,8 @@ This will essentially perform a git pull and replace all current files in the `/
 - [`emu device`](#emu-device): 📈 Statistics about your device
 ---
 
-#### `emu fork`: 🍴 Manage installed forks, or install a new one
+#### `emu fork`:
+🍴 Manage installed forks, or install a new one
 - `emu fork switch`: 🍴 Switch between any openpilot fork
   - Arguments 💢:
     - username: 👤 The username of the fork's owner to install
@@ -68,18 +69,21 @@ This will essentially perform a git pull and replace all current files in the `/
   - Example 📚:
     - `emu fork list stock`
 
-#### `emu panda`: 🐼 panda interfacing tools
+#### `emu panda`:
+🐼 panda interfacing tools
 - `emu panda flash`: 🐼 flashes panda with make recover (usually works with the C2)
 - `emu panda flash2`: 🎍 flashes panda using Panda module (usually works with the EON)
 
-#### `emu debug`: de-🐛-ing tools
+#### `emu debug`:
+de-🐛-ing tools
 - `emu debug controlsd`: logs controlsd to /data/output.log by default
   - Arguments 💢:
     - -o, --output: Name of file to save log to
   - Example 📚:
     - `emu debug controlsd /data/controlsd_log`
 
-#### `emu device`: 📈 Statistics about your device
+#### `emu device`:
+📈 Statistics about your device
 - `emu device battery`: 🔋 see information about the state of your battery
 - `emu device reboot`: ⚡ safely reboot your device
 - `emu device shutdown`: 🔌 safely shutdown your device
