@@ -3,6 +3,7 @@ from py_utils.emu_utils import ArgumentParser, BaseFunctions, success, error
 
 class CommandBase(BaseFunctions):
   def __init__(self):
+    self.name = ''
     self.commands = {}
 
   def main(self, args, cmd_name):
