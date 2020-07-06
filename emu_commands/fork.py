@@ -69,7 +69,8 @@ class Fork(CommandBase):
     self.commands = {'switch': Command(description='🍴 Switch between forks or install a new one',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to install', required=True, dtype='str'),
                                               Flag('branch', '🌿 Branch to switch to', dtype='str')]),
-                     'list': Command(description='📜 See a list of installed forks and branches')}
+                     'list': Command(description='📜 See a list of installed forks and branches',
+                                     flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
 
   def _list(self):
     max_branches = 5  # max branches to display per fork when listing all forks
@@ -82,7 +83,7 @@ class Fork(CommandBase):
         if idx < max_branches:
           print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
         else:
-          print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.OKBLUE, fork, COLORS.ENDC))
+          print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
           break
 
   def _switch(self):
@@ -261,7 +262,8 @@ class Fork(CommandBase):
     else:
       success('Created symlink to {}'.format(COMMAAI_PATH))
     os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
-    success('Fork management set up successfully!')
-    success('To get started, try running: emu fork switch stock release2')
+    check_output(['git', '-C', COMMAAI_PATH, 'checkout', 'release2'])
+    success('Fork management set up successfully! You\'re on commaai/release2')
+    success('To get started, try running: {}emu fork switch stock release2{}'.format(COLORS.RED, COLORS.ENDC))
     self.fork_params.put('setup_complete', True)
     self.__add_fork('commaai')
