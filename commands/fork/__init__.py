@@ -288,6 +288,6 @@ class Fork(CommandBase):
     os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
     check_output(['git', '-C', COMMAAI_PATH, 'checkout', 'release2'])
     success('Fork management set up successfully! You\'re on commaai/release2')
-    success('To get started, try running: {}emu fork switch stock release2{}'.format(COLORS.RED, COLORS.ENDC))
+    success('To get started, try running: {}emu fork switch [fork_username] [branch]{}'.format(COLORS.RED, COLORS.ENDC))
     self.fork_params.put('setup_complete', True)
     self.__add_fork('commaai')
