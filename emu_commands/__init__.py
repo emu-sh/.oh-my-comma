@@ -2,7 +2,7 @@ import glob
 import importlib
 from py_utils.emu_utils import error
 from os.path import dirname, basename, isfile, join
-
+EMU_COMMANDS = []
 import os
 for module_name in os.listdir(os.path.dirname(__file__)):
     if module_name.endswith('.py'):
