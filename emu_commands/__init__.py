@@ -1,30 +1,18 @@
-EMU_COMMANDS = []
-import importlib
-# import os
-# for cmd in os.listdir(os.getcwd()):
-#   print(cmd)
-
-from os.path import dirname, basename, isfile, join
 import glob
+import importlib
+from py_utils.emu_utils import error
+from os.path import dirname, basename, isfile, join
+
+
+EMU_COMMANDS = []
 modules = glob.glob(join(dirname(__file__), "*.py"))
 __all__ = [basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__init__.py')]
-print(modules)
-print(__all__)
+__all__.remove('base')
+
 for module_name in __all__:
-  if 'base' == module_name:
-    continue
-  print(module_name)
-  module = importlib.import_module('emu_commands.{}'.format(module_name))
-  module = getattr(module, module_name.title())()
-  print(module.name)
-  EMU_COMMANDS.append(module)
-  # print(dir(module))
-# from emu_commands.fork import Fork
-# from emu_commands.update import Update
-# from emu_commands.panda import Panda
-# from emu_commands.debug import Debug
-# from emu_commands.device import Device
-# from emu_commands.uninstall import Uninstall
-#
-#
-# EMU_COMMANDS = [Fork(), Update(), Panda(), Debug(), Device(), Uninstall()]
+  try:
+    module = importlib.import_module('emu_commands.{}'.format(module_name))
+    module = getattr(module, module_name.title())()
+    EMU_COMMANDS.append(module)
+  except:
+    error('Error loading {} command, please try updating!')
