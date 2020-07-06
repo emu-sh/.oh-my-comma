@@ -43,6 +43,7 @@ class CommandBase(BaseFunctions):
     if flags is not None and len(flags) > 0:
       usage = [f.aliases[0] for f in flags if f.required or (f.aliases[0][0] != '-' and len(f.aliases) == 0)]  # if required or non-required non-positional
       if len(usage) > 0:
+        usage = ['[{}]'.format(u) for u in usage]
         usage = ['emu', self.name, cmd] + usage
         print(usage)
         print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, ' '.join(usage)) + COLORS.ENDC)
