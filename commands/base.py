@@ -50,7 +50,7 @@ class CommandBase(BaseFunctions):
         usage = ['emu', self.name, cmd] + usage_req + usage_non_req
         print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, ' '.join(usage)) + COLORS.ENDC)
 
-      print(leading + COLORS.WARNING + '>>  Arguments 💢:' + COLORS.ENDC)
+      print(leading + COLORS.WARNING + '>>  Arguments 💢 and Flags 🎌:' + COLORS.ENDC)
       for flag in flags:
         aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
         if not flag.required and '-' not in aliases:
