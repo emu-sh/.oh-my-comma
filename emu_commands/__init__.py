@@ -14,7 +14,7 @@ for module_name in __all__:
   if 'base' == module_name:
     continue
   print(module_name)
-  module = importlib.import_module(module_name)
+  module = importlib.import_module('emu_commands.{}'.format(module_name))
   module = getattr(module, module_name.title())()
   print(module.name)
   EMU_COMMANDS.append(module)
