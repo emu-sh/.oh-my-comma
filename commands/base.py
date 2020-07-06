@@ -3,6 +3,7 @@ from py_utils.emu_utils import ArgumentParser, BaseFunctions, success, error
 
 class CommandBase(BaseFunctions):
   def __init__(self):
+    self.name = ''
     self.commands = {}
 
   def main(self, args, cmd_name):
@@ -41,9 +42,19 @@ class CommandBase(BaseFunctions):
 
     flags_to_print = []
     if flags is not None and len(flags) > 0:
-      print(leading + '{}>>  Flags 🎌:{}'.format(COLORS.WARNING, COLORS.ENDC))
+      usage_req = [f.aliases[0] for f in flags if f.required and len(f.aliases) == 1]  # if required
+      usage_non_req = [f.aliases[0] for f in flags if not f.required and len(f.aliases) == 1]  # if non-required non-positional
+      if len(usage_req) > 0 or len(usage_non_req) > 0:  # print usage with proper braces
+        usage_req = ['[{}]'.format(u) for u in usage_req]
+        usage_non_req = ['({})'.format(u) for u in usage_non_req]
+        usage = ['emu', self.name, cmd] + usage_req + usage_non_req
+        print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, ' '.join(usage)) + COLORS.ENDC)
+
+      print(leading + COLORS.WARNING + '>>  Arguments 💢:' + COLORS.ENDC)
       for flag in flags:
         aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
+        if not flag.required and '-' not in aliases:
+          aliases += COLORS.RED + ' (optional)' + COLORS.WARNING
         flags_to_print.append(leading + COLORS.WARNING + '  - {}: {}'.format(aliases, flag.description) + COLORS.ENDC)
       print('\n'.join(flags_to_print))
 
@@ -56,10 +67,16 @@ class CommandBase(BaseFunctions):
       print('\n'.join(cmds_to_print))
 
 class Flag:
-  def __init__(self, aliases, description, has_value=False):
-    self.aliases = aliases
+  def __init__(self, aliases, description, required=False, dtype='bool'):
+    if isinstance(aliases, str):
+      self.aliases = [aliases]
+    else:
+      self.aliases = aliases
     self.description = description
-    self.has_value = has_value
+    self.required = required
+    self.dtype = dtype
+    if self.required and self.aliases[0][0] == '-':
+      raise Exception('Positional arguments cannot be required!')
 
 class Command:
   def __init__(self, description=None, commands=None, flags=None):
@@ -72,6 +89,22 @@ class Command:
       self.has_flags = True
       for flag in flags:
         # for each flag, add it as argument with aliases.
-        # if flag.has_value, parse value as string, if not, assume flag is boolean
-        action = 'store_true' if not flag.has_value else None
-        self.parser.add_argument(*flag.aliases, help=flag.description, action=action)
+        parser_args = {}  # handle various conditions
+        if not flag.required and flag.dtype not in ['bool']:
+          parser_args['nargs'] = '?'
+
+        if flag.dtype != 'bool':
+          parser_args['action'] = 'store'
+        elif flag.dtype == 'bool':
+          parser_args['action'] = 'store_true'
+
+        if flag.dtype == 'bool':  # type bool is not required when store_true
+          pass
+        elif flag.dtype == 'str':
+          parser_args['type'] = str
+        elif flag.dtype == 'int':
+          parser_args['type'] = int
+        else:
+          error('Unsupported dtype: {}'.format(flag.dtype))
+          return
+        self.parser.add_argument(*flag.aliases, help=flag.description, **parser_args)

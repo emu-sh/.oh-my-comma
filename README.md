@@ -46,24 +46,32 @@ This will essentially perform a git pull and replace all current files in the `/
 # Commands
 
 ### General
-
-- `emu fork`: 🍴 manage installed forks, or clone a new one
-  - `install`: Clones a fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` after cloning
-- `emu update`: 🎉 updates this tool
-- `emu info`: 📈 Statistics about your device
-  - `battery`: 🔋 see information about the state of your battery
+- `emu update`: 🎉 Updates this tool, recommended to restart ssh session
 - `emu uninstall`: 👋 Uninstalls emu
-
+### [Forks](#fork-management)
+- `emu fork`: 🍴 Manage installed forks, or install a new one
+  - `emu fork switch`: 🍴 Switch between any openpilot fork
+  - `emu fork list`: 📜 See a list of installed forks and branches
 ### Panda
-
 - `emu panda`: 🐼 panda interfacing tools
-  - `flash`: 🐼 flashes panda with make recover (usually works with the C2)
-  - `flash2`:  🎍 flashes panda using Panda module (usually works with the EON)
-
+  - `emu panda flash`: 🐼 flashes panda with make recover (usually works with the C2)
+  - `emu panda flash2`: 🎍 flashes panda using Panda module (usually works with the EON)
 ### Debugging
-
 - `emu debug`: de-🐛-ing tools
-  - `controlsd`: 🔬 logs controlsd to /data/output.log by default
+  - `emu debug controlsd`: 🔬 logs controlsd to /data/output.log by default
+- `emu device`: 📈 Statistics about your device
+  - `emu device battery`: 🔋 see information about the state of your battery
+  - `emu device reboot`: ⚡ safely reboot your device
+  - `emu device shutdown`: 🔌 safely shutdown your device
+
+To see more information about each command and its arguments, checkout the full [command documentation here.](/commands/README.md)
+
+---
+
+# Fork management
+When you first run any `emu fork` command, `emu` will ask you to perform a one-time setup of cloning the base repository of openpilot from commaai. This may take a while, but upon finishing the setup you will be able to switch to any openpilot fork much quicker than the time it usually takes to full-clone a new fork the old fashioned way.
+
+For each new fork you install with the `emu fork switch` command, Git is able to re-use blobs already downloaded from commaai/openpilot and other similar installed forks, enabling quicker install times.
 
 # Git config
 

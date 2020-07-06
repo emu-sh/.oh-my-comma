@@ -20,6 +20,9 @@ UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
 UNINSTALL_PATH = '{}/uninstall.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
 
+FORKS_PATH = '/data/community/forks'
+FORK_PARAM_PATH = '/data/community/forks/forks.json'
+
 
 class ArgumentParser(argparse.ArgumentParser):
   def error(self, message):
@@ -39,9 +42,8 @@ class BaseFunctions:
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
-        self._help(cmd, show_description=False, leading='')  # todo: decide if leading is better than no leading
-        if idx == len(self.commands) - 1:  # removes double newlines at end of loop
-          print()
+        self._help(cmd, show_description=False, leading='  ')
+        print()
     print(COLORS.ENDC, end='')
 
   def next_arg(self, lower=True, ingest=True):
@@ -62,13 +64,15 @@ class BaseFunctions:
     return arg
 
 
+def str_sim(a, b):
+  return difflib.SequenceMatcher(a=a, b=b).ratio()
+
+
 def input_with_options(options, default=None):
   """
   Takes in a list of options and asks user to make a choice.
   The most similar option list index is returned along with the similarity percentage from 0 to 1
   """
-  def str_sim(a, b):
-    return difflib.SequenceMatcher(a=a, b=b).ratio()
 
   user_input = input('[{}]: '.format('/'.join(options))).lower().strip()
   if not user_input:
@@ -78,19 +82,25 @@ def input_with_options(options, default=None):
   return argmax, sims[argmax]
 
 
-def check_output(cmd):
-  """
-  If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
-  The status is returned, True being success, False for failure
-  """
+def most_similar(find, options):
+  sims = [[str_sim(i.lower().strip(), find.lower().strip()), i] for i in options]
+  sims = sorted(sims, reverse=True)
+  return [o[1] for o in sims]
+
+
+def check_output(cmd, cwd=None):
+  class Output:
+    def __init__(self, output='', s=True):
+      self.output = output
+      self.success = s
   if isinstance(cmd, str):
     cmd = cmd.split()
-
   try:
-    return subprocess.check_output(cmd)
-  except Exception as e:
-    # print(e)
-    return False
+    return Output(subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8'))
+  except subprocess.CalledProcessError as e:
+    if e.output is None:
+      return Output(e, s=False)  # command failed to execute
+    return Output(e.output)  # command executed but it resulted in error
 
 
 def run(cmd, out_file=None):
@@ -124,7 +134,7 @@ def kill(procname):
 
 def is_affirmative():
   i = None
-  print(COLORS.PROMPT)
+  print(COLORS.WARNING, end='')
   while i not in ['y', 'n', 'yes', 'no']:
     i = input('[Y/n]: ').lower().strip()
   print(COLORS.ENDC)
@@ -146,7 +156,7 @@ def error(msg, end='\n', ret=False):
 
 
 def warning(msg, end='\n', ret=False):
-  w = '{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC)
+  w = '{}{}{}'.format(COLORS.PROMPT, msg, COLORS.ENDC)
   if ret:
     return w
   print(w, end=end)
@@ -154,6 +164,13 @@ def warning(msg, end='\n', ret=False):
 
 def success(msg, end='\n', ret=False):
   s = '{}{}{}'.format(COLORS.SUCCESS, msg, COLORS.ENDC)
+  if ret:
+    return s
+  print(s, end=end)
+
+
+def info(msg, end='\n', ret=False):
+  s = '{}{}{}'.format(COLORS.WARNING, msg, COLORS.ENDC)
   if ret:
     return s
   print(s, end=end)
