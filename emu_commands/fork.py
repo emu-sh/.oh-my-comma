@@ -80,7 +80,7 @@ class Fork(CommandBase):
       error(e)
       self._help('list')
       return
-    if flags['fork'] is None:
+    if flags.fork is None:
       max_branches = 4  # max branches to display per fork when listing all forks
       installed_forks = self.fork_params.get('installed_forks')
       success('Installed forks:')
