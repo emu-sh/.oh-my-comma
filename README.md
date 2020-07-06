@@ -47,7 +47,7 @@ This will essentially perform a git pull and replace all current files in the `/
 - `emu update`: 🎉 Updates this tool, recommended to restart ssh session
 - `emu uninstall`: 👋 Uninstalls emu
 ### Fork management
-- [`emu fork`](#emu-fork): 🍴 Manage installed forks, or install a new one
+- [`emu fork`](#emu-fork-manage-installed-forks-or-install-a-new-one): 🍴 Manage installed forks, or install a new one
 ### Panda
 - [`emu panda`](#emu-panda): 🐼 panda interfacing tools
 ### Debugging
