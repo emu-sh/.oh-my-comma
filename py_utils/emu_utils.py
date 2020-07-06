@@ -43,8 +43,7 @@ class BaseFunctions:
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
         self._help(cmd, show_description=False, leading='  ')
-        if idx != len(self.commands) - 1:  # removes double newlines at end of loop
-          print()
+        print()
     print(COLORS.ENDC, end='')
 
   def next_arg(self, lower=True, ingest=True):
