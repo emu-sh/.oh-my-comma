@@ -46,7 +46,7 @@ This will essentially perform a git pull and replace all current files in the `/
 ### General
 - `emu update`: 🎉 Updates this tool, recommended to restart ssh session
 - `emu uninstall`: 👋 Uninstalls emu
-### [Fork management](#fork-management)
+### [Forks](#fork-management)
 - `emu fork`: 🍴 Manage installed forks, or install a new one
   - `emu fork switch`: 🍴 Switch between any openpilot fork
   - `emu fork list`: 📜 See a list of installed forks and branches
