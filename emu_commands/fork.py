@@ -98,6 +98,9 @@ class Fork(CommandBase):
           print()  # line break except last fork
     else:
       fork = flags.fork.lower()
+      if fork in self.stock_aliases:
+        fork = 'commaai'
+        flags.fork = 'commaai'
       if fork not in installed_forks:
         error('{} not an installed fork! Try installing it with the {}switch{} command'.format(fork, COLORS.CYAN, COLORS.ENDC))
         return
