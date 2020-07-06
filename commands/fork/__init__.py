@@ -252,12 +252,26 @@ class Fork(CommandBase):
   def _init(self):
     if self.fork_params.get('setup_complete'):
       if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
-        branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
-        if branches.success and 'master' in branches.output:
-          return True  # already set up
+        if os.path.islink(OPENPILOT_PATH):  # ensure symlink is set up
+          branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
+          if branches.success and 'master' in branches.output:
+            return True  # already set up
+        else:
+          os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
+          warning('Fixed missing/broken symlink!')
+          return True  # created symlink, we're good
       self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
       warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
+
       shutil.rmtree(COMMAAI_PATH)  # clean slate
+      if (os.path.lexists(OPENPILOT_PATH) and not os.path.exists(OPENPILOT_PATH)) or os.path.islink(OPENPILOT_PATH):  # if symlink or broken symlink
+        try:
+          os.unlink(OPENPILOT_PATH)  # should be a symlink, try to unlink
+        except:
+          try:
+            shutil.rmtree(OPENPILOT_PATH)  # else just rm -rf
+          except:
+            pass
 
     info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Confirm you would like to continue')
