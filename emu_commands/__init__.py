@@ -11,6 +11,8 @@ __all__ = [basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__
 print(modules)
 print(__all__)
 for module in __all__:
+  if 'base' == module:
+    continue
   module = importlib.import_module(module)
   print(module.name)
 # from emu_commands.fork import Fork
