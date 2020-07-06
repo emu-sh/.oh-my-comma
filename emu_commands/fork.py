@@ -68,7 +68,14 @@ class Fork(CommandBase):
     # todo: add list command
     self.commands = {'switch': Command(description='🍴 Switch between forks or install a new one',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to install', required=True, dtype='str'),
-                                              Flag('branch', '🌿 Branch to switch to', dtype='str')])}
+                                              Flag('branch', '🌿 Branch to switch to', dtype='str')]),
+                     'list': Command(description='📜 See a list of installed forks and branches')}
+
+  def _list(self):
+    installed_forks = self.fork_params.get('installed_forks')
+    success('Installed forks:')
+    for fork in installed_forks:
+      print(' - {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
 
   def _switch(self):
     if not self._init():
