@@ -76,6 +76,11 @@ class Fork(CommandBase):
     success('Installed forks:')
     for fork in installed_forks:
       print(' - {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
+      success(' Branches:')
+      for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
+        print('  - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
+        if idx == 4:
+          print('  - {}...{}'.format(COLORS.RED, COLORS.ENDC))
 
   def _switch(self):
     if not self._init():
