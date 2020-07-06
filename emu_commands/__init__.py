@@ -16,8 +16,9 @@ for module_name in __all__:
   print(module_name)
   module = importlib.import_module(module_name)
   module = getattr(module, module_name.title())()
-  print(dir(module))
   print(module.name)
+  EMU_COMMANDS.append(module)
+  # print(dir(module))
 # from emu_commands.fork import Fork
 # from emu_commands.update import Update
 # from emu_commands.panda import Panda
