@@ -76,7 +76,7 @@ class Fork(CommandBase):
     success('Installed forks:')
     for fork in installed_forks:
       print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
-      success(' Branches:')
+      success('  Branches:')
       for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
         print('  - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
         if idx == 4:
