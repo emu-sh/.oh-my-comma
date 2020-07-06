@@ -73,18 +73,26 @@ class Fork(CommandBase):
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
 
   def _list(self):
-    max_branches = 5  # max branches to display per fork when listing all forks
-    installed_forks = self.fork_params.get('installed_forks')
-    success('Installed forks:')
-    for fork in installed_forks:
-      print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
-      success('   Branches:')
-      for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
-        if idx < max_branches:
-          print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
-        else:
-          print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
-          break
+    if not self._init():
+      return
+    flags, e = self.parse_flags(self.commands['list'].parser)
+    if e is not None:
+      error(e)
+      self._help('list')
+      return
+    if flags['fork'] is None:
+      max_branches = 4  # max branches to display per fork when listing all forks
+      installed_forks = self.fork_params.get('installed_forks')
+      success('Installed forks:')
+      for fork in installed_forks:
+        print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
+        success('   Branches:')
+        for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
+          if idx < max_branches:
+            print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
+          else:
+            print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
+            break
 
   def _switch(self):
     if not self._init():
