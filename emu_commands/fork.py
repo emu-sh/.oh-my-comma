@@ -75,7 +75,7 @@ class Fork(CommandBase):
     installed_forks = self.fork_params.get('installed_forks')
     success('Installed forks:')
     for fork in installed_forks:
-      print(' - {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
+      print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
       success(' Branches:')
       for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
         print('  - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
@@ -88,6 +88,7 @@ class Fork(CommandBase):
     flags, e = self.parse_flags(self.commands['switch'].parser)
     if e is not None:
       error(e)
+      self._help('switch')
       return
 
     username = flags.username.lower()
