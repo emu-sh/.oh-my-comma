@@ -1,6 +1,6 @@
 EMU_COMMANDS = []
 import os
-for cmd in os.listdir('emu_commands'):
+for cmd in os.listdir(os.getcwd()):
   print(cmd)
 # from emu_commands.fork import Fork
 # from emu_commands.update import Update
