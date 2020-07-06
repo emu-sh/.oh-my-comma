@@ -80,11 +80,12 @@ class Fork(CommandBase):
       error(e)
       self._help('list')
       return
+
+    installed_forks = self.fork_params.get('installed_forks')
     if flags.fork is None:
       max_branches = 4  # max branches to display per fork when listing all forks
-      installed_forks = self.fork_params.get('installed_forks')
       success('Installed forks:')
-      for fork in installed_forks:
+      for idi, fork in enumerate(installed_forks):
         print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
         success('   Branches:')
         for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
@@ -93,6 +94,16 @@ class Fork(CommandBase):
           else:
             print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
             break
+        if idi != len(installed_forks) - 1:
+          print()  # line break except last fork
+    else:
+      fork = flags.fork.lower()
+      installed_branches = installed_forks[fork]['installed_branches']
+      success('Installed branches for {}:'.format(flags.fork))
+      for branch in installed_branches:
+        print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
+
+
 
   def _switch(self):
     if not self._init():
