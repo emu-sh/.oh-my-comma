@@ -10,11 +10,12 @@ modules = glob.glob(join(dirname(__file__), "*.py"))
 __all__ = [basename(f)[:-3] for f in modules if isfile(f) and not f.endswith('__init__.py')]
 print(modules)
 print(__all__)
-for module in __all__:
-  if 'base' == module:
+for module_name in __all__:
+  if 'base' == module_name:
     continue
-  print(module)
-  module = importlib.import_module('emu_commands.' + module)
+  print(module_name)
+  module = importlib.import_module(module_name)
+  module = getattr(module, module_name.title())
   print(dir(module))
   print(module.name)
 # from emu_commands.fork import Fork
