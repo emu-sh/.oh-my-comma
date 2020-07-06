@@ -98,11 +98,13 @@ class Fork(CommandBase):
           print()  # line break except last fork
     else:
       fork = flags.fork.lower()
+      if fork not in installed_forks:
+        error('{} not an installed fork! Try installing it with the {}switch{} command'.format(fork, COLORS.CYAN, COLORS.ENDC))
+        return
       installed_branches = installed_forks[fork]['installed_branches']
       success('Installed branches for {}:'.format(flags.fork))
       for branch in installed_branches:
         print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
-
 
 
   def _switch(self):
