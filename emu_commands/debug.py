@@ -9,7 +9,7 @@ class Debug(CommandBase):
     self.description = 'de-🐛-ing tools'
 
     self.commands = {'controlsd': Command(description='🔬 logs controlsd to /data/output.log by default',
-                                          flags=[Flag(['-o', '--output'], 'Name of file to save log to', has_value=True)])}
+                                          flags=[Flag(['-o', '--output'], 'Name of file to save log to', dtype='str')])}
     self.default_path = '/data/output.log'
 
   def _controlsd(self):
