@@ -1,7 +1,7 @@
 import shutil
 import os
 import json
-from emu_commands.base import CommandBase, Command, Flag
+from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH, COLORS
 

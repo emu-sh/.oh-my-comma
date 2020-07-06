@@ -1,4 +1,4 @@
-from emu_commands.base import CommandBase, Command, Flag
+from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, warning, error, check_output, COLORS, success
 
 class Device(CommandBase):

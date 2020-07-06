@@ -8,7 +8,7 @@ for module_name in os.listdir(os.path.dirname(__file__)):
     if module_name.endswith('.py') or module_name == '__pycache__':
         continue
     try:
-      module = importlib.import_module('emu_commands.{}'.format(module_name))
+      module = importlib.import_module('commands.{}'.format(module_name))
       module = getattr(module, module_name.title())()
       EMU_COMMANDS.append(module)
     except Exception as e:

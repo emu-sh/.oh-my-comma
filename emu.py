@@ -5,11 +5,11 @@ if __package__ is None:
   import sys
   from os import path
   sys.path.append(path.abspath(path.join(path.dirname(__file__), 'py_utils')))
-  sys.path.append(path.abspath(path.join(path.dirname(__file__), 'emu_commands')))
+  sys.path.append(path.abspath(path.join(path.dirname(__file__), 'commands')))
 
   from py_utils.emu_utils import BaseFunctions
   from py_utils.emu_utils import OPENPILOT_PATH
-  from emu_commands import EMU_COMMANDS
+  from commands import EMU_COMMANDS
 
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')

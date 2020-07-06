@@ -1,4 +1,4 @@
-from emu_commands.base import CommandBase
+from commands.base import CommandBase
 from py_utils.emu_utils import run, error
 from py_utils.emu_utils import UPDATE_PATH
 
