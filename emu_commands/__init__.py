@@ -15,7 +15,7 @@ for module_name in __all__:
     continue
   print(module_name)
   module = importlib.import_module(module_name)
-  module = getattr(module, module_name.title())
+  module = getattr(module, module_name.title())()
   print(dir(module))
   print(module.name)
 # from emu_commands.fork import Fork
