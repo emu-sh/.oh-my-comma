@@ -3,7 +3,10 @@ import importlib
 from py_utils.emu_utils import error
 
 EMU_COMMANDS = []
-for module_name in os.listdir(os.path.dirname(__file__)):
+basedir = os.path.dirname(__file__)
+for module_name in os.listdir(basedir):
+  print(module_name)
+  print(os.path.isdir(os.path.join(basedir, module_name)))
   if module_name.endswith('.py') or module_name == '__pycache__':
     continue
   try:
