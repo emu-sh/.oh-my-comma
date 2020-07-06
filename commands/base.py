@@ -44,12 +44,10 @@ class CommandBase(BaseFunctions):
     if flags is not None and len(flags) > 0:
       usage_req = [f.aliases[0] for f in flags if f.required and len(f.aliases) == 1]  # if required
       usage_non_req = [f.aliases[0] for f in flags if not f.required and len(f.aliases) == 1]  # if non-required non-positional
-      if len(usage_req) > 0 or len(usage_non_req) > 0:
+      if len(usage_req) > 0 or len(usage_non_req) > 0:  # print usage with proper braces
         usage_req = ['[{}]'.format(u) for u in usage_req]
         usage_non_req = ['({})'.format(u) for u in usage_non_req]
         usage = ['emu', self.name, cmd] + usage_req + usage_non_req
-        print(usage_req)
-        print(usage_non_req)
         print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, ' '.join(usage)) + COLORS.ENDC)
 
       print(leading + COLORS.WARNING + '>>  Arguments 💢:' + COLORS.ENDC)
