@@ -22,6 +22,8 @@ Read the README for <https://github.com/b-ryan/powerline-shell>. You will need t
 
 Alternately, you can install [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts), as it provides more icons than powerline fonts, and is more maintained.
 
+Once NEOS 15 comes out, zsh will be used and [powerlevel10k](https://github.com/romkatv/powerlevel10k) will be the optimal powerline
+
 The default directory of your bash/ssh session is now `/data/openpilot`. Much easier to git pull after shelling in.
 
 # welcome to the family
