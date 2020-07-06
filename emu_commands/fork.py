@@ -5,7 +5,6 @@ from emu_commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH, COLORS
 
-
 COMMAAI_PATH = FORKS_PATH + '/commaai'
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
@@ -23,6 +22,7 @@ def valid_fork_url(url):
     return True
   except Exception as e:
     return False
+
 
 class ForkParams:
   def __init__(self):
@@ -82,7 +82,7 @@ class Fork(CommandBase):
         if idx < max_branches:
           print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
         else:
-          print('   - {}...{}emu fork list {}{} to see all branches{}'.format(COLORS.RED, COLORS.OKBLUE, fork, COLORS.RED, COLORS.ENDC))
+          print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.OKBLUE, fork, COLORS.ENDC))
           break
 
   def _switch(self):
@@ -141,7 +141,7 @@ class Fork(CommandBase):
 
     if flags.branch is None:
       start_default_branch = r.output.index(DEFAULT_BRANCH_START)
-      default_branch = r.output[start_default_branch+len(DEFAULT_BRANCH_START):]
+      default_branch = r.output[start_default_branch + len(DEFAULT_BRANCH_START):]
       end_default_branch = default_branch.index('\n')
       default_branch = default_branch[:end_default_branch]
       fork_branch = '{}_{}'.format(username, default_branch)
