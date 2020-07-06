@@ -41,7 +41,10 @@ class CommandBase(BaseFunctions):
 
     flags_to_print = []
     if flags is not None and len(flags) > 0:
-      print(leading + '{}>>  Arguments 💢:{}'.format(COLORS.WARNING, COLORS.ENDC))
+      usage = [f for f in flags if f.required or f.aliases[0][0] != '-']
+      print(usage)
+      print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, usage) + COLORS.ENDC)
+      print(leading + COLORS.WARNING + '>>  Arguments 💢:' + COLORS.ENDC)
       for flag in flags:
         aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
         if not flag.required and '-' not in aliases:
