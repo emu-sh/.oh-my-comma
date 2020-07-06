@@ -45,8 +45,8 @@ class CommandBase(BaseFunctions):
       usage_non_req = [f.aliases[0] for f in flags if not f.required and len(f.aliases) == 0]
       if len(usage_req) > 0:
         usage_req = ['[{}]'.format(u) for u in usage_req]
-        usage_req = ['emu', self.name, cmd] + usage_req
-        usage_non_req = ['({})'.format(u) for u in usage_req]
+        # usage_req = ['emu', self.name, cmd] + usage_req
+        usage_non_req = ['({})'.format(u) for u in usage_non_req]
         print(usage_req)
         print(usage_non_req)
         # print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, ' '.join(usage)) + COLORS.ENDC)
