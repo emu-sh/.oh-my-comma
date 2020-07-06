@@ -14,6 +14,7 @@ for module in __all__:
   if 'base' == module:
     continue
   module = importlib.import_module(module)
+  print(dir(module))
   print(module.name)
 # from emu_commands.fork import Fork
 # from emu_commands.update import Update
