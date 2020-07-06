@@ -82,7 +82,7 @@ class Fork(CommandBase):
         if idx < max_branches:
           print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
         else:
-          print('   - {}...{}'.format(COLORS.RED, COLORS.ENDC))
+          print('   - {}run emu fork list {} to see all branches{}'.format(COLORS.RED, fork, COLORS.ENDC))
           break
 
   def _switch(self):
