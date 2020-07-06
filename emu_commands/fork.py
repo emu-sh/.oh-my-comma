@@ -236,15 +236,15 @@ class Fork(CommandBase):
       return
 
     info('Cloning commaai/openpilot into /data/community/forks, please wait...')
-    r = check_output(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
-    if not r.success or 'done' not in r.output:
+    r = run(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
+    if not r:
       error('Error while cloning, please try again')
       return
 
     # rename origin to commaai so it's easy to switch to stock without any extra logic for url checking, etc
-    r = run(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
-    if not r:
-      error('Error cloning!')
+    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
+    if not r.success:
+      error(r.output)
       return
 
     # backup and create symlink
