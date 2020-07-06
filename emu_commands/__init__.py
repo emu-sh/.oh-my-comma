@@ -15,4 +15,4 @@ for module_name in __all__:
     module = getattr(module, module_name.title())()
     EMU_COMMANDS.append(module)
   except:
-    error('Error loading {} command, please try updating!')
+    error('Error loading {} command, please try updating!'.format(module_name))
