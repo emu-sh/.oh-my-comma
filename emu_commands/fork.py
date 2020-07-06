@@ -242,9 +242,9 @@ class Fork(CommandBase):
       return
 
     # rename origin to commaai so it's easy to switch to stock without any extra logic for url checking, etc
-    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
-    if not r.success:
-      error(r.output)
+    r = run(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
+    if not r:
+      error('Error cloning!')
       return
 
     # backup and create symlink
