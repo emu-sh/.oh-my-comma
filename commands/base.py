@@ -46,10 +46,11 @@ class CommandBase(BaseFunctions):
       if len(usage_req) > 0 or len(usage_non_req) > 0:
         usage_req = ['[{}]'.format(u) for u in usage_req]
         usage_non_req = ['({})'.format(u) for u in usage_non_req]
-        usage_req = ['emu', self.name, cmd] + usage_req + usage_non_req
+        usage = ['emu', self.name, cmd] + usage_req + usage_non_req
         print(usage_req)
         print(usage_non_req)
         print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, ' '.join(usage)) + COLORS.ENDC)
+
       print(leading + COLORS.WARNING + '>>  Arguments 💢:' + COLORS.ENDC)
       for flag in flags:
         aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
