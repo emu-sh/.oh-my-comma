@@ -72,13 +72,14 @@ class Fork(CommandBase):
                      'list': Command(description='📜 See a list of installed forks and branches')}
 
   def _list(self):
+    max_branches = 5  # max branches to display per fork when listing all forks
     installed_forks = self.fork_params.get('installed_forks')
     success('Installed forks:')
     for fork in installed_forks:
       print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
       success('   Branches:')
       for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
-        if idx < 4:
+        if idx < max_branches:
           print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
         else:
           print('   - {}...{}'.format(COLORS.RED, COLORS.ENDC))
