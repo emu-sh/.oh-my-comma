@@ -6,3 +6,4 @@ Release 0.1.3 (2020-07-06)
   * Change remote of `origin` to `commaai` so that no additional logic is required. Aliases of stock openpilot are: `['stock', 'commaai', 'origin']`
 * Stores all installed forks and forks' branches in `/data/community/forks/forks.json` so that the forks command can easily identify when it needs to track and create a branch or just check it out.
 * You should still run `git pull` to make sure you get the latest updates from the fork you're currently switched to.
+* Dynamic loading of commands. If a command has an exception loading, it won't crash the CLI. Instead you will see an error when you try to call `emu`
