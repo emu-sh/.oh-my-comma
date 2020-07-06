@@ -7,6 +7,7 @@ class Debug(CommandBase):
     super().__init__()
     self.name = 'debug'
     self.description = 'de-🐛-ing tools'
+    5/0
 
     self.commands = {'controlsd': Command(description='🔬 logs controlsd to /data/output.log by default',
                                           flags=[Flag(['-o', '--output'], 'Name of file to save log to', dtype='str')])}

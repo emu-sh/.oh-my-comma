@@ -14,5 +14,6 @@ for module_name in __all__:
     module = importlib.import_module('emu_commands.{}'.format(module_name))
     module = getattr(module, module_name.title())()
     EMU_COMMANDS.append(module)
-  except:
+  except Exception as e:
     error('Error loading {} command, please try updating!'.format(module_name))
+    error(e)
