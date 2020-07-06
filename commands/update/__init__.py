@@ -6,7 +6,7 @@ class Update(CommandBase):
   def __init__(self):
     super().__init__()
     self.name = 'update'
-    self.description = '🎉 updates this tool, recommended to restart ssh session'
+    self.description = '🎉 Updates this tool'
 
   def _update(self):
     if not run(['sh', UPDATE_PATH]):

@@ -44,9 +44,15 @@ This will essentially perform a git pull and replace all current files in the `/
 # Commands
 
 ### General
+- `emu fork`: 🍴 Manage installed forks, or install a new one
+- `emu update`: 🎉 Updates this tool, recommended to restart ssh session
+- `emu device`: 📈 Statistics about your device
+- `emu panda`: 🐼 panda interfacing tools
+- `emu debug`: de-🐛-ing tools
+- `emu uninstall`: 👋 Uninstalls emu
 
 - `emu fork`: 🍴 manage installed forks, or clone a new one
-  - `install`: Clones a fork URL to `/data/openpilot`. Current folder is moved to `/data/openpilot.old` after cloning
+  - `switch`: Uses remotes and one global-repository to quickly get yourself up and running with any fork in seconds
 - `emu update`: 🎉 updates this tool
 - `emu info`: 📈 Statistics about your device
   - `battery`: 🔋 see information about the state of your battery
@@ -61,7 +67,7 @@ This will essentially perform a git pull and replace all current files in the `/
 ### Debugging
 
 - `emu debug`: de-🐛-ing tools
-  - `controlsd`: 🔬 logs controlsd to /data/output.log by default
+  - `controls`: 🔬 logs controlsd to /data/output.log by default
 
 # Git config
 

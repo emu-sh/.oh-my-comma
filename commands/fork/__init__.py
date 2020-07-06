@@ -60,13 +60,13 @@ class Fork(CommandBase):
   def __init__(self):
     super().__init__()
     self.name = 'fork'
-    self.description = '🍴 manage installed forks, or clone a new one'
+    self.description = '🍴 Manage installed forks, or install a new one'
 
     self.fork_params = ForkParams()
     self.stock_aliases = ['stock', 'commaai', 'origin']
 
     # todo: add list command
-    self.commands = {'switch': Command(description='🍴 Switch between forks or install a new one',
+    self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to install', required=True, dtype='str'),
                                               Flag('branch', '🌿 Branch to switch to', dtype='str')]),
                      'list': Command(description='📜 See a list of installed forks and branches',
