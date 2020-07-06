@@ -44,6 +44,8 @@ class CommandBase(BaseFunctions):
       print(leading + '{}>>  Arguments 💢:{}'.format(COLORS.WARNING, COLORS.ENDC))
       for flag in flags:
         aliases = COLORS.SUCCESS + ', '.join(flag.aliases) + COLORS.WARNING
+        if not flag.required and '-' not in aliases:
+          aliases += ' (optional)'
         flags_to_print.append(leading + COLORS.WARNING + '  - {}: {}'.format(aliases, flag.description) + COLORS.ENDC)
       print('\n'.join(flags_to_print))
 
