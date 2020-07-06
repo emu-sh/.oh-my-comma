@@ -81,6 +81,7 @@ class Fork(CommandBase):
         print('  - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
         if idx == 4:
           print('  - {}...{}'.format(COLORS.RED, COLORS.ENDC))
+          break
 
   def _switch(self):
     if not self._init():
