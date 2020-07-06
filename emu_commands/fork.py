@@ -102,7 +102,7 @@ class Fork(CommandBase):
         fork = 'commaai'
         flags.fork = 'commaai'
       if fork not in installed_forks:
-        error('{} not an installed fork! Try installing it with the {}switch{} command'.format(fork, COLORS.CYAN, COLORS.ENDC))
+        error('{} not an installed fork! Try installing it with the {}switch{} command'.format(fork, COLORS.CYAN, COLORS.RED))
         return
       installed_branches = installed_forks[fork]['installed_branches']
       success('Installed branches for {}:'.format(flags.fork))
