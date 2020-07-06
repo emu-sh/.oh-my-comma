@@ -42,7 +42,7 @@ class BaseFunctions:
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
-        self._help(cmd, show_description=False, leading='  ')  # todo: decide if leading is better than no leading
+        self._help(cmd, show_description=False, leading='  ')
         if idx != len(self.commands) - 1:  # removes double newlines at end of loop
           print()
     print(COLORS.ENDC, end='')
