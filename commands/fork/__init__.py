@@ -5,8 +5,8 @@ from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH, COLORS
 
-# COMMAAI_PATH = FORKS_PATH + '/commaai'
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
+COMMA_ORIGIN_NAME = 'commaai'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
@@ -27,6 +27,7 @@ def valid_fork_url(url):
 class ForkParams:
   def __init__(self):
     self.default_params = {'current_fork': None,
+                           'current_branch': None,
                            'installed_forks': {},
                            'setup_complete': False}
     self._init()
@@ -132,7 +133,7 @@ class Fork(CommandBase):
         error('Invalid username! {} does not exist'.format(clone_url))
         return
 
-      r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'add', username, clone_url])
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'add', username, clone_url])
       if r.success and r.output == '':
         success('Remote added successfully!')
       elif r.success and REMOTE_ALREADY_EXISTS in r.output:
@@ -150,13 +151,13 @@ class Fork(CommandBase):
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
 
-    r = check_output(['git', '-C', COMMAAI_PATH, 'fetch', username])
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     if not r.success:
       error(r.output)
       return
     self.__add_fork(username)
 
-    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'show', username])
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches = self.__get_remote_branches(r)
 
     if DEFAULT_BRANCH_START not in r.output:
@@ -194,18 +195,19 @@ class Fork(CommandBase):
     remote_branch = f'{username}/{branch}'
     if branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
-      r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
       if not r.success:
         error(r.output)
         return
       installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
       self.fork_params.put('installed_forks', installed_forks)
     else:  # already installed branch, checking out fork_branch from remote_branch
-      r = check_output(['git', '-C', COMMAAI_PATH, 'checkout', fork_branch])
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', fork_branch])
       if not r.success:
         error(r.output)
         return
-
+    self.fork_params.put('current_fork', username)
+    self.fork_params.put('current_branch', branch)
     success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
 
   def __add_fork(self, username):
@@ -252,63 +254,40 @@ class Fork(CommandBase):
   def _init(self):
     if self.fork_params.get('setup_complete'):
       if os.path.exists(OPENPILOT_PATH):
-        r = check_output(['git', '-C', '/data/community/forks/commaai', 'remote', 'show'])
-        print(r.output)
-        print(r.output.split('\n'))
-      raise Exception()
-      if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
-        if os.path.islink(OPENPILOT_PATH):  # ensure symlink is set up
-          branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
-          if branches.success and 'master' in branches.output:
-            return True  # already set up
-        else:
-          os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
-          warning('Fixed missing/broken symlink!')
-          return True  # created symlink, we're good
-      self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
-      warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
+        r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
+        if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly
+          return True
+    self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+    warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
 
-      shutil.rmtree(COMMAAI_PATH)  # clean slate
-      if (os.path.lexists(OPENPILOT_PATH) and not os.path.exists(OPENPILOT_PATH)) or os.path.islink(OPENPILOT_PATH):  # if symlink or broken symlink
-        try:
-          os.unlink(OPENPILOT_PATH)  # should be a symlink, try to unlink
-        except:
-          try:
-            shutil.rmtree(OPENPILOT_PATH)  # else just rm -rf
-          except:
-            pass
-
-    info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
+    info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')  # todo: backup /data/openpilot here
     info('Confirm you would like to continue')
     if not is_affirmative():
       error('Stopping initialization!')
       return
 
-    info('Cloning commaai/openpilot into /data/community/forks, please wait...')
-    r = run(['git', 'clone', GIT_OPENPILOT_URL, COMMAAI_PATH])
+    # backup openpilot here to free up /data/openpilot
+    if os.path.exists(OPENPILOT_PATH):
+      bak_dir = '{}.bak'.format(OPENPILOT_PATH)
+      idx = 0
+      while os.path.exists(bak_dir):
+        bak_dir = '{}.{}'.format(bak_dir, idx)
+        idx += 1
+      shutil.move(OPENPILOT_PATH, bak_dir)
+      success('Backed up your current openpilot install to {}'.format(bak_dir))
+
+    info('Cloning commaai/openpilot into {}, please wait...'.format(OPENPILOT_PATH))
+    r = run(['git', 'clone', '-b', 'release2', GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to r2 for stock
     if not r:
       error('Error while cloning, please try again')
       return
 
     # rename origin to commaai so it's easy to switch to stock without any extra logic for url checking, etc
-    r = check_output(['git', '-C', COMMAAI_PATH, 'remote', 'rename', 'origin', 'commaai'])
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'rename', 'origin', COMMA_ORIGIN_NAME])
     if not r.success:
       error(r.output)
       return
 
-    # backup and create symlink
-    if os.path.exists(OPENPILOT_PATH):
-      bak_dir = '{}.bak'.format(OPENPILOT_PATH)
-      idx = 0
-      while os.path.exists(bak_dir):
-        bak_dir = '{}{}'.format(bak_dir, idx)
-        idx += 1
-      shutil.move(OPENPILOT_PATH, bak_dir)
-      success('Backed up openpilot to {} and created symlink to {}'.format(bak_dir, COMMAAI_PATH))
-    else:
-      success('Created symlink to {}'.format(COMMAAI_PATH))
-    os.symlink(COMMAAI_PATH, OPENPILOT_PATH, target_is_directory=True)
-    check_output(['git', '-C', COMMAAI_PATH, 'checkout', 'release2'])
     success('Fork management set up successfully! You\'re on commaai/release2')
     success('To get started, try running: {}emu fork switch [fork_username] [branch]{}'.format(COLORS.RED, COLORS.ENDC))
     self.fork_params.put('setup_complete', True)
