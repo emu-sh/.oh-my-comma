@@ -86,7 +86,12 @@ class Fork(CommandBase):
       max_branches = 4  # max branches to display per fork when listing all forks
       success('Installed forks:')
       for idi, fork in enumerate(installed_forks):
-        print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC))
+        print('- {}{}{}'.format(COLORS.OKBLUE, fork, COLORS.ENDC), end='')
+        current_fork = self.fork_params.get('current_fork')
+        if current_fork == fork:
+          print(' (current)')
+        else:
+          print()
         success('   Branches:')
         for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
           if idx < max_branches:
@@ -260,7 +265,7 @@ class Fork(CommandBase):
     self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
     warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
 
-    info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')  # todo: backup /data/openpilot here
+    info('To set up emu fork management we will clone commaai/openpilot into /data/community/forks')
     info('Confirm you would like to continue')
     if not is_affirmative():
       error('Stopping initialization!')
