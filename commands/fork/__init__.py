@@ -114,7 +114,7 @@ class Fork(CommandBase):
           else:
             print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
             break
-        print()  # line break except last fork
+        print()
     else:
       fork = flags.fork.lower()
       if fork in self.stock_aliases:
@@ -147,13 +147,13 @@ class Fork(CommandBase):
     fork_in_params = True
     if username not in installed_forks:
       fork_in_params = False
-      clone_url = 'https://github.com/{}/openpilot'.format(username)
+      remote_url = 'https://github.com/{}/openpilot'.format(username)
 
-      if not valid_fork_url(clone_url):
-        error('Invalid username! {} does not exist'.format(clone_url))
+      if not valid_fork_url(remote_url):
+        error('Invalid username! {} does not exist'.format(remote_url))
         return
 
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'add', username, clone_url])
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'add', username, remote_url])
       if r.success and r.output == '':
         success('Remote added successfully!')
       elif r.success and REMOTE_ALREADY_EXISTS in r.output:
