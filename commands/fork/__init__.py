@@ -92,10 +92,20 @@ class Fork(CommandBase):
           print(' (current)')
         else:
           print()
+        branches = installed_forks[fork]['installed_branches']
+        current_branch = self.fork_params.get('current_branch')
+        if current_branch in branches:
+          branches.remove(current_branch)
+          branches.insert(0, current_branch)  # move cur_branch to beginning
+
         success('   Branches:')
-        for idx, branch in enumerate(installed_forks[fork]['installed_branches']):
+        for idx, branch in enumerate(branches):
           if idx < max_branches:
-            print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
+            print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC), end='')
+            if branch == current_branch:
+              print(' (current)')
+            else:
+              print()
           else:
             print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
             break
