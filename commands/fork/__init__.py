@@ -291,6 +291,8 @@ class Fork(CommandBase):
   #   pass
 
   def _init(self):
+    if os.path.isdir('/data/community/forks'):
+      shutil.rmtree('/data/community/forks')  # remove to save space
     if self.fork_params.get('setup_complete'):
       if os.path.exists(OPENPILOT_PATH):
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
