@@ -76,6 +76,7 @@ class Fork(CommandBase):
     if not self._init():
       return
     self.fork_params.put('current_branch', None)
+    self.fork_params.put('current_fork', None)
     flags, e = self.parse_flags(self.commands['list'].parser)
     if e is not None:
       error(e)
@@ -99,7 +100,8 @@ class Fork(CommandBase):
           branches.remove(current_branch)
           branches.insert(0, current_branch)  # move cur_branch to beginning
 
-        success('   Branches:')
+        if len(branches) > 0:
+          success('   Branches:')
         for idx, branch in enumerate(branches):
           if idx < max_branches:
             print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC), end='')
