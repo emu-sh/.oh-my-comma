@@ -177,7 +177,7 @@ class Fork(CommandBase):
     self.__add_fork(username)
 
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
-    remote_branches = self.__get_remote_branches(r)
+    remote_branches, default_remote_branch = self.__get_remote_branches(r)
     if remote_branches is None:
       return
 
@@ -185,17 +185,13 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
-    if flags.branch is None:  # user hasn't specified a branch
+    if flags.branch is None:  # user hasn't specified a branch, use remote's branch
       if username == 'commaai':  # todo: use a dict for default branches if we end up needing default branches for multiple forks
         branch = COMMA_DEFAULT_BRANCH  # use release2 and default branch for stock
         fork_branch = 'commaai_{}'.format(branch)
       else:
-        start_default_branch = r.output.index(DEFAULT_BRANCH_START)
-        default_branch = r.output[start_default_branch + len(DEFAULT_BRANCH_START):]
-        end_default_branch = default_branch.index('\n')
-        default_branch = default_branch[:end_default_branch]
-        fork_branch = '{}_{}'.format(username, default_branch)
-        branch = default_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
+        fork_branch = '{}_{}'.format(username, default_remote_branch)
+        branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
 
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
@@ -261,7 +257,7 @@ class Fork(CommandBase):
     # get remote's branches to verify from output of command in parent function
     if not r.success:
       error(r.output)
-      return
+      return None, None
     print(r.output)
     if REMOTE_BRANCHES_START in r.output:
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
@@ -277,12 +273,17 @@ class Fork(CommandBase):
       remote_branches = [r.output[start_remote_branch + len(REMOTE_BRANCHES_START):].replace('\n', '').replace('tracked', '').strip()]
     else:
       error('Unable to parse remote branches!')
-      return
+      return None, None
 
     if len(remote_branches) == 0:
       error('Error getting remote branches!')
-      return
-    return remote_branches
+      return None, None
+
+    start_default_branch = r.output.index(DEFAULT_BRANCH_START)  # get default branch to return
+    default_branch = r.output[start_default_branch + len(DEFAULT_BRANCH_START):]
+    end_default_branch = default_branch.index('\n')
+    default_branch = default_branch[:end_default_branch]
+    return remote_branches, default_branch
 
   # def _reset_hard(self):  # todo: this functionality
   #   # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
