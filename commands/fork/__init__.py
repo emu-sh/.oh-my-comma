@@ -7,6 +7,7 @@ from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH, COLO
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 COMMA_ORIGIN_NAME = 'commaai'
+COMMA_DEFAULT_BRANCH = 'release2'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
@@ -184,7 +185,7 @@ class Fork(CommandBase):
 
     if flags.branch is None:  # user hasn't specified a branch
       if username == 'commaai':  # todo: use a dict for default branches if we end up needing default branches for multiple forks
-        branch = 'release2'  # use release2 and default branch for stock
+        branch = COMMA_DEFAULT_BRANCH  # use release2 and default branch for stock
         fork_branch = 'commaai_{}'.format(branch)
       else:
         start_default_branch = r.output.index(DEFAULT_BRANCH_START)
@@ -295,7 +296,7 @@ class Fork(CommandBase):
       success('Backed up your current openpilot install to {}'.format(bak_dir))
 
     info('Cloning commaai/openpilot into {}, please wait...'.format(OPENPILOT_PATH))
-    r = run(['git', 'clone', '-b', 'release2', GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to r2 for stock
+    r = run(['git', 'clone', '-b', COMMA_DEFAULT_BRANCH, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to r2 for stock
     if not r:
       error('Error while cloning, please try again')
       return
@@ -306,7 +307,9 @@ class Fork(CommandBase):
       error(r.output)
       return
 
-    success('Fork management set up successfully! You\'re on commaai/release2')
+    success('Fork management set up successfully! You\'re on commaai/{}'.format(COMMA_DEFAULT_BRANCH))
     success('To get started, try running: {}emu fork switch [fork_username] [branch]{}'.format(COLORS.RED, COLORS.ENDC))
     self.fork_params.put('setup_complete', True)
+    self.fork_params.put('current_fork', COMMA_ORIGIN_NAME)
+    self.fork_params.put('current_branch', COMMA_DEFAULT_BRANCH)
     self.__add_fork('commaai')
