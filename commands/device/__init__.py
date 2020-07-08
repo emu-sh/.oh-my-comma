@@ -12,10 +12,12 @@ class Device(CommandBase):
                      'shutdown': Command(description='🔌 safely shutdown your device')}
 
   def _reboot(self):
-    run('am start -a android.intent.action.REBOOT')
+    check_output('am start -a android.intent.action.REBOOT')
+    print('👋 See you in a bit!')
 
   def _shutdown(self):
-    run('am start -n android/com.android.internal.app.ShutdownActivity')
+    check_output('am start -n android/com.android.internal.app.ShutdownActivity')
+    success('🌙 Goodnight!')
 
   def _battery(self):
     r = check_output('dumpsys batterymanager')

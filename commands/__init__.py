@@ -9,8 +9,8 @@ for module_name in os.listdir(basedir):
     continue
   try:
     module = importlib.import_module('commands.{}'.format(module_name))
-    module = getattr(module, module_name.title())()
-    EMU_COMMANDS.append(module)
+    module = getattr(module, module_name.title())
+    EMU_COMMANDS.append(module())
   except Exception as e:
     error('Error loading {} command, please try updating!'.format(module_name))
     error(e)
