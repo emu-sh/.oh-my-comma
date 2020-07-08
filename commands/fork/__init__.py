@@ -251,7 +251,7 @@ class Fork(CommandBase):
 
   def _init(self):
     if self.fork_params.get('setup_complete'):
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
+      r = check_output(['git', '-C', '/data/community/forks/commaai', 'remote', 'show'])
       print(r.output)
       raise Exception()
       if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
