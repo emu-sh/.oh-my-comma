@@ -115,8 +115,7 @@ class Fork(CommandBase):
           else:
             print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
             break
-        if idi != len(installed_forks) - 1:
-          print()  # line break except last fork
+        print()  # line break except last fork
     else:
       fork = flags.fork.lower()
       if fork in self.stock_aliases:
@@ -167,7 +166,6 @@ class Fork(CommandBase):
         return
 
     # fork has been added as a remote, switch to it
-    # todo: probably should write a function that checks installed forks, but should be fine for now
     if fork_in_params:
       info('Fetching {}\'s latest changes...'.format(flags.username))
     else:
@@ -282,8 +280,8 @@ class Fork(CommandBase):
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
         if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly
           return True
-    self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
-    self.fork_params.reset()
+      self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+      self.fork_params.reset()
     warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
 
     info('To set up emu fork management we will clone commaai/openpilot into {}'.format(OPENPILOT_PATH))
