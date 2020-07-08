@@ -5,7 +5,7 @@ from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH, COLORS
 
-COMMAAI_PATH = FORKS_PATH + '/commaai'
+# COMMAAI_PATH = FORKS_PATH + '/commaai'
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
@@ -251,6 +251,9 @@ class Fork(CommandBase):
 
   def _init(self):
     if self.fork_params.get('setup_complete'):
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
+      print(r.output)
+      raise Exception()
       if os.path.exists(COMMAAI_PATH):  # ensure we're really set up (directory got deleted?)
         if os.path.islink(OPENPILOT_PATH):  # ensure symlink is set up
           branches = check_output(['git', '-C', COMMAAI_PATH, 'branch'])
