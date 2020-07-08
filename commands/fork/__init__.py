@@ -178,6 +178,7 @@ class Fork(CommandBase):
 
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
+    print(remote_branches)
     if remote_branches is None:
       return
 
