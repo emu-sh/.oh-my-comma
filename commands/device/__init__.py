@@ -13,11 +13,11 @@ class Device(CommandBase):
 
   def _reboot(self):
     check_output('am start -a android.intent.action.REBOOT')
-    print('See you in a bit! 🔄')
+    print('👋 See you in a bit!')
 
   def _shutdown(self):
     check_output('am start -n android/com.android.internal.app.ShutdownActivity')
-    success('Goodnight! 🌙')
+    success('🌙 Goodnight!')
 
   def _battery(self):
     r = check_output('dumpsys batterymanager')
