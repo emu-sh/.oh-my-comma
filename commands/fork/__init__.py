@@ -258,7 +258,6 @@ class Fork(CommandBase):
     if not r.success:
       error(r.output)
       return None, None
-    print(r.output)
     if REMOTE_BRANCHES_START in r.output:
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
       remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
