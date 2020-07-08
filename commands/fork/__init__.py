@@ -49,6 +49,10 @@ class ForkParams:
     self.params.update({key: value})
     self._write()
 
+  def reset(self):
+    self.params = self.default_params
+    self._write()
+
   def _read(self):
     with open(FORK_PARAM_PATH, "r") as f:
       self.params = json.loads(f.read())
@@ -141,8 +145,9 @@ class Fork(CommandBase):
       username = 'commaai'
       flags.username = 'commaai'
 
+    installed_forks = self.fork_params.get('installed_forks')
     fork_in_params = True
-    if username not in self.fork_params.get('installed_forks'):
+    if username not in installed_forks:
       fork_in_params = False
       clone_url = 'https://github.com/{}/openpilot'.format(username)
 
@@ -208,7 +213,6 @@ class Fork(CommandBase):
       return
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
-    installed_forks = self.fork_params.get('installed_forks')
     remote_branch = f'{username}/{branch}'
     if branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
@@ -216,8 +220,7 @@ class Fork(CommandBase):
       if not r.success:
         error(r.output)
         return
-      installed_forks[username]['installed_branches'].append(branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
-      self.fork_params.put('installed_forks', installed_forks)
+      self.__add_branch(username, branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
     else:  # already installed branch, checking out fork_branch from remote_branch
       r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', fork_branch])
       if not r.success:
@@ -232,6 +235,11 @@ class Fork(CommandBase):
     if username not in installed_forks:
       installed_forks[username] = {'installed_branches': []}
       self.fork_params.put('installed_forks', installed_forks)
+
+  def __add_branch(self, username, branch):  # assumes fork exists in params
+    installed_forks = self.fork_params.get('installed_forks')
+    installed_forks[username]['installed_branches'].append(branch)
+    self.fork_params.put('installed_forks', installed_forks)
 
   def __show_similar_branches(self, branch, branches):
     if len(branches) > 0:
@@ -275,6 +283,7 @@ class Fork(CommandBase):
         if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly
           return True
     self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+    self.fork_params.reset()
     warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
 
     info('To set up emu fork management we will clone commaai/openpilot into {}'.format(OPENPILOT_PATH))
