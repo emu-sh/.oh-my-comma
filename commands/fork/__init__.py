@@ -224,6 +224,11 @@ class Fork(CommandBase):
       if not r.success:
         error(r.output)
         return
+    # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'reset', '--hard', remote_branch])
+    if not r.success:
+      error(r.output)
+      return
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', branch)
     success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
@@ -295,7 +300,7 @@ class Fork(CommandBase):
       bak_dir = '{}.bak'.format(OPENPILOT_PATH)
       idx = 0
       while os.path.exists(bak_dir):
-        bak_dir = '{}.{}'.format(bak_dir, idx)
+        bak_dir = '{}{}'.format(bak_dir, idx)
         idx += 1
       shutil.move(OPENPILOT_PATH, bak_dir)
       success('Backed up your current openpilot install to {}'.format(bak_dir))
