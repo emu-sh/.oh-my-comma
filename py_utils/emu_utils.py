@@ -20,8 +20,7 @@ UPDATE_PATH = '{}/update.sh'.format(OH_MY_COMMA_PATH)
 UNINSTALL_PATH = '{}/uninstall.sh'.format(OH_MY_COMMA_PATH)
 OPENPILOT_PATH = '/data/openpilot'
 
-FORKS_PATH = '/data/community/forks'
-FORK_PARAM_PATH = '/data/community/forks/forks.json'
+FORK_PARAM_PATH = '/data/community/forks.json'
 
 
 class ArgumentParser(argparse.ArgumentParser):

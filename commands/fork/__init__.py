@@ -3,7 +3,7 @@ import os
 import json
 from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
-from py_utils.emu_utils import OPENPILOT_PATH, FORKS_PATH, FORK_PARAM_PATH, COLORS
+from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 COMMA_ORIGIN_NAME = 'commaai'
@@ -34,8 +34,6 @@ class ForkParams:
     self._init()
 
   def _init(self):
-    if not os.path.exists(FORKS_PATH):
-      os.mkdir(FORKS_PATH)
     self.params = self.default_params  # start with default params
     if not os.path.exists(FORK_PARAM_PATH):  # if first time running, just write default
       self._write()
