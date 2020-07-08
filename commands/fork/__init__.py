@@ -68,7 +68,7 @@ class Fork(CommandBase):
     self.description = '🍴 Manage installed forks, or install a new one'
 
     self.fork_params = ForkParams()
-    self.stock_aliases = ['stock', 'commaai', 'origin']
+    self.stock_aliases = ['stock', COMMA_ORIGIN_NAME, 'origin']
 
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to install', required=True, dtype='str'),
@@ -118,8 +118,8 @@ class Fork(CommandBase):
     else:
       fork = flags.fork.lower()
       if fork in self.stock_aliases:
-        fork = 'commaai'
-        flags.fork = 'commaai'
+        fork = COMMA_ORIGIN_NAME
+        flags.fork = COMMA_ORIGIN_NAME
       if fork not in installed_forks:
         error('{} not an installed fork! Try installing it with the {}switch{} command'.format(fork, COLORS.CYAN, COLORS.RED))
         return
@@ -140,8 +140,8 @@ class Fork(CommandBase):
 
     username = flags.username.lower()
     if username in self.stock_aliases:
-      username = 'commaai'
-      flags.username = 'commaai'
+      username = COMMA_ORIGIN_NAME
+      flags.username = COMMA_ORIGIN_NAME
 
     installed_forks = self.fork_params.get('installed_forks')
     fork_in_params = True
@@ -186,7 +186,7 @@ class Fork(CommandBase):
       return
 
     if flags.branch is None:  # user hasn't specified a branch, use remote's branch
-      if username == 'commaai':  # todo: use a dict for default branches if we end up needing default branches for multiple forks
+      if username == COMMA_ORIGIN_NAME:  # todo: use a dict for default branches if we end up needing default branches for multiple forks
         branch = COMMA_DEFAULT_BRANCH  # use release2 and default branch for stock
         fork_branch = 'commaai_{}'.format(branch)
       else:
@@ -328,9 +328,9 @@ class Fork(CommandBase):
       error(r.output)
       return
 
-    success('Fork management set up successfully! You\'re on commaai/{}'.format(COMMA_DEFAULT_BRANCH))
+    success('Fork management set up successfully! You\'re on {}/{}'.format(COMMA_ORIGIN_NAME, COMMA_DEFAULT_BRANCH))
     success('To get started, try running: {}emu fork switch [fork_username] (branch){}'.format(COLORS.RED, COLORS.ENDC))
     self.fork_params.put('setup_complete', True)
     self.fork_params.put('current_fork', COMMA_ORIGIN_NAME)
     self.fork_params.put('current_branch', COMMA_DEFAULT_BRANCH)
-    self.__add_fork('commaai')
+    self.__add_fork(COMMA_ORIGIN_NAME)
