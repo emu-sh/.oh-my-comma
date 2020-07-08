@@ -107,7 +107,7 @@ class Fork(CommandBase):
         for idx, branch in enumerate(branches):
           if idx < max_branches:
             print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC), end='')
-            if branch == current_branch:
+            if branch == current_branch and fork == current_fork:
               print(' (current)')
             else:
               print()
