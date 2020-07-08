@@ -270,7 +270,8 @@ class Fork(CommandBase):
     elif REMOTE_BRANCH_START in r.output:  # remote has single branch
       start_remote_branch = r.output.index(REMOTE_BRANCH_START)
       print(r.output)
-      remote_branches = [r.output[start_remote_branch + len(REMOTE_BRANCHES_START):].replace('\n', '').replace('tracked', '').strip()]
+      remote_branches = r.output[start_remote_branch + len(REMOTE_BRANCH_START):].split('\n')
+      remote_branches = [b.replace('tracked', '').strip() for b in remote_branches if b.strip() != '' and 'tracked' in b]
     else:
       error('Unable to parse remote branches!')
       return None, None
