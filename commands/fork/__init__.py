@@ -75,6 +75,7 @@ class Fork(CommandBase):
   def _list(self):
     if not self._init():
       return
+    self.fork_params.put('current_branch', None)
     flags, e = self.parse_flags(self.commands['list'].parser)
     if e is not None:
       error(e)
