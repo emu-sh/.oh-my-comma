@@ -178,7 +178,6 @@ class Fork(CommandBase):
 
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
-    print(remote_branches)
     if remote_branches is None:
       return
 
@@ -270,6 +269,7 @@ class Fork(CommandBase):
         remote_branches.append(b)
     elif REMOTE_BRANCH_START in r.output:  # remote has single branch
       start_remote_branch = r.output.index(REMOTE_BRANCH_START)
+      print(r.output)
       remote_branches = [r.output[start_remote_branch + len(REMOTE_BRANCHES_START):].replace('\n', '').replace('tracked', '').strip()]
     else:
       error('Unable to parse remote branches!')
