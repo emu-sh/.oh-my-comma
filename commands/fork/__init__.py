@@ -12,6 +12,7 @@ COMMA_DEFAULT_BRANCH = 'release2'
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
 REMOTE_BRANCHES_START = 'Remote branches:'
+REMOTE_BRANCH_START = 'Remote branch:'
 
 
 def valid_fork_url(url):
@@ -177,6 +178,8 @@ class Fork(CommandBase):
 
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches = self.__get_remote_branches(r)
+    if remote_branches is None:
+      return
 
     if DEFAULT_BRANCH_START not in r.output:
       error('Error: Cannot find default branch from fork!')
@@ -260,14 +263,22 @@ class Fork(CommandBase):
       error(r.output)
       return
     print(r.output)
-    start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
-    remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
-    remote_branches = []
-    for b in remote_branches_txt[1:]:  # remove first useless line
-      b = b.replace('tracked', '').strip()
-      if ' ' in b:  # end of branches
-        break
-      remote_branches.append(b)
+    if REMOTE_BRANCHES_START in r.output:
+      start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
+      remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
+      remote_branches = []
+      for b in remote_branches_txt[1:]:  # remove first useless line
+        b = b.replace('tracked', '').strip()
+        if ' ' in b:  # end of branches
+          break
+        remote_branches.append(b)
+    elif REMOTE_BRANCH_START in r.output:  # remote has single branch
+      start_remote_branch = r.output.index(REMOTE_BRANCH_START)
+      remote_branches = [r.output[start_remote_branch + len(REMOTE_BRANCHES_START):].replace('\n', '').replace('tracked', '').strip()]
+    else:
+      error('Unable to parse remote branches!')
+      return
+
     if len(remote_branches) == 0:
       error('Error getting remote branches!')
       return
