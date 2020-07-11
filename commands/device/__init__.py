@@ -10,7 +10,7 @@ class Device(CommandBase):
     self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
                      'reboot': Command(description='⚡ safely reboot your device'),
                      'shutdown': Command(description='🔌 safely shutdown your device'),
-                     'settings': Command(description='⚙ open the Settings app')}
+                     'settings': Command(description='⚙️ open the Settings app')}
 
   def _settings(self):
     check_output('am start -a android.settings.SETTINGS')
