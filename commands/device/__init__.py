@@ -13,7 +13,7 @@ class Device(CommandBase):
                      'settings': Command(description='⚙ open the Settings app')}
 
   def _settings(self):
-    check_output('adb shell am start -a android.settings.SETTINGS')
+    check_output('am start -a android.settings.SETTINGS')
     success('⚙ Opened settings!')
 
   def _reboot(self):
