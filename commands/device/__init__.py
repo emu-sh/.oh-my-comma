@@ -9,11 +9,16 @@ class Device(CommandBase):
 
     self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
                      'reboot': Command(description='⚡ safely reboot your device'),
-                     'shutdown': Command(description='🔌 safely shutdown your device')}
+                     'shutdown': Command(description='🔌 safely shutdown your device'),
+                     'settings': Command(description='⚙ open the Settings app')}
+
+  def _settings(self):
+    check_output('adb shell am start -a android.settings.SETTINGS')
+    success('⚙ Opened settings!')
 
   def _reboot(self):
     check_output('am start -a android.intent.action.REBOOT')
-    print('👋 See you in a bit!')
+    success('👋 See you in a bit!')
 
   def _shutdown(self):
     check_output('am start -n android/com.android.internal.app.ShutdownActivity')
