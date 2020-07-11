@@ -14,7 +14,7 @@ class Device(CommandBase):
 
   def _settings(self):
     check_output('am start -a android.settings.SETTINGS')
-    success('⚙ Opened settings!')
+    success('⚙️ Opened settings!')
 
   def _reboot(self):
     check_output('am start -a android.intent.action.REBOOT')
