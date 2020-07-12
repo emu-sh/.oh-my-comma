@@ -63,6 +63,7 @@ This will essentially perform a git pull and replace all current files in the `/
   - `emu device battery`: 🔋 see information about the state of your battery
   - `emu device reboot`: ⚡ safely reboot your device
   - `emu device shutdown`: 🔌 safely shutdown your device
+  - `emu device settings`: ⚙ open the Settings app
 
 To see more information about each command and its arguments, checkout the full [command documentation here.](/commands/README.md)
 
