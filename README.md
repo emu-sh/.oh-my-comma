@@ -4,7 +4,7 @@ improving the dev workflow friction is paramount to innovating [openpilot](https
 
 ***PRs accepted!** What cool shit do you do to your ssh session with your car??*
 
-This tool was created by `@emu#6969` on Discord, and is widely contributed to by ShaneSmiskol `Shane#6175`
+This tool was created by [Alice Knag](https://github.com/AskAlice) - `@emu#6969` on Discord, and is widely contributed to by [ShaneSmiskol](https://github.com/ShaneSmiskol) - `Shane#6175`
 If you have any questions about the development process, or have any ideas you want to see happen, check out [CONTRIBUTING.md](CONTRIBUTING.md) and/or DM one of us on Discord or ask in #custom-forks
 
 <img src="https://emu.bz/xmf" alt="" />
