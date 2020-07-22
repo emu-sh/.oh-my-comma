@@ -49,6 +49,8 @@ class CommandBase(BaseFunctions):
         usage_req = ['[{}]'.format(u) for u in usage_req]
         usage_non_req = ['({})'.format(u) for u in usage_non_req]
         usage_flags = ['{} {}'.format(min(u, key=len), max(u, key=len).upper()[2:]) for u in usage_flags]  # formats to: ['-b BRANCH', '-o OUTPUT']
+        print(usage_flags)
+        print(usage_non_req)
         # usage_flags = '[{}]'.format(', '.join(usage_flags))
 
         usage = ['emu', self.name, cmd] + usage_req + usage_non_req + usage_flags
