@@ -143,8 +143,14 @@ class Fork(CommandBase):
         self._help('switch')
         return
 
-    print(flags.username)
-    print(flags.branch)
+    if flags.username is None:  # branch is specified, so use current checked out fork/username
+      _current_fork = self.fork_params.get('current_fork')
+      if _current_fork is not None:  # ...if available
+        success('No username specified, using current fork: {}'.format(_current_fork))
+        flags.username = _current_fork
+      else:
+        error('Current fork is unknown, please switch to a fork first before switching between branches!')
+        return
 
     username = flags.username.lower()
     if username in self.stock_aliases:
@@ -193,7 +199,7 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
-    if flags.branch is None:  # user hasn't specified a branch, use remote's branch
+    if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
       if username == COMMA_ORIGIN_NAME:  # todo: use a dict for default branches if we end up needing default branches for multiple forks
         branch = COMMA_DEFAULT_BRANCH  # use release2 and default branch for stock
         fork_branch = 'commaai_{}'.format(branch)
