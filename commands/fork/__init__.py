@@ -146,7 +146,7 @@ class Fork(CommandBase):
     if flags.username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
-        success('No username specified, using current fork: {}'.format(_current_fork))
+        info('No username specified, using current fork: {}'.format(_current_fork))
         flags.username = _current_fork
       else:
         error('Current fork is unknown, please switch to a fork first before switching between branches!')
