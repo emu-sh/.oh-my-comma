@@ -134,12 +134,12 @@ class Fork(CommandBase):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
-    print(flags.username)
-    print(flags.branch)
     if e is not None:
       error(e)
       self._help('switch')
       return
+    print(flags.username)
+    print(flags.branch)
 
     username = flags.username.lower()
     if username in self.stock_aliases:
