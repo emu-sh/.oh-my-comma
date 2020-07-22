@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from py_utils.colors import COLORS
 from py_utils.emu_utils import ArgumentParser, BaseFunctions, success, error
 
