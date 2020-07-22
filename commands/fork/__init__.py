@@ -72,7 +72,7 @@ class Fork(CommandBase):
 
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to install', required=True, dtype='str'),
-                                              Flag('branch', '🌿 Branch to switch to, will use default branch if not provided', dtype='str')]),
+                                              Flag(['-b', '--branch', 'branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str')]),
                      'list': Command(description='📜 See a list of installed forks and branches',
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
 
@@ -133,6 +133,8 @@ class Fork(CommandBase):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
+    print(flags.username)
+    print(flags.branch)
     if e is not None:
       error(e)
       self._help('switch')

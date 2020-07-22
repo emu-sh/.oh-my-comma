@@ -6,6 +6,7 @@
   - Arguments 💢:
     - username: 👤 The username of the fork's owner to install
     - branch (optional): 🌿 Branch to switch to, will use default branch if not provided
+    - *New Behavior*: If a branch is provided with -b and username is missing, it will assume the current fork
   - Example 📚:
     - `emu fork switch stock devel`
 - `emu fork list`: 📜 See a list of installed forks and branches
