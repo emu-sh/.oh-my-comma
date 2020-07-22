@@ -4,6 +4,9 @@ Release 0.1.5 (2020-07-22)
 * Add `--branch` (`-b`) flag for specifying the branch
   * This means you must supply `-b` or `--branch` when switching branches, even when supplying the username:
 
+        Old syntax: emu fork switch another_fork branch
+        New syntax: emu fork switch another_fork -b branch
+
         Old syntax: emu fork switch same_fork new_branch
         New syntax: emu fork switch -b new_branch
 
