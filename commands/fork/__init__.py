@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import shutil
 import os
 import json
@@ -71,8 +73,8 @@ class Fork(CommandBase):
     self.stock_aliases = ['stock', COMMA_ORIGIN_NAME, 'origin']
 
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
-                                       flags=[Flag('username', '👤 The username of the fork\'s owner to install', required=True, dtype='str'),
-                                              Flag('branch', '🌿 Branch to switch to, will use default branch if not provided', dtype='str')]),
+                                       flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
+                                              Flag(['-b', '--branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str')]),
                      'list': Command(description='📜 See a list of installed forks and branches',
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
 
@@ -137,6 +139,20 @@ class Fork(CommandBase):
       error(e)
       self._help('switch')
       return
+    else:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
+      if flags.username is flags.branch is None:
+        error('You must supply either username or branch or both!')
+        self._help('switch')
+        return
+
+    if flags.username is None:  # branch is specified, so use current checked out fork/username
+      _current_fork = self.fork_params.get('current_fork')
+      if _current_fork is not None:  # ...if available
+        info('No username specified, using current fork: {}'.format(COLORS.SUCCESS + _current_fork + COLORS.ENDC))
+        flags.username = _current_fork
+      else:
+        error('Current fork is unknown, please switch to a fork first before switching between branches!')
+        return
 
     username = flags.username.lower()
     if username in self.stock_aliases:
@@ -185,7 +201,7 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
-    if flags.branch is None:  # user hasn't specified a branch, use remote's branch
+    if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
       if username == COMMA_ORIGIN_NAME:  # todo: use a dict for default branches if we end up needing default branches for multiple forks
         branch = COMMA_DEFAULT_BRANCH  # use release2 and default branch for stock
         fork_branch = 'commaai_{}'.format(branch)

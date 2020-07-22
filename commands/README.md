@@ -4,8 +4,9 @@
 🍴 Manage installed forks, or install a new one
 - `emu fork switch`: 🍴 Switch between any openpilot fork
   - Arguments 💢:
-    - username: 👤 The username of the fork's owner to install
-    - branch (optional): 🌿 Branch to switch to, will use default branch if not provided
+    - username (optional): 👤 The username of the fork's owner to switch to, will use current fork if not provided
+    - -b, --branch (optional): 🌿 Branch to switch to, will use fork's default branch if not provided
+    - *New Behavior:* If a branch is provided with `-b` and username is not supplied, it will use the current fork switched to
   - Example 📚:
     - `emu fork switch stock devel`
 - `emu fork list`: 📜 See a list of installed forks and branches

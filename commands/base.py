@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from py_utils.colors import COLORS
 from py_utils.emu_utils import ArgumentParser, BaseFunctions, success, error
 
@@ -44,10 +46,16 @@ class CommandBase(BaseFunctions):
     if flags is not None and len(flags) > 0:
       usage_req = [f.aliases[0] for f in flags if f.required and len(f.aliases) == 1]  # if required
       usage_non_req = [f.aliases[0] for f in flags if not f.required and len(f.aliases) == 1]  # if non-required non-positional
+      usage_flags = [f.aliases for f in flags if not f.required and len(f.aliases) > 1 or f.aliases[0].startswith('-')]  # if flag
       if len(usage_req) > 0 or len(usage_non_req) > 0:  # print usage with proper braces
         usage_req = ['[{}]'.format(u) for u in usage_req]
         usage_non_req = ['({})'.format(u) for u in usage_non_req]
-        usage = ['emu', self.name, cmd] + usage_req + usage_non_req
+        if len(usage_flags):
+          # formats flags to: "[-b BRANCH, -o OUTPUT]"
+          usage_flags = ['{} {}'.format(min(u, key=len), max(u, key=len).upper()[2:]) for u in usage_flags]
+          usage_flags = ['[{}]'.format(', '.join(usage_flags))]
+
+        usage = ['emu', self.name, cmd] + usage_req + usage_non_req + usage_flags
         print(leading + COLORS.WARNING + '>>  Usage:{} {}'.format(COLORS.OKGREEN, ' '.join(usage)) + COLORS.ENDC)
 
       print(leading + COLORS.WARNING + '>>  Arguments 💢:' + COLORS.ENDC)

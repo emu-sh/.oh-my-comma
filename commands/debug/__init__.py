@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, kill, warning, error
 from py_utils.emu_utils import OPENPILOT_PATH
