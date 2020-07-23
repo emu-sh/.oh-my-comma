@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 import importlib
 from commands.base import CommandBase, Command
 from py_utils.emu_utils import run, error

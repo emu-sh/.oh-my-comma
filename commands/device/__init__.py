@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, warning, error, check_output, COLORS, success
 
