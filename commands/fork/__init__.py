@@ -347,7 +347,7 @@ class Fork(CommandBase):
       return
 
     success('Fork management set up successfully! You\'re on {}/{}'.format(COMMA_ORIGIN_NAME, COMMA_DEFAULT_BRANCH))
-    success('To get started, try running: {}emu fork switch [fork_username] (branch){}'.format(COLORS.RED, COLORS.ENDC))
+    success('To get started, try running: {}emu fork switch (username) [-b BRANCH]{}'.format(COLORS.RED, COLORS.ENDC))
     self.fork_params.put('setup_complete', True)
     self.fork_params.put('current_fork', COMMA_ORIGIN_NAME)
     self.fork_params.put('current_branch', COMMA_DEFAULT_BRANCH)
