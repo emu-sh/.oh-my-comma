@@ -54,16 +54,13 @@ function update_last_updated_file() {
     else
         # input sink to swallow all characters typed before the prompt
         # and add a newline if there wasn't one after characters typed
-        while read -r -p "[emu.sh] Would you like to update? [Y/n]  " option; do true; done
-        if [[ "$option" != $($'\n'|"") ]]; then
-          read -r -k 1 option
-          [[ "$option" != $'\n' ]] && echo
-          case "$option" in
-              [yY$'\n']) emu update ;;
-              [nN]) update_last_updated_file ;;
-              *) update_last_updated_file ;;
-          esac
-        fi
+        read -r -p "Are You Sure? [Y/n] " option
+        [[ "$option" != $'\n' ]] && echo
+        case "$option" in
+            [yY$'\n']) emu update ;;
+            [nN]) update_last_updated_file ;;
+          *) update_last_updated_file ;;
+        esac
     fi
   unset -f current_epoch update_last_updated_file
 
