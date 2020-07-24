@@ -15,7 +15,7 @@ function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" >! "${OH_MY_COMMA}/log/.omc-update"
 }
 
-funciton check_omc_update() {
+function check_omc_update() {
 
     local epoch_target mtime option LAST_EPOCH
 
