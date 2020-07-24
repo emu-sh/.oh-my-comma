@@ -70,8 +70,6 @@ if [ $OMC_LOCAL != $OMC_REMOTE ]; then
         *) update_last_updated_file ;;
       esac
   fi
-else
-  echo "[emu.sh] Checked for updates, and found none."
 fi
 cd -
 unset -f current_epoch update_last_updated_file
