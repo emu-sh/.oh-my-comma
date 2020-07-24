@@ -14,11 +14,7 @@ function current_epoch() {
 function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" > "${OH_MY_COMMA_PATH}/log/.omc-update"
 }
-cd ${OH_MY_COMMA_PATH}
-OMC_UPSTREAM=${1:-'@{u}'}
-OMC_LOCAL=$(git rev-parse @)
-OMC_REMOTE=$(git rev-parse "$OMC_UPSTREAM")
-OMC_BASE=$(git merge-base @ "$OMC_UPSTREAM")
+
 # Remove lock directory if older than a day
 if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
     if (( (mtime + 120) < OMC_EPOCH )); then
@@ -52,7 +48,14 @@ if (( ( $(current_epoch) - LAST_EPOCH ) < $epoch_target )); then
     return
 fi
 
-if [ $OMC_LOCAL != $OMC_BASE ]; then
+cd ${OH_MY_COMMA_PATH}
+
+git fetch
+OMC_UPSTREAM=${1:-'@{u}'}
+OMC_LOCAL=$(git rev-parse @)
+OMC_REMOTE=$(git rev-parse "$OMC_UPSTREAM")
+
+if [ $OMC_LOCAL != $OMC_REMOTE ]; then
   # Ask for confirmation before updating unless disabled
   if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
       emu update
