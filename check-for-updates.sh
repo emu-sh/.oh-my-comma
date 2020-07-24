@@ -12,7 +12,7 @@ function current_epoch() {
 }
 
 function update_last_updated_file() {
-    echo "LAST_EPOCH=$(current_epoch)" >! "${OH_MY_COMMA}/cache/.omc-update"
+    echo "LAST_EPOCH=$(current_epoch)" >! "${OH_MY_COMMA}/log/.omc-update"
 }
 
 () {
@@ -39,7 +39,7 @@ function update_last_updated_file() {
     trap "command rm -rf '$OH_MY_COMMA_PATH/log/update.lock'; return 1" EXIT INT QUIT
 
     # Create or update .omc-update file if missing or malformed
-    if ! source "${OH_MY_COMMA_PATH}/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
+    if ! source "${OH_MY_COMMA_PATH}/log/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
         update_last_updated_file
         return
     fi
@@ -53,7 +53,7 @@ function update_last_updated_file() {
 
     # Ask for confirmation before updating unless disabled
     if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
-        _updateohmycomma
+        emu update
     else
         # input sink to swallow all characters typed before the prompt
         # and add a newline if there wasn't one after characters typed
@@ -64,10 +64,10 @@ function update_last_updated_file() {
         read -r -k 1 option
         [[ "$option" != $'\n' ]] && echo
         case "$option" in
-            [yY$'\n']) _updateohmycomma ;;
+            [yY$'\n']) emu update ;;
             [nN]) update_last_updated_file ;;
         esac
     fi
 }
 
-unset -f current_epoch update_last_updated_file update_ohmyzsh
+unset -f current_epoch update_last_updated_file
