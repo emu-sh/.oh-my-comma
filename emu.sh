@@ -27,3 +27,5 @@ function emu(){  # main wrapper function
     _updateohmycomma
   fi
 }
+
+source ${OH_MY_COMMA_PATH}/check-for-updates.sh
