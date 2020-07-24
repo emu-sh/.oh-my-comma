@@ -47,7 +47,7 @@ function update_last_updated_file() {
         return
     fi
     cd ${OH_MY_COMMA_PATH}
-    if [[ $(git fetch --dry-run) ]]; then
+    if ( git fetch --dry-run ); then
       # Ask for confirmation before updating unless disabled
       if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
           emu update
