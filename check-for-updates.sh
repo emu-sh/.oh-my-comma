@@ -15,6 +15,9 @@ function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" >! "${OH_MY_COMMA}/log/.omc-update"
 }
 
+function check_omc_update() {
+
+    local epoch_target mtime option LAST_EPOCH
 
     # Remove lock directory if older than a day
     if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
@@ -65,3 +68,5 @@ function update_last_updated_file() {
         fi
     fi
   unset -f current_epoch update_last_updated_file
+}
+check_omc_update
