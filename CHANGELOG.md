@@ -1,3 +1,8 @@
+Release 0.1.7 (2020-07-24)
+=====
+
+* Auto updater will check for updates. This is based on .oh-my-zsh's [check_for_upgrade.sh](https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/check_for_upgrade.sh)
+
 Release 0.1.6 (2020-07-23)
 =====
 
