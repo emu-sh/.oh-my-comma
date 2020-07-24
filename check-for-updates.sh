@@ -15,6 +15,9 @@ function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" > "${OH_MY_COMMA_PATH}/log/.omc-update"
 }
 
+function omc_delete_update_lock(){
+trap "command rm -rf '$OH_MY_COMMA_PATH/log/update.lock'; return 1" EXIT INT QUIT
+}
 # Remove lock directory if older than a day
 if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
     if (( (mtime + 3600 * 24) < OMC_EPOCH )); then
@@ -31,7 +34,8 @@ fi
 #  The return status from the function is handled specially. If it is zero, the signal is
 #  assumed to have been handled, and execution continues normally. Otherwise, the shell
 #  will behave as interrupted except that the return status of the trap is retained.
-trap "command rm -rf '$OH_MY_COMMA_PATH/log/update.lock'; return" EXIT INT QUIT
+omc_delete_update_lock
+
 
 # Create or update .omc-update file if missing or malformed
 if ! source "${OH_MY_COMMA_PATH}/log/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
