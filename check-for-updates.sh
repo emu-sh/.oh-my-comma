@@ -47,20 +47,23 @@ function update_last_updated_file() {
     if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
         return
     fi
-
-    # Ask for confirmation before updating unless disabled
-    if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
-        emu update
-    else
-        # input sink to swallow all characters typed before the prompt
-        # and add a newline if there wasn't one after characters typed
-        read -r -p "Are You Sure? [Y/n] " option
-        [[ "$option" != $'\n' ]] && echo
-        case "$option" in
-            [yY$'\n']) emu update ;;
-            [nN]) update_last_updated_file ;;
-          *) update_last_updated_file ;;
-        esac
+    cd ${OH_MY_COMMA_PATH}
+    if [[ $(git fetch --dry-run) ]]; then
+      # Ask for confirmation before updating unless disabled
+      if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
+          emu update
+      else
+          # input sink to swallow all characters typed before the prompt
+          # and add a newline if there wasn't one after characters typed
+          read -r -p "[emu.sh] Update .oh-my-comma? [Y/n] " option
+          [[ "$option" != $'\n' ]] && echo
+          case "$option" in
+              [yY$'\n']) emu update ;;
+              [nN]) update_last_updated_file ;;
+            *) update_last_updated_file ;;
+          esac
+      fi
     fi
+    cd -
   unset -f current_epoch update_last_updated_file
 
