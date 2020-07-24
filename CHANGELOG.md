@@ -1,4 +1,4 @@
-Release 0.1.6 (2020-07-22)
+Release 0.1.6 (2020-07-23)
 =====
 * Add device command aliases: battery, settings, shutdown, reboot
 
