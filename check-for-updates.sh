@@ -22,7 +22,7 @@ function update_last_updated_file() {
             command rm -rf "$OH_MY_COMMA_PATH/log/update.lock"
         fi
     fi
- 
+
     # Check for lock directory
     if ! command mkdir "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null; then
         return
