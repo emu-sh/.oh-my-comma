@@ -12,6 +12,8 @@ function _updateohmycomma(){  # good to keep a backup in case python CLI is brok
   source ${OH_MY_COMMA_PATH}/emu.sh
 }
 
+source ${OH_MY_COMMA_PATH}/check-for-updates.sh
+
 function emu(){  # main wrapper function
   if $(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))' | grep -q -e '^2')
   then
