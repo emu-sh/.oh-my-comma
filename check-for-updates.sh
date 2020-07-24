@@ -50,7 +50,7 @@ function update_last_updated_file() {
         return
     fi
     cd ${OH_MY_COMMA_PATH}
-    if [ $OMC_LOCAL = $OMC_BASE ]; then
+    if [ $OMC_LOCAL != $OMC_BASE ]; then
       # Ask for confirmation before updating unless disabled
       if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
           emu update
@@ -65,6 +65,8 @@ function update_last_updated_file() {
             *) update_last_updated_file ;;
           esac
       fi
+    else
+      echo "[emu.sh] Checked for updates, and found none."
     fi
     cd -
   unset -f current_epoch update_last_updated_file
