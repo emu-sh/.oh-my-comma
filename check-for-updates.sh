@@ -31,6 +31,8 @@ if ! command mkdir "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null; then
     return
 fi
 
+# emu
+
 # Remove lock directory on exit. `return 1` is important for when trapping a SIGINT:
 #  The return status from the function is handled specially. If it is zero, the signal is
 #  assumed to have been handled, and execution continues normally. Otherwise, the shell
