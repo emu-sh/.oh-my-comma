@@ -8,7 +8,6 @@ fi
 OMC_EPOCH=$(date +%s)
 set +x
 function current_epoch() {
-    date +%s
     echo $(($OMC_EPOCH/60/60/24))
 }
 
