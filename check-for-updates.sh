@@ -73,4 +73,3 @@ if [ $OMC_LOCAL != $OMC_REMOTE ]; then
 fi
 cd -
 unset -f current_epoch update_last_updated_file
-
