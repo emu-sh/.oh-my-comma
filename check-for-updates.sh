@@ -57,15 +57,15 @@ function check_omc_update() {
         # input sink to swallow all characters typed before the prompt
         # and add a newline if there wasn't one after characters typed
         while read -t -k 1 option; do true; done
-        [[ "$option" != ($'\n'|"") ]] && echo
-
-        echo -n "[emu.sh] Would you like to update? [Y/n] "
-        read -r -k 1 option
-        [[ "$option" != $'\n' ]] && echo
-        case "$option" in
-            [yY$'\n']) emu update ;;
-            [nN]) update_last_updated_file ;;
-        esac
+        if [[ "$option" != $($'\n'|"") ]]; then
+          echo -n "[emu.sh] Would you like to update? [Y/n] "
+          read -r -k 1 option
+          [[ "$option" != $'\n' ]] && echo
+          case "$option" in
+              [yY$'\n']) emu update ;;
+              [nN]) update_last_updated_file ;;
+          esac
+        fi
     fi
   unset -f current_epoch update_last_updated_file
 }
