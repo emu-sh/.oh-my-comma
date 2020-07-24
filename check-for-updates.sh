@@ -26,7 +26,7 @@ function update_last_updated_file() {
 
     # Check for lock directory
     if ! command mkdir "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null; then
-        exit 0
+        return
     fi
 
     # Remove lock directory on exit. `return 1` is important for when trapping a SIGINT:
@@ -38,14 +38,14 @@ function update_last_updated_file() {
     # Create or update .omc-update file if missing or malformed
     if ! source "${OH_MY_COMMA_PATH}/log/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
         update_last_updated_file
-        exit 0
+        return
     fi
 
     # Number of days before trying to update again
     epoch_target=${OMC_AUTOUPDATE_DAYS:-7}
     # Test if enough time has passed until the next update
     if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
-        exit 0
+        return
     fi
 
     # Ask for confirmation before updating unless disabled
@@ -66,3 +66,4 @@ function update_last_updated_file() {
         fi
     fi
   unset -f current_epoch update_last_updated_file
+
