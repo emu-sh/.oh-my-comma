@@ -17,7 +17,7 @@ function update_last_updated_file() {
 
 # Remove lock directory if older than a day
 if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
-    if (( (mtime + 120) < OMC_EPOCH )); then
+    if (( (mtime + 3600 * 24) < OMC_EPOCH )); then
         command rm -rf "$OH_MY_COMMA_PATH/log/update.lock"
     fi
 fi
