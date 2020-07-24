@@ -16,9 +16,6 @@ function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" >! "${OH_MY_COMMA}/log/.omc-update"
 }
 
-function check_omc_update() {
-
-    local epoch_target mtime option LAST_EPOCH
 
     # Remove lock directory if older than a day
     if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
@@ -29,7 +26,7 @@ function check_omc_update() {
 
     # Check for lock directory
     if ! command mkdir "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null; then
-        return
+        exit 0
     fi
 
     # Remove lock directory on exit. `return 1` is important for when trapping a SIGINT:
@@ -41,14 +38,14 @@ function check_omc_update() {
     # Create or update .omc-update file if missing or malformed
     if ! source "${OH_MY_COMMA_PATH}/log/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
         update_last_updated_file
-        return
+        exit 0
     fi
 
     # Number of days before trying to update again
     epoch_target=${OMC_AUTOUPDATE_DAYS:-7}
     # Test if enough time has passed until the next update
     if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
-        return
+        exit 0
     fi
 
     # Ask for confirmation before updating unless disabled
@@ -69,5 +66,3 @@ function check_omc_update() {
         fi
     fi
   unset -f current_epoch update_last_updated_file
-}
-check_omc_update
