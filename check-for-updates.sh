@@ -60,6 +60,7 @@ if [ $OMC_LOCAL != $OMC_REMOTE ]; then
   if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
       emu update
   else
+      echo $(git status | head -n 2 | tail -n 1)
       # input sink to swallow all characters typed before the prompt
       # and add a newline if there wasn't one after characters typed
       read -r -p "[emu.sh] Update .oh-my-comma? [Y/n] " option
