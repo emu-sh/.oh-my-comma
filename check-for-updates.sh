@@ -15,6 +15,7 @@ function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" >! "${OH_MY_COMMA}/log/.omc-update"
 }
 
+funciton check_omc_update() {
 
     local epoch_target mtime option LAST_EPOCH
 
@@ -66,6 +67,6 @@ function update_last_updated_file() {
             [nN]) update_last_updated_file ;;
         esac
     fi
-
-
-unset -f current_epoch update_last_updated_file
+  unset -f current_epoch update_last_updated_file
+}
+check_omc_update()
