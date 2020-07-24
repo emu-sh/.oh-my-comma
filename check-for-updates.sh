@@ -69,4 +69,4 @@ function check_omc_update() {
     fi
   unset -f current_epoch update_last_updated_file
 }
-check_omc_update()
+check_omc_update
