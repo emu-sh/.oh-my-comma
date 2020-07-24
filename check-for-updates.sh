@@ -21,7 +21,7 @@ if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
         command rm -rf "$OH_MY_COMMA_PATH/log/update.lock"
     fi
 fi
-
+ 
 # Check for lock directory
 if ! command mkdir "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null; then
     return
