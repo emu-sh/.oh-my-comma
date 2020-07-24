@@ -43,7 +43,7 @@ function update_last_updated_file() {
     # Number of days before trying to update again
     epoch_target=${OMC_AUTOUPDATE_DAYS:-7}
     # Test if enough time has passed until the next update
-    if (( ( $(current_epoch) - $LAST_EPOCH ) < $epoch_target )); then
+    if (( ( $(current_epoch) - LAST_EPOCH ) < $epoch_target )); then
         return
     fi
     cd ${OH_MY_COMMA_PATH}
