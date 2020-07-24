@@ -15,6 +15,9 @@ function update_last_updated_file() {
     echo "LAST_EPOCH=$(current_epoch)" > "${OH_MY_COMMA_PATH}/log/.omc-update"
 }
 
+function omc_delete_update_lock() {
+  rm -rf '$OH_MY_COMMA_PATH/log/update.lock' || return 1
+}
 # Remove lock directory if older than a day
 if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
     if (( (mtime + 3600 * 24) < OMC_EPOCH )); then
@@ -31,7 +34,8 @@ fi
 #  The return status from the function is handled specially. If it is zero, the signal is
 #  assumed to have been handled, and execution continues normally. Otherwise, the shell
 #  will behave as interrupted except that the return status of the trap is retained.
-trap "command rm -rf '$OH_MY_COMMA_PATH/log/update.lock'; return" EXIT INT QUIT
+omc_delete_update_lock
+
 
 # Create or update .omc-update file if missing or malformed
 if ! source "${OH_MY_COMMA_PATH}/log/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
@@ -58,7 +62,8 @@ if [ $OMC_LOCAL != $OMC_REMOTE ]; then
   if [[ "$OMC_DISABLE_UPDATE_PROMPT" = true ]]; then
       emu update
   else
-      echo "[emu.sh] Current .oh-my-comma branch: $(git branch | head -n 1)"
+      echo "[emu.sh] Current OMC branch:"
+      echo "$(git branch | head -n 1)"
       echo "$(git status | head -n 2 | tail -n 1)"
       # input sink to swallow all characters typed before the prompt
       # and add a newline if there wasn't one after characters typed
