@@ -13,7 +13,7 @@ function current_epoch() {
 }
 
 function update_last_updated_file() {
-    echo "LAST_EPOCH=$(current_epoch)" >! "${OH_MY_COMMA}/log/.omc-update"
+    echo "LAST_EPOCH=$(current_epoch)" > "${OH_MY_COMMA_PATH}/log/.omc-update"
 }
 
 
@@ -37,8 +37,8 @@ function update_last_updated_file() {
 
     # Create or update .omc-update file if missing or malformed
     if ! source "${OH_MY_COMMA_PATH}/log/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
+        touch ${OH_MY_COMMA_PATH}/log/.omc-update
         update_last_updated_file
-        return
     fi
 
     # Number of days before trying to update again
