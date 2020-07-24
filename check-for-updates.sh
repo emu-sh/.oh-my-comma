@@ -16,7 +16,7 @@ function update_last_updated_file() {
 }
 
 function omc_delete_update_lock() {
-  trap "command rm -rf '$OH_MY_COMMA_PATH/log/update.lock'; return 1" EXIT INT QUIT
+  rm -rf '$OH_MY_COMMA_PATH/log/update.lock' || return 1
 }
 # Remove lock directory if older than a day
 if mtime=$(date +%s -r "$OH_MY_COMMA_PATH/log/update.lock" 2>/dev/null); then
