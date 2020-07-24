@@ -67,9 +67,9 @@ if [ $OMC_LOCAL != $OMC_REMOTE ]; then
       read -r -p "[emu.sh] Update .oh-my-comma? [Y/n] " option
       [[ "$option" != $'\n' ]] && echo
       case "$option" in
-          [yY$'\n']) emu update ;;
+          [yY$'\n']) emu update && update_last_updated_file ;;
           [nN]) update_last_updated_file ;;
-        *) update_last_updated_file ;;
+        *) emu update ;;
       esac
   fi
 fi
