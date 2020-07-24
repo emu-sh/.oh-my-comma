@@ -32,7 +32,7 @@ function update_last_updated_file() {
     #  The return status from the function is handled specially. If it is zero, the signal is
     #  assumed to have been handled, and execution continues normally. Otherwise, the shell
     #  will behave as interrupted except that the return status of the trap is retained.
-    trap "command rm -rf '$OH_MY_COMMA_PATH/log/update.lock'; return 1" EXIT INT QUIT
+    trap "command rm -rf '$OH_MY_COMMA_PATH/log/update.lock'; return" EXIT INT QUIT
 
     # Create or update .omc-update file if missing or malformed
     if ! source "${OH_MY_COMMA_PATH}/log/.omc-update" 2>/dev/null || [[ -z "$LAST_EPOCH" ]]; then
