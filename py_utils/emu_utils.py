@@ -38,7 +38,7 @@ class BaseFunctions:
     max_cmd = max([len(_c) for _c in self.commands]) + 1
     for idx, cmd in enumerate(self.commands):
       desc = COLORS.CYAN + self.commands[cmd].description
-      print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
+      print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format('hi '+cmd + ':', desc))
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
         if self._help(cmd, show_description=False, leading='  '):
