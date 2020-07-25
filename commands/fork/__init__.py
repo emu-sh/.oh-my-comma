@@ -186,9 +186,9 @@ class Fork(CommandBase):
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
 
-    r = check_output(['git', '-C', OPENPILOT_PATH, 'fetch', username])
-    if not r.success:
-      error(r.output)
+    r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
+    if not r:
+      error('Error while fetching remote, please try again')
       return
     self.__add_fork(username)
 
