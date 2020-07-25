@@ -312,7 +312,7 @@ class Fork(CommandBase):
     if self.fork_params.get('setup_complete'):
       if os.path.exists(OPENPILOT_PATH):
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
-        if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly
+        if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly todo: check all forks exist as remotes
           return True
       self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
       self.fork_params.reset()
@@ -352,3 +352,4 @@ class Fork(CommandBase):
     self.fork_params.put('current_fork', COMMA_ORIGIN_NAME)
     self.fork_params.put('current_branch', COMMA_DEFAULT_BRANCH)
     self.__add_fork(COMMA_ORIGIN_NAME)
+    return True
