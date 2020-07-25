@@ -227,9 +227,9 @@ class Fork(CommandBase):
     remote_branch = f'{username}/{branch}'
     if branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
-      if not r.success:
-        error(r.output)
+      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
+      if not r:
+        error('Error while checking out branch, please try again')
         return
       self.__add_branch(username, branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
     else:  # already installed branch, checking out fork_branch from remote_branch
