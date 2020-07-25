@@ -70,8 +70,8 @@ class CommandBase(BaseFunctions):
 
     commands = self.commands[cmd].commands
     cmds_to_print = []
+    print('here?')
     if commands is not None and len(commands) > 0:
-      print('here?')
       print(leading + '{}>>  Commands 💻:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
       for cmd in commands:
         cmds_to_print.append(leading + COLORS.FAIL + '  - {}: {}'.format(cmd, success(commands[cmd].description, ret=True)) + COLORS.ENDC)
