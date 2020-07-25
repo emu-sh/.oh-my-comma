@@ -316,7 +316,7 @@ class Fork(CommandBase):
           return True
       self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
       self.fork_params.reset()
-    warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
+      warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
 
     info('To set up emu fork management we will clone commaai/openpilot into {}'.format(OPENPILOT_PATH))
     info('Confirm you would like to continue')
