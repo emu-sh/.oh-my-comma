@@ -44,6 +44,7 @@ class CommandBase(BaseFunctions):
     flags = self.commands[cmd].flags
 
     flags_to_print = []
+    print('here?')
     if flags is not None and len(flags) > 0:
       has_extra_info = True
       usage_req = [f.aliases[0] for f in flags if f.required and len(f.aliases) == 1]  # if required
@@ -67,10 +68,10 @@ class CommandBase(BaseFunctions):
           aliases += COLORS.RED + ' (optional)' + COLORS.WARNING
         flags_to_print.append(leading + COLORS.WARNING + '  - {}: {}'.format(aliases, flag.description) + COLORS.ENDC)
       print('\n'.join(flags_to_print))
+    print('here?')
 
     commands = self.commands[cmd].commands
     cmds_to_print = []
-    print('here?')
     if commands is not None and len(commands) > 0:
       print(leading + '{}>>  Commands 💻:{}'.format(COLORS.OKGREEN, COLORS.ENDC))
       for cmd in commands:
