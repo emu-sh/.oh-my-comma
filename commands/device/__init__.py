@@ -11,7 +11,8 @@ class Device(CommandBase):
 
     self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
                      'reboot': Command(description='⚡ safely reboot your device'),
-                     'shutdown': Command(description='🔌 safely shutdown your device'),
+                     'shutdown': Command(description='🔌 safely shutdown your device',
+                                         flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot the device', dtype='bool')]),
                      'settings': Command(description='⚙️ open the Settings app')}
 
   def _settings(self):
@@ -23,6 +24,10 @@ class Device(CommandBase):
     success('👋 See you in a bit!')
 
   def _shutdown(self):
+    flags, e = self.parse_flags(self.commands['switch'].parser)
+    if e is None and flags.reboot:
+      self._reboot()
+      return
     check_output('am start -n android/com.android.internal.app.ShutdownActivity')
     success('🌙 Goodnight!')
 
