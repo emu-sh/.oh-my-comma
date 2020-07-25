@@ -314,7 +314,7 @@ class Fork(CommandBase):
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
         if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly todo: check all forks exist as remotes
           return True
-      self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+      self.fork_params.put('setup_complete', False)  # renamed origin -> commaai does not exist, restart setup
       self.fork_params.reset()
       warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
 
