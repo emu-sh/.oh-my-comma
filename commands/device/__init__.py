@@ -24,7 +24,7 @@ class Device(CommandBase):
     success('👋 See you in a bit!')
 
   def _shutdown(self):
-    flags, e = self.parse_flags(self.commands['switch'].parser)
+    flags, e = self.parse_flags(self.commands['shutdown'].parser)
     if e is None and flags.reboot:
       self._reboot()
       return
