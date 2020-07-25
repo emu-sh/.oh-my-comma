@@ -36,6 +36,7 @@ class CommandBase(BaseFunctions):
       return None, e
 
   def _help(self, cmd, show_description=True, leading=''):
+    print('here?')
     has_extra_info = False
     description = self.commands[cmd].description
     if show_description:
