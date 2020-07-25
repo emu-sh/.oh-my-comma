@@ -41,9 +41,8 @@ class BaseFunctions:
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(cmd + ':', desc))
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
-        self._help(cmd, show_description=False, leading='  ')
-        print('here')
-        print()
+        if self._help(cmd, show_description=False, leading='  '):
+          print()  # only add newline when there's more information to sift through
     print(COLORS.ENDC, end='')
 
   def next_arg(self, lower=True, ingest=True):
