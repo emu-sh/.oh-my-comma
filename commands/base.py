@@ -36,7 +36,6 @@ class CommandBase(BaseFunctions):
       return None, e
 
   def _help(self, cmd, show_description=True, leading=''):
-    print('here?')
     has_extra_info = False
     description = self.commands[cmd].description
     if show_description:
@@ -45,7 +44,6 @@ class CommandBase(BaseFunctions):
     flags = self.commands[cmd].flags
 
     flags_to_print = []
-    print('here?')
     if flags is not None and len(flags) > 0:
       has_extra_info = True
       usage_req = [f.aliases[0] for f in flags if f.required and len(f.aliases) == 1]  # if required
@@ -69,7 +67,6 @@ class CommandBase(BaseFunctions):
           aliases += COLORS.RED + ' (optional)' + COLORS.WARNING
         flags_to_print.append(leading + COLORS.WARNING + '  - {}: {}'.format(aliases, flag.description) + COLORS.ENDC)
       print('\n'.join(flags_to_print))
-    print('here?')
 
     commands = self.commands[cmd].commands
     cmds_to_print = []
