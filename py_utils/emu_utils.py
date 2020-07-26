@@ -38,7 +38,9 @@ class BaseFunctions:
     max_cmd = max([len(_c) for _c in self.commands]) + 1
     for idx, cmd in enumerate(self.commands):
       desc = COLORS.CYAN + self.commands[cmd].description
-      print_cmd = 'emu {} {}'.format(self.name, cmd)
+      print_cmd = '{} {}'.format(self.name, cmd)
+      if self.name != 'emu':
+        print_cmd = 'emu {}'.format(print_cmd)
       print(COLORS.OKGREEN + ('- {:<%d} {}' % max_cmd).format(print_cmd + ':', desc))
       if hasattr(self, '_help'):
         # leading is for better differentiating between the different commands
