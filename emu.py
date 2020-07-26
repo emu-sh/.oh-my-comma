@@ -16,6 +16,7 @@ DEBUG = not path.exists('/data/params/d')
 
 class Emu(BaseFunctions):
   def __init__(self, args):
+    self.name = 'emu'
     self.args = args
     self.commands = {cmd.name: cmd for cmd in EMU_COMMANDS}
     self.parse()
