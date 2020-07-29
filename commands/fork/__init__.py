@@ -186,9 +186,9 @@ class Fork(CommandBase):
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
 
-    r = check_output(['git', '-C', OPENPILOT_PATH, 'fetch', username])
-    if not r.success:
-      error(r.output)
+    r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
+    if not r:
+      error('Error while fetching remote, please try again')
       return
     self.__add_fork(username)
 
@@ -227,9 +227,9 @@ class Fork(CommandBase):
     remote_branch = f'{username}/{branch}'
     if branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
-      if not r.success:
-        error(r.output)
+      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
+      if not r:
+        error('Error while checking out branch, please try again')
         return
       self.__add_branch(username, branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
     else:  # already installed branch, checking out fork_branch from remote_branch
@@ -312,11 +312,11 @@ class Fork(CommandBase):
     if self.fork_params.get('setup_complete'):
       if os.path.exists(OPENPILOT_PATH):
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
-        if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly
+        if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly todo: check all forks exist as remotes
           return True
-      self.fork_params.put('setup_complete', False)  # some error with base origin, reclone
+      self.fork_params.put('setup_complete', False)  # renamed origin -> commaai does not exist, restart setup
       self.fork_params.reset()
-    warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
+      warning('There was an error with your clone of commaai/openpilot, restarting initialization!')
 
     info('To set up emu fork management we will clone commaai/openpilot into {}'.format(OPENPILOT_PATH))
     info('Confirm you would like to continue')
@@ -352,3 +352,4 @@ class Fork(CommandBase):
     self.fork_params.put('current_fork', COMMA_ORIGIN_NAME)
     self.fork_params.put('current_branch', COMMA_DEFAULT_BRANCH)
     self.__add_fork(COMMA_ORIGIN_NAME)
+    return True

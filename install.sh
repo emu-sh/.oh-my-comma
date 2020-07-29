@@ -28,7 +28,7 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 GIT_BRANCH_NAME=master
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
-OMC_VERSION=0.1.7
+OMC_VERSION=0.1.8
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then

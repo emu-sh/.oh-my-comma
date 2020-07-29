@@ -36,6 +36,7 @@ class CommandBase(BaseFunctions):
       return None, e
 
   def _help(self, cmd, show_description=True, leading=''):
+    has_extra_info = False
     description = self.commands[cmd].description
     if show_description:
       print('{}>>  Description 📚: {}{}'.format(COLORS.CYAN, description, COLORS.ENDC))
@@ -44,6 +45,7 @@ class CommandBase(BaseFunctions):
 
     flags_to_print = []
     if flags is not None and len(flags) > 0:
+      has_extra_info = True
       usage_req = [f.aliases[0] for f in flags if f.required and len(f.aliases) == 1]  # if required
       usage_non_req = [f.aliases[0] for f in flags if not f.required and len(f.aliases) == 1]  # if non-required non-positional
       usage_flags = [f.aliases for f in flags if not f.required and len(f.aliases) > 1 or f.aliases[0].startswith('-')]  # if flag
@@ -73,6 +75,7 @@ class CommandBase(BaseFunctions):
       for cmd in commands:
         cmds_to_print.append(leading + COLORS.FAIL + '  - {}: {}'.format(cmd, success(commands[cmd].description, ret=True)) + COLORS.ENDC)
       print('\n'.join(cmds_to_print))
+    return has_extra_info
 
 class Flag:
   def __init__(self, aliases, description, required=False, dtype='bool'):
