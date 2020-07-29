@@ -1,6 +1,7 @@
 Release 0.1.8 (2020-07-29)
 =====
 
+* Run user's switch command after fork management setup
 * More verbose fork switching, shows git output
 * Only print newline when more information about command is available to better differentiate between commands
 
