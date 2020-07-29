@@ -1,3 +1,9 @@
+Release 0.1.8 (2020-07-29)
+=====
+
+* More verbose fork switching, shows git output
+* Only print newline when more information about command is available to better differentiate between commands
+
 Release 0.1.7 (2020-07-24)
 =====
 
