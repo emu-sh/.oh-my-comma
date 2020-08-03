@@ -8,7 +8,7 @@ This tool was created by [Alice Knag](https://github.com/AskAlice) - `@emu#6969`
 If you have any questions about the development process, or have any ideas you want to see happen, check out [CONTRIBUTING.md](CONTRIBUTING.md) and/or DM one of us on Discord or ask in #custom-forks
 
 <p align="center">
-  <a href="https://emu.sh/demo.mp4">
+  <a href="https://i.imgur.com/Bbr1sPX.mp4">
   <img src="https://thumbs.gfycat.com/LimpDeadIaerismetalmark-size_restricted.gif" alt="click for full size">
   <br/>Click for Full Size</a>
 </p>
