@@ -277,6 +277,13 @@ class Fork(CommandBase):
       print('nothing to prune 2')
       return
     branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
+
+    info('Deleted remote branches detected:')
+    for b in branches_to_prune:
+      print('  - {}'.format(b))
+    warning('Would you like to delete them locally?')
+    if is_affirmative():
+      print('deleting!')
     print(branches_to_prune)
 
   def __get_remote_branches(self, r):
