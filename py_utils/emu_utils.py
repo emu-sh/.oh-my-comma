@@ -136,7 +136,7 @@ def kill(procname):
 
 def is_affirmative():
   i = None
-  print(COLORS.INFO, end='')
+  print(COLORS.PROMPT, end='')
   while i not in ['y', 'n', 'yes', 'no', 'sure', '']:
     i = input('[Y/n]: ').lower().strip()
   print(COLORS.ENDC)
