@@ -268,7 +268,7 @@ class Fork(CommandBase):
 
   def __prune_remote_branches(self, username):  # remove deleted remote branches locally
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
-    print(r.output)
+    # print(r.output)
     if r.output == '':  # nothing to prune
       print('nothing to prune')
       return
@@ -278,9 +278,9 @@ class Fork(CommandBase):
       return
     branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
 
-    print(COLORS.CYAN + 'Deleted remote branches detected:' + COLORS.ENDC)
+    print(COLORS.FAIL + 'Deleted remote branches detected:' + COLORS.ENDC)
     for b in branches_to_prune:
-      print(COLORS.FAIL + '  - {}'.format(b) + COLORS.ENDC)
+      print(COLORS.CYAN + '  - {}'.format(b) + COLORS.ENDC)
     print()
     warning('Would you like to delete them locally?')
     if is_affirmative():
