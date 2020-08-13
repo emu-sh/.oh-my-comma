@@ -273,6 +273,9 @@ class Fork(CommandBase):
       print('nothing to prune')
       return
     branches_to_prune = [b.strip() for b in r.output.split('\n') if 'would prune' in b]
+    if not len(branches_to_prune):  # todo: not sure if this would ever be needed
+      print('nothing to prune 2')
+      return
     branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
     print(branches_to_prune)
 
