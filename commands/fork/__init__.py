@@ -192,6 +192,7 @@ class Fork(CommandBase):
       return
     self.__add_fork(username)
 
+    # check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username])  # remove non-existing remote branches locally
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
     if remote_branches is None:
@@ -272,6 +273,7 @@ class Fork(CommandBase):
         print(' - {}{}'.format(cb, COLORS.ENDC))
 
   def __get_remote_branches(self, r):
+    print('remote: {}'.format(r))
     # get remote's branches to verify from output of command in parent function
     if not r.success:
       error(r.output)
@@ -282,6 +284,7 @@ class Fork(CommandBase):
       remote_branches = []
       for b in remote_branches_txt[1:]:  # remove first useless line
         b = b.replace('tracked', '').strip()
+        print(b)
         if ' ' in b:  # end of branches
           break
         remote_branches.append(b)
