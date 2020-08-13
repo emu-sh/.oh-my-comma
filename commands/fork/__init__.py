@@ -273,9 +273,8 @@ class Fork(CommandBase):
       print('nothing to prune')
       return
     branches_to_prune = [b.strip() for b in r.output.split('\n') if 'would prune' in b]
-    branches_to_prune = [b.replace('* [would prune] ', '') for b in branches_to_prune]
+    branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
     print(branches_to_prune)
-
 
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
