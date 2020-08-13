@@ -272,7 +272,8 @@ class Fork(CommandBase):
     if r.output == '':  # nothing to prune
       print('nothing to prune')
       return
-    branches_to_prune = [b for b in r.output.split('\n') if 'would prune' in b]
+    branches_to_prune = [b.strip() for b in r.output.split('\n') if 'would prune' in b]
+    branches_to_prune = [b.replace('* [would prune] ', '') for b in branches_to_prune]
     print(branches_to_prune)
 
 
