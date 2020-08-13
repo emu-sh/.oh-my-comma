@@ -214,6 +214,8 @@ class Fork(CommandBase):
       branch = flags.branch
       if remote_branches is None:
         return
+      print(branch)
+      print(remote_branches)
       if branch not in remote_branches:
         error('The branch you specified does not exist!')
         self.__show_similar_branches(branch, remote_branches)  # if possible
