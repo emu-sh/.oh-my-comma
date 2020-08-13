@@ -280,8 +280,8 @@ class Fork(CommandBase):
 
     info('Deleted remote branches detected:')
     for b in branches_to_prune:
-      print('  - {}'.format(b))
-    warning('Would you like to delete them locally?')
+      print(COLORS.FAIL + '  - {}'.format(b) + COLORS.ENDC)
+    error('Would you like to delete them locally?')
     if is_affirmative():
       print('deleting!')
     print(branches_to_prune)
