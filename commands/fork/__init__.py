@@ -278,7 +278,7 @@ class Fork(CommandBase):
       print(COLORS.CYAN + '  - {}'.format(b) + COLORS.ENDC)
     warning('\nWould you like to delete them locally?')
     if is_affirmative():
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username])  # todo: uncomment when done
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username])
       if r.success:
         success('Pruned local branches successfully!')
       else:
