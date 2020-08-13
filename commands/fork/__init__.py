@@ -13,7 +13,7 @@ COMMA_DEFAULT_BRANCH = 'release2'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
-REMOTE_BRANCHES_START = 'Remote branches:'
+REMOTE_BRANCHES_START = 'Remote branches:\n'
 REMOTE_BRANCH_START = 'Remote branch:'
 
 
@@ -300,12 +300,14 @@ class Fork(CommandBase):
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
       remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
       remote_branches = []
-      for b in remote_branches_txt[1:]:  # remove first useless line
+      for b in remote_branches_txt:
         b = b.replace('tracked', '').strip()
-        if ' ' in b:  # end of branches
+        if 'stale' in b:  # support stale/to-be-pruned branches
+          b = b.split(' ')[0].split('/')[-1]
+        if ' ' in b or b == '':  # end of branches
           break
         remote_branches.append(b)
-    elif REMOTE_BRANCH_START in r.output:  # remote has single branch
+    elif REMOTE_BRANCH_START in r.output:  # remote has single branch, shouldn't need to handle stale here
       start_remote_branch = r.output.index(REMOTE_BRANCH_START)
       remote_branches = r.output[start_remote_branch + len(REMOTE_BRANCH_START):].split('\n')
       remote_branches = [b.replace('tracked', '').strip() for b in remote_branches if b.strip() != '' and 'tracked' in b]
