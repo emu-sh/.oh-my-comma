@@ -268,7 +268,7 @@ class Fork(CommandBase):
 
   def __prune_remote_branches(self, username):  # remove deleted remote branches locally
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
-    print(r)
+    print(r.output)
 
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
