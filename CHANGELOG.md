@@ -1,3 +1,9 @@
+Release 0.1.9 (2020-08-12)
+=====
+
+* Fix "branch you specified does not exist" error due to deleted remote branches
+  * Also add a prompt to prune the local branches that have deleted on the remote
+
 Release 0.1.8 (2020-07-29)
 =====
 

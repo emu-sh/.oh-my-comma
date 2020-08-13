@@ -13,7 +13,7 @@ COMMA_DEFAULT_BRANCH = 'release2'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
-REMOTE_BRANCHES_START = 'Remote branches:'
+REMOTE_BRANCHES_START = 'Remote branches:\n'
 REMOTE_BRANCH_START = 'Remote branch:'
 
 
@@ -148,7 +148,7 @@ class Fork(CommandBase):
     if flags.username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
-        info('No username specified, using current fork: {}'.format(COLORS.SUCCESS + _current_fork + COLORS.ENDC))
+        info('Assuming current fork for username: {}'.format(COLORS.SUCCESS + _current_fork + COLORS.ENDC))
         flags.username = _current_fork
       else:
         error('Current fork is unknown, please switch to a fork first before switching between branches!')
@@ -182,9 +182,9 @@ class Fork(CommandBase):
 
     # fork has been added as a remote, switch to it
     if fork_in_params:
-      info('Fetching {}\'s latest changes...'.format(flags.username))
+      info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
     else:
-      info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
+      info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
 
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     if not r:
@@ -192,6 +192,7 @@ class Fork(CommandBase):
       return
     self.__add_fork(username)
 
+    self.__prune_remote_branches(username)
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
     if remote_branches is None:
@@ -208,17 +209,13 @@ class Fork(CommandBase):
       else:
         fork_branch = '{}_{}'.format(username, default_remote_branch)
         branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
-
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
       branch = flags.branch
-      if remote_branches is None:
-        return
       if branch not in remote_branches:
         error('The branch you specified does not exist!')
         self.__show_similar_branches(branch, remote_branches)  # if possible
         return
-
     else:
       error('Error with branch!')
       return
@@ -269,6 +266,25 @@ class Fork(CommandBase):
           cb = COLORS.CYAN + cb
         print(' - {}{}'.format(cb, COLORS.ENDC))
 
+  def __prune_remote_branches(self, username):  # remove deleted remote branches locally
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
+    if r.output == '':  # nothing to prune
+      return
+    branches_to_prune = [b.strip() for b in r.output.split('\n') if 'would prune' in b]
+    branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
+
+    error('\nDeleted remote branches detected:')
+    for b in branches_to_prune:
+      print(COLORS.CYAN + '  - {}'.format(b) + COLORS.ENDC)
+    warning('\nWould you like to delete them locally?')
+    if is_affirmative():
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username])
+      if r.success:
+        success('Pruned local branches successfully!')
+      else:
+        error('Please try again, something went wrong:')
+        print(r.output)
+
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
     if not r.success:
@@ -278,12 +294,14 @@ class Fork(CommandBase):
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
       remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
       remote_branches = []
-      for b in remote_branches_txt[1:]:  # remove first useless line
+      for b in remote_branches_txt:
         b = b.replace('tracked', '').strip()
-        if ' ' in b:  # end of branches
+        if 'stale' in b:  # support stale/to-be-pruned branches
+          b = b.split(' ')[0].split('/')[-1]
+        if ' ' in b or b == '':  # end of branches
           break
         remote_branches.append(b)
-    elif REMOTE_BRANCH_START in r.output:  # remote has single branch
+    elif REMOTE_BRANCH_START in r.output:  # remote has single branch, shouldn't need to handle stale here
       start_remote_branch = r.output.index(REMOTE_BRANCH_START)
       remote_branches = r.output[start_remote_branch + len(REMOTE_BRANCH_START):].split('\n')
       remote_branches = [b.replace('tracked', '').strip() for b in remote_branches if b.strip() != '' and 'tracked' in b]
