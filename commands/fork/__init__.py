@@ -278,11 +278,10 @@ class Fork(CommandBase):
       return
     branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
 
-    print(COLORS.FAIL + 'Deleted remote branches detected:' + COLORS.ENDC)
+    print('\n' + COLORS.FAIL + 'Deleted remote branches detected:' + COLORS.ENDC)
     for b in branches_to_prune:
       print(COLORS.CYAN + '  - {}'.format(b) + COLORS.ENDC)
-    print()
-    warning('Would you like to delete them locally?')
+    warning('\nWould you like to delete them locally?')
     if is_affirmative():
       print('deleting!')
     print(branches_to_prune)
