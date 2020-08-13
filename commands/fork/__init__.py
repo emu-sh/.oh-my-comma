@@ -182,9 +182,9 @@ class Fork(CommandBase):
 
     # fork has been added as a remote, switch to it
     if fork_in_params:
-      info('Fetching {}\'s latest changes...'.format(flags.username))
+      info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
     else:
-      info('Fetching {}\'s fork, this may take a sec...'.format(flags.username))
+      info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
 
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     if not r:
