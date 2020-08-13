@@ -292,7 +292,6 @@ class Fork(CommandBase):
 
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
-    print(r.output)
     if not r.success:
       error(r.output)
       return None, None
