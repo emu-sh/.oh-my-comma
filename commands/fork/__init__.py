@@ -209,19 +209,13 @@ class Fork(CommandBase):
       else:
         fork_branch = '{}_{}'.format(username, default_remote_branch)
         branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
-
     elif len(flags.branch) > 0:
       fork_branch = f'{username}_{flags.branch}'
       branch = flags.branch
-      if remote_branches is None:
-        return
-      print(branch)
-      print(remote_branches)
       if branch not in remote_branches:
         error('The branch you specified does not exist!')
         self.__show_similar_branches(branch, remote_branches)  # if possible
         return
-
     else:
       error('Error with branch!')
       return
