@@ -192,7 +192,7 @@ class Fork(CommandBase):
       return
     self.__add_fork(username)
 
-    # check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username])  # remove deleted remote branches locally
+    self.__prune_remote_branches(username)
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
     if remote_branches is None:
@@ -265,6 +265,10 @@ class Fork(CommandBase):
         else:
           cb = COLORS.CYAN + cb
         print(' - {}{}'.format(cb, COLORS.ENDC))
+
+  def __prune_remote_branches(self, username):  # remove deleted remote branches locally
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
+    print(r)
 
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
