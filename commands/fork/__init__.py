@@ -8,8 +8,8 @@ from py_utils.emu_utils import run, error, success, warning, info, is_affirmativ
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
-COMMA_ORIGIN_NAME = 'commaai'
-COMMA_DEFAULT_BRANCH = 'release2'
+# COMMA_ORIGIN_NAME = 'commaai'
+# COMMA_DEFAULT_BRANCH = 'release2'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
@@ -63,6 +63,12 @@ class ForkParams:
       f.write(json.dumps(self.params, indent=2))
 
 
+class RemoteAlias:
+  def __init__(self, aliases, repo_name):
+    self.aliases = aliases
+    self.repo_name = repo_name
+
+
 class Fork(CommandBase):
   def __init__(self):
     super().__init__()
@@ -70,7 +76,9 @@ class Fork(CommandBase):
     self.description = '🍴 Manage installed forks, or install a new one'
 
     self.fork_params = ForkParams()
-    self.stock_aliases = ['stock', COMMA_ORIGIN_NAME, 'origin']
+    # self.stock_aliases = ['stock', COMMA_ORIGIN_NAME, 'origin']
+    self.remote_aliases = {'commaai': RemoteAlias(['stock', 'origin'], 'openpilot'),
+                           'dragonpilot-community': RemoteAlias(['dragonpilot'], 'dragonpilot')}
 
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
@@ -130,6 +138,11 @@ class Fork(CommandBase):
       for branch in installed_branches:
         print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
 
+  def __is_username_alias(self, username):
+    for remote, obj in self.remote_aliases.items():
+      if username in obj.aliases:
+        return remote, obj.repo_name
+    return None, None
 
   def _switch(self):
     if not self._init():
@@ -155,9 +168,11 @@ class Fork(CommandBase):
         return
 
     username = flags.username.lower()
-    if username in self.stock_aliases:
-      username = COMMA_ORIGIN_NAME
-      flags.username = COMMA_ORIGIN_NAME
+    alias_remote, alias_repo_name = self.__is_username_alias(username)
+    if alias_remote is not None:  # user entered an alias (ex. stock, dragonpilot)
+      print('{} is alias: {}'.format(username, (alias_remote, alias_repo_name)))
+      username = alias_remote
+      flags.username = alias_remote
 
     installed_forks = self.fork_params.get('installed_forks')
     fork_in_params = True
