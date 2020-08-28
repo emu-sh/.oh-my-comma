@@ -8,8 +8,8 @@ from py_utils.emu_utils import run, error, success, warning, info, is_affirmativ
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
-# COMMA_ORIGIN_NAME = 'commaai'
-# COMMA_DEFAULT_BRANCH = 'release2'
+COMMA_ORIGIN_NAME = 'commaai'
+COMMA_DEFAULT_BRANCH = 'release2'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
