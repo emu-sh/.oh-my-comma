@@ -8,8 +8,8 @@ from py_utils.emu_utils import run, error, success, warning, info, is_affirmativ
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
-COMMA_ORIGIN_NAME = 'commaai'
-COMMA_DEFAULT_BRANCH = 'release2'
+# COMMA_ORIGIN_NAME = 'commaai'
+# COMMA_DEFAULT_BRANCH = 'release2'
 
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
@@ -63,10 +63,12 @@ class ForkParams:
       f.write(json.dumps(self.params, indent=2))
 
 
-class RemoteAlias:
-  def __init__(self, aliases, repo_name):
-    self.aliases = aliases
-    self.repo_name = repo_name
+class RemoteInfo:
+  def __init__(self, username, fork_name, username_aliases, default_branch):
+    self.username = username
+    self.fork_name = fork_name
+    self.username_aliases = username_aliases
+    self.default_branch = default_branch
 
 
 class Fork(CommandBase):
@@ -77,8 +79,8 @@ class Fork(CommandBase):
 
     self.fork_params = ForkParams()
     # self.stock_aliases = ['stock', COMMA_ORIGIN_NAME, 'origin']
-    self.remote_aliases = {'commaai': RemoteAlias(['stock', 'origin'], 'openpilot'),
-                           'dragonpilot-community': RemoteAlias(['dragonpilot'], 'dragonpilot')}
+    self.remote_default_info = [RemoteInfo('commaai', 'openpilot', ['stock', 'origin'], default_branch='release2'),
+                                RemoteInfo('dragonpilot-community', 'dragonpilot', ['dragonpilot'], default_branch='devel-i18n')]  # devel-i18n isn't most stable, but its name remains the same
 
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
@@ -138,11 +140,11 @@ class Fork(CommandBase):
       for branch in installed_branches:
         print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
 
-  def __is_username_alias(self, username):
-    for remote, obj in self.remote_aliases.items():
-      if username in obj.aliases:
-        return remote, obj.repo_name
-    return None, None
+  def __get_remote_info(self, username):
+    for remote_info in self.remote_default_info:
+      if username in remote_info.username_aliases:
+        return info
+    return None
 
   def _switch(self):
     if not self._init():
@@ -168,11 +170,11 @@ class Fork(CommandBase):
         return
 
     username = flags.username.lower()
-    alias_remote, alias_repo_name = self.__is_username_alias(username)
-    if alias_remote is not None:  # user entered an alias (ex. stock, dragonpilot)
-      print('{} is alias: {}'.format(username, (alias_remote, alias_repo_name)))
-      username = alias_remote
-      flags.username = alias_remote
+    remote_info = self.__get_remote_info(username)
+    if remote_info is not None:  # user entered an alias (ex. stock, dragonpilot)
+      print('{} is alias: {}'.format(username, (remote_info.username, remote_info.fork_name)))
+      username = remote_info.username
+      flags.username = remote_info.username
 
     installed_forks = self.fork_params.get('installed_forks')
     fork_in_params = True
@@ -218,8 +220,8 @@ class Fork(CommandBase):
       return
 
     if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
-      if username == COMMA_ORIGIN_NAME:  # todo: use a dict for default branches if we end up needing default branches for multiple forks
-        branch = COMMA_DEFAULT_BRANCH  # use release2 and default branch for stock
+      if remote_info is not None:
+        branch = remote_info.default_branch
         fork_branch = 'commaai_{}'.format(branch)
       else:
         fork_branch = '{}_{}'.format(username, default_remote_branch)
