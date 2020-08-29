@@ -222,6 +222,8 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
+    print(flags.branch)
+    print(remote_info)
     if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
       if remote_info is not None:  # todo: check this
         print('{} is branch alias: {}'.format(username, (remote_info.username, remote_info.default_branch)))
