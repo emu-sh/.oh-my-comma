@@ -8,7 +8,6 @@ from py_utils.emu_utils import run, error, success, warning, info, is_affirmativ
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
-
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
 REMOTE_BRANCHES_START = 'Remote branches:\n'
