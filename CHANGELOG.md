@@ -1,3 +1,10 @@
+Release 0.2 (2020-08-28)
+=====
+
+* On first setup we now rename local branch `release2` to `commaai_release2`  (removes dangling `release2` branch after setup and switching to stock)
+  * We also now add the `release2` branch to `installed_branches` for the fork so `emu fork list` now shows current branch after immediate set up with no switching
+* Add `dragonpilot` as an alias to `dragonpilot-community/dragonpilot`
+
 Release 0.1.9 (2020-08-12)
 =====
 
