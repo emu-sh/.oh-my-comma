@@ -76,8 +76,8 @@ class Fork(CommandBase):
     self.description = '🍴 Manage installed forks, or install a new one'
 
     self.fork_params = ForkParams()
-    self.remote_defaults = {'commaai': RemoteInfo('openpilot', ['stock', 'commaai', 'origin'], 'release2'),
-                            'dragonpilot-community': RemoteInfo('dragonpilot', ['dragonpilot', 'dragonpilot-community'], 'devel-i18n')}  # devel-i18n isn't most stable, but its name remains the same
+    self.remote_defaults = {'commaai': RemoteInfo('openpilot', ['stock', 'origin'], 'release2'),
+                            'dragonpilot-community': RemoteInfo('dragonpilot', ['dragonpilot'], 'devel-i18n')}  # devel-i18n isn't most stable, but its name remains the same
 
     self.comma_origin_name = 'commaai'
     self.comma_default_branch = self.remote_defaults['commaai'].default_branch
@@ -146,6 +146,7 @@ class Fork(CommandBase):
       remote_info = self.remote_defaults[default_username]
       if username in remote_info.username_aliases:
         remote_info.username = default_username  # add dict key to class instance so we don't have to return a tuple
+        remote_info.username_aliases.append(default_username)  # so default branch works when user enters the actual name
         return remote_info
     return None
 
