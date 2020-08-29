@@ -140,15 +140,6 @@ class Fork(CommandBase):
       for branch in installed_branches:
         print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
 
-  def __get_remote_info(self, username):
-    for default_username in self.remote_defaults:
-      remote_info = self.remote_defaults[default_username]
-      remote_info.username = default_username  # add dict key to class instance so we don't have to return a tuple
-      remote_info.username_aliases.append(default_username)  # so default branch works when user enters the actual name
-      if username in remote_info.username_aliases:
-        return remote_info
-    return None
-
   def _switch(self):
     if not self._init():
       return
@@ -307,6 +298,15 @@ class Fork(CommandBase):
       else:
         error('Please try again, something went wrong:')
         print(r.output)
+
+  def __get_remote_info(self, username):
+    for default_username in self.remote_defaults:
+      remote_info = self.remote_defaults[default_username]
+      remote_info.username = default_username  # add dict key to class instance so we don't have to return a tuple
+      remote_info.username_aliases.append(default_username)  # so default branch works when user enters the actual name
+      if username in remote_info.username_aliases:
+        return remote_info
+    return None
 
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
