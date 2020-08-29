@@ -154,7 +154,7 @@ if [ ${CURRENT_BRANCH} != "master" ]; then
 fi
 
 echo "Current version: $OMC_VERSION"
-printf "\033[0mYou may need to run the following to reflect the update:\n \033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
+printf "\033[0mYou may need to run the following to reflect the update:\n\033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
 printf "\033[0m\n\n"
 
 if [ $update = false ]; then
