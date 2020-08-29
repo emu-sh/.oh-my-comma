@@ -58,7 +58,7 @@ if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
 fi
 
 if [ $update = true ]; then
-  echo "Installing emu utilities..."
+  echo "\nInstalling emu utilities..."
 fi
 
 echo "Remounting /system as rewritable (until NEOS 15)"
