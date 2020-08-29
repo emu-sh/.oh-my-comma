@@ -145,7 +145,7 @@ if [ $update = true ]; then
 else
   echo "Sourcing /home/.bashrc to apply the changes made during installation"
   source /home/.bashrc
-  printf "\nSuccessfully installed emu utilities\n\n"
+  printf "Successfully installed emu utilities\n\n"
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
