@@ -175,7 +175,7 @@ class Fork(CommandBase):
     username = flags.username.lower()
     remote_info = self.__get_remote_info(username)
     if remote_info is not None:  # user entered an alias (ex. stock, dragonpilot)
-      print('{} is alias: {}'.format(username, (remote_info.username, remote_info.fork_name)))
+      print('{} is fork alias: {}'.format(username, (remote_info.username, remote_info.fork_name)))
       username = remote_info.username
       flags.username = remote_info.username
 
@@ -224,6 +224,7 @@ class Fork(CommandBase):
 
     if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
       if remote_info is not None:  # todo: check this
+        print('{} is branch alias: {}'.format(username, (remote_info.username, remote_info.default_branch)))
         remote_branch = remote_info.default_branch
         local_branch = '{}_{}'.format(remote_info.username, remote_branch)
       else:
