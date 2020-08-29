@@ -76,8 +76,8 @@ class Fork(CommandBase):
     self.description = '🍴 Manage installed forks, or install a new one'
 
     self.fork_params = ForkParams()
-    self.remote_defaults = {'commaai': RemoteInfo('openpilot', ['stock', 'commaai', 'origin'], default_branch='release2'),
-                            'dragonpilot-community': RemoteInfo('dragonpilot', ['dragonpilot'], default_branch='devel-i18n')}  # devel-i18n isn't most stable, but its name remains the same
+    self.remote_defaults = {'commaai': RemoteInfo('openpilot', ['stock', 'commaai', 'origin'], 'release2'),
+                            'dragonpilot-community': RemoteInfo('dragonpilot', ['dragonpilot'], 'devel-i18n')}  # devel-i18n isn't most stable, but its name remains the same
 
     self.comma_origin_name = 'commaai'
     self.comma_default_branch = self.remote_defaults['commaai'].default_branch
