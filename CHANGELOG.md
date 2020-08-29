@@ -1,4 +1,4 @@
-Release 0.2 (2020-08-28)
+Release 0.1.10 (2020-08-28)
 =====
 
 * On first setup we now rename local branch `release2` to `commaai_release2`  (removes dangling `release2` branch after setup and switching to stock)
