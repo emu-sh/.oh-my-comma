@@ -183,7 +183,10 @@ class Fork(CommandBase):
     fork_in_params = True
     if username not in installed_forks:
       fork_in_params = False
-      remote_url = 'https://github.com/{}/openpilot'.format(username)
+      if remote_info is not None:
+        remote_url = f'https://github.com/{username}/{remote_info.fork_name}'  # dragonpilot doesn't have a GH redirect
+      else:
+        remote_url = f'https://github.com/{username}/openpilot'
 
       if not valid_fork_url(remote_url):
         error('Invalid username! {} does not exist'.format(remote_url))
