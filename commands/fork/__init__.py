@@ -130,7 +130,7 @@ class Fork(CommandBase):
     else:
       fork = flags.fork.lower()
       remote_info = self.__get_remote_info(fork)
-      if remote_info is not None:
+      if remote_info is not None:  # there's an overriding default username available
         fork = remote_info.username
         flags.fork = remote_info.username
       if fork not in installed_forks:
@@ -175,7 +175,6 @@ class Fork(CommandBase):
     username = flags.username.lower()
     remote_info = self.__get_remote_info(username)
     if remote_info is not None:  # user entered an alias (ex. stock, dragonpilot)
-      print('{} is fork alias: {}'.format(username, (remote_info.username, remote_info.fork_name)))
       username = remote_info.username
       flags.username = remote_info.username
 
@@ -185,7 +184,7 @@ class Fork(CommandBase):
       fork_in_params = False
       if remote_info is not None:
         remote_url = f'https://github.com/{username}/{remote_info.fork_name}'  # dragonpilot doesn't have a GH redirect
-      else:
+      else:  # for most forks, GH will redirect from /openpilot if user renames fork
         remote_url = f'https://github.com/{username}/openpilot'
 
       if not valid_fork_url(remote_url):
@@ -225,11 +224,8 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
-    print(flags.branch)
-    print(remote_info)
     if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
-      if remote_info is not None:  # todo: check this
-        print('{} is branch alias: {}'.format(username, (remote_info.username, remote_info.default_branch)))
+      if remote_info is not None:  # there's an overriding default branch specified
         remote_branch = remote_info.default_branch
         local_branch = '{}_{}'.format(remote_info.username, remote_branch)
       else:
