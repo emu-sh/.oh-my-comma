@@ -8,9 +8,6 @@ from py_utils.emu_utils import run, error, success, warning, info, is_affirmativ
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
-COMMA_ORIGIN_NAME = 'commaai'
-COMMA_DEFAULT_BRANCH = 'release2'
-
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
 REMOTE_BRANCHES_START = 'Remote branches:\n'
@@ -63,6 +60,14 @@ class ForkParams:
       f.write(json.dumps(self.params, indent=2))
 
 
+class RemoteInfo:
+  def __init__(self, fork_name, username_aliases, default_branch):
+    self.username = None  # to be added by Fork.__get_remote_info function
+    self.fork_name = fork_name
+    self.username_aliases = username_aliases
+    self.default_branch = default_branch
+
+
 class Fork(CommandBase):
   def __init__(self):
     super().__init__()
@@ -70,7 +75,11 @@ class Fork(CommandBase):
     self.description = '🍴 Manage installed forks, or install a new one'
 
     self.fork_params = ForkParams()
-    self.stock_aliases = ['stock', COMMA_ORIGIN_NAME, 'origin']
+    self.remote_defaults = {'commaai': RemoteInfo('openpilot', ['stock', 'origin'], 'release2'),
+                            'dragonpilot-community': RemoteInfo('dragonpilot', ['dragonpilot'], 'devel-i18n')}  # devel-i18n isn't most stable, but its name remains the same
+
+    self.comma_origin_name = 'commaai'
+    self.comma_default_branch = self.remote_defaults['commaai'].default_branch
 
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
@@ -82,13 +91,14 @@ class Fork(CommandBase):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['list'].parser)
+    specified_fork = flags.fork
     if e is not None:
       error(e)
       self._help('list')
       return
 
     installed_forks = self.fork_params.get('installed_forks')
-    if flags.fork is None:
+    if specified_fork is None:
       max_branches = 4  # max branches to display per fork when listing all forks
       success('Installed forks:')
       for idi, fork in enumerate(installed_forks):
@@ -118,52 +128,56 @@ class Fork(CommandBase):
             break
         print()
     else:
-      fork = flags.fork.lower()
-      if fork in self.stock_aliases:
-        fork = COMMA_ORIGIN_NAME
-        flags.fork = COMMA_ORIGIN_NAME
-      if fork not in installed_forks:
-        error('{} not an installed fork! Try installing it with the {}switch{} command'.format(fork, COLORS.CYAN, COLORS.RED))
+      specified_fork = specified_fork.lower()
+      remote_info = self.__get_remote_info(specified_fork)
+      if remote_info is not None:  # there's an overriding default username available
+        specified_fork = remote_info.username
+      if specified_fork not in installed_forks:
+        error('{} not an installed fork! Try installing it with the {}switch{} command'.format(specified_fork, COLORS.CYAN, COLORS.RED))
         return
-      installed_branches = installed_forks[fork]['installed_branches']
-      success('Installed branches for {}:'.format(flags.fork))
+      installed_branches = installed_forks[specified_fork]['installed_branches']
+      success('Installed branches for {}:'.format(specified_fork))
       for branch in installed_branches:
         print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
-
 
   def _switch(self):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
+    username = flags.username
+    branch = flags.branch
     if e is not None:
       error(e)
       self._help('switch')
       return
     else:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
-      if flags.username is flags.branch is None:
+      if username is branch is None:
         error('You must supply either username or branch or both!')
         self._help('switch')
         return
 
-    if flags.username is None:  # branch is specified, so use current checked out fork/username
+    if username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
         info('Assuming current fork for username: {}'.format(COLORS.SUCCESS + _current_fork + COLORS.ENDC))
-        flags.username = _current_fork
+        username = _current_fork
       else:
         error('Current fork is unknown, please switch to a fork first before switching between branches!')
         return
 
-    username = flags.username.lower()
-    if username in self.stock_aliases:
-      username = COMMA_ORIGIN_NAME
-      flags.username = COMMA_ORIGIN_NAME
+    username = username.lower()
+    remote_info = self.__get_remote_info(username)
+    if remote_info is not None:  # user entered an alias (ex. stock, dragonpilot)
+      username = remote_info.username
 
     installed_forks = self.fork_params.get('installed_forks')
     fork_in_params = True
     if username not in installed_forks:
       fork_in_params = False
-      remote_url = 'https://github.com/{}/openpilot'.format(username)
+      if remote_info is not None:
+        remote_url = f'https://github.com/{username}/{remote_info.fork_name}'  # dragonpilot doesn't have a GH redirect
+      else:  # for most forks, GH will redirect from /openpilot if user renames fork
+        remote_url = f'https://github.com/{username}/openpilot'
 
       if not valid_fork_url(remote_url):
         error('Invalid username! {} does not exist'.format(remote_url))
@@ -182,9 +196,9 @@ class Fork(CommandBase):
 
     # fork has been added as a remote, switch to it
     if fork_in_params:
-      info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
+      info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
     else:
-      info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
+      info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     if not r:
@@ -202,51 +216,52 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
-    if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
-      if username == COMMA_ORIGIN_NAME:  # todo: use a dict for default branches if we end up needing default branches for multiple forks
-        branch = COMMA_DEFAULT_BRANCH  # use release2 and default branch for stock
-        fork_branch = 'commaai_{}'.format(branch)
+    if branch is None:  # user hasn't specified a branch, use remote's default branch
+      if remote_info is not None:  # there's an overriding default branch specified
+        remote_branch = remote_info.default_branch
+        local_branch = '{}_{}'.format(remote_info.username, remote_branch)
       else:
-        fork_branch = '{}_{}'.format(username, default_remote_branch)
-        branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
-    elif len(flags.branch) > 0:
-      fork_branch = f'{username}_{flags.branch}'
-      branch = flags.branch
-      if branch not in remote_branches:
+        local_branch = '{}_{}'.format(username, default_remote_branch)
+        remote_branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
+    elif len(branch) > 0:
+      local_branch = f'{username}_{branch}'
+      remote_branch = branch
+      if remote_branch not in remote_branches:
         error('The branch you specified does not exist!')
-        self.__show_similar_branches(branch, remote_branches)  # if possible
+        self.__show_similar_branches(remote_branch, remote_branches)  # if possible
         return
     else:
       error('Error with branch!')
       return
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
-    remote_branch = f'{username}/{branch}'
-    if branch not in installed_forks[username]['installed_branches']:
-      info('New branch! Tracking and checking out {} from {}'.format(fork_branch, remote_branch))
-      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', fork_branch, remote_branch])
+    if remote_branch not in installed_forks[username]['installed_branches']:
+      info('New branch! Tracking and checking out {} from {}'.format(local_branch, f'{username}/{remote_branch}'))
+      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', local_branch, f'{username}/{remote_branch}'])
       if not r:
         error('Error while checking out branch, please try again')
         return
-      self.__add_branch(username, branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
-    else:  # already installed branch, checking out fork_branch from remote_branch
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', fork_branch])
+      self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
+    else:  # already installed branch, checking out fork_branch from f'{username}/{branch}'
+      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', local_branch])
       if not r.success:
         error(r.output)
         return
     # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
-    r = check_output(['git', '-C', OPENPILOT_PATH, 'reset', '--hard', remote_branch])
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'reset', '--hard', f'{username}/{remote_branch}'])
     if not r.success:
       error(r.output)
       return
     self.fork_params.put('current_fork', username)
-    self.fork_params.put('current_branch', branch)
-    success('Successfully checked out {}/{} as {}'.format(flags.username, branch, fork_branch))
+    self.fork_params.put('current_branch', remote_branch)
+    success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
 
-  def __add_fork(self, username):
+  def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
     if username not in installed_forks:
       installed_forks[username] = {'installed_branches': []}
+      if branch is not None:
+        installed_forks[username]['installed_branches'].append(branch)
       self.fork_params.put('installed_forks', installed_forks)
 
   def __add_branch(self, username, branch):  # assumes fork exists in params
@@ -284,6 +299,15 @@ class Fork(CommandBase):
       else:
         error('Please try again, something went wrong:')
         print(r.output)
+
+  def __get_remote_info(self, username):
+    for default_username in self.remote_defaults:
+      remote_info = self.remote_defaults[default_username]
+      remote_info.username = default_username  # add dict key to class instance so we don't have to return a tuple
+      remote_info.username_aliases.append(default_username)  # so default branch works when user enters the actual name
+      if username in remote_info.username_aliases:
+        return remote_info
+    return None
 
   def __get_remote_branches(self, r):
     # get remote's branches to verify from output of command in parent function
@@ -330,7 +354,7 @@ class Fork(CommandBase):
     if self.fork_params.get('setup_complete'):
       if os.path.exists(OPENPILOT_PATH):
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
-        if COMMA_ORIGIN_NAME in r.output.split('\n'):  # sign that we're set up correctly todo: check all forks exist as remotes
+        if self.comma_origin_name in r.output.split('\n'):  # sign that we're set up correctly todo: check all forks exist as remotes
           return True
       self.fork_params.put('setup_complete', False)  # renamed origin -> commaai does not exist, restart setup
       self.fork_params.reset()
@@ -353,21 +377,23 @@ class Fork(CommandBase):
       success('Backed up your current openpilot install to {}'.format(bak_dir))
 
     info('Cloning commaai/openpilot into {}, please wait...'.format(OPENPILOT_PATH))
-    r = run(['git', 'clone', '-b', COMMA_DEFAULT_BRANCH, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to r2 for stock
+    r = run(['git', 'clone', '-b', self.comma_default_branch, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to stock/release2 for setup
     if not r:
       error('Error while cloning, please try again')
       return
 
     # rename origin to commaai so it's easy to switch to stock without any extra logic for url checking, etc
-    r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'rename', 'origin', COMMA_ORIGIN_NAME])
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'rename', 'origin', self.comma_origin_name])
     if not r.success:
       error(r.output)
       return
+    # rename release2 to commaai_release2 to align with emu fork standards
+    check_output(['git', '-C', OPENPILOT_PATH, 'branch', '-m', f'{self.comma_origin_name}_{self.comma_default_branch}'])
 
-    success('Fork management set up successfully! You\'re on {}/{}'.format(COMMA_ORIGIN_NAME, COMMA_DEFAULT_BRANCH))
+    success('Fork management set up successfully! You\'re on {}/{}'.format(self.comma_origin_name, self.comma_default_branch))
     success('To get started, try running: {}emu fork switch (username) [-b BRANCH]{}'.format(COLORS.RED, COLORS.ENDC))
+    self.__add_fork(self.comma_origin_name, self.comma_default_branch)
     self.fork_params.put('setup_complete', True)
-    self.fork_params.put('current_fork', COMMA_ORIGIN_NAME)
-    self.fork_params.put('current_branch', COMMA_DEFAULT_BRANCH)
-    self.__add_fork(COMMA_ORIGIN_NAME)
+    self.fork_params.put('current_fork', self.comma_origin_name)
+    self.fork_params.put('current_branch', self.comma_default_branch)
     return True

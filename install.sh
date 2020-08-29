@@ -16,11 +16,9 @@
 
 # This is the install script for https://emu.sh/
 # Located on git at https://github.com/emu-sh/.oh-my-comma
-# To install this, ssh into your comma device and paste: '
-'
-bash <(curl -fsSL install.emu.sh) # the brain of the bird
-source /home/.bashrc
-'
+# To install this, ssh into your comma device and paste:
+# bash <(curl -fsSL install.emu.sh) # the brain of the bird
+# source /home/.bashrc
 
 SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
@@ -60,7 +58,7 @@ if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
 fi
 
 if [ $update = true ]; then
-  echo "Installing emu utilities..."
+  echo "\nInstalling emu utilities..."
 fi
 
 echo "Remounting /system as rewritable (until NEOS 15)"
@@ -143,7 +141,7 @@ fi
 
 printf "\033[92m"
 if [ $update = true ]; then
-  printf "\nSuccessfully updated emu utilities!\n"
+  printf "Successfully updated emu utilities!\n"
 else
   echo "Sourcing /home/.bashrc to apply the changes made during installation"
   source /home/.bashrc
@@ -152,11 +150,11 @@ fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 if [ ${CURRENT_BRANCH} != "master" ]; then
-  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. Run git -C /data/community/.oh-my-comma checkout master if this is unintentional\n"
+  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n"
 fi
 
 echo "Current version: $OMC_VERSION"
-printf "\033[0mYou may need to run the following to reflect the update:\n \033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
+printf "\033[0mYou may need to run the following to reflect the update:\n\033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
 printf "\033[0m\n\n"
 
 if [ $update = false ]; then
