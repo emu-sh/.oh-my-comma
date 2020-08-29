@@ -262,10 +262,12 @@ class Fork(CommandBase):
     self.fork_params.put('current_branch', remote_branch)
     success('Successfully checked out {}/{} as {}'.format(flags.username, remote_branch, local_branch))
 
-  def __add_fork(self, username):
+  def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
     if username not in installed_forks:
       installed_forks[username] = {'installed_branches': []}
+      if branch is not None:
+        installed_forks[username]['installed_branches'].append(branch)
       self.fork_params.put('installed_forks', installed_forks)
 
   def __add_branch(self, username, branch):  # assumes fork exists in params
@@ -372,7 +374,7 @@ class Fork(CommandBase):
       success('Backed up your current openpilot install to {}'.format(bak_dir))
 
     info('Cloning commaai/openpilot into {}, please wait...'.format(OPENPILOT_PATH))
-    r = run(['git', 'clone', '-b', self.comma_default_branch, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to r2 for stock
+    r = run(['git', 'clone', '-b', self.comma_default_branch, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to stock/release2 for setup
     if not r:
       error('Error while cloning, please try again')
       return
@@ -383,15 +385,12 @@ class Fork(CommandBase):
       error(r.output)
       return
     # rename release2 to commaai_release2 to align with emu fork standards
-    r = check_output(['git', '-C', OPENPILOT_PATH, 'branch', '-m', f'{self.comma_origin_name}_{self.comma_default_branch}'])
-    if not r.success:
-      error(r.output)
-      return
+    check_output(['git', '-C', OPENPILOT_PATH, 'branch', '-m', f'{self.comma_origin_name}_{self.comma_default_branch}'])
 
     success('Fork management set up successfully! You\'re on {}/{}'.format(self.comma_origin_name, self.comma_default_branch))
     success('To get started, try running: {}emu fork switch (username) [-b BRANCH]{}'.format(COLORS.RED, COLORS.ENDC))
+    self.__add_fork(self.comma_origin_name, self.comma_default_branch)
     self.fork_params.put('setup_complete', True)
     self.fork_params.put('current_fork', self.comma_origin_name)
     self.fork_params.put('current_branch', self.comma_default_branch)
-    self.__add_fork(self.comma_origin_name)
     return True
