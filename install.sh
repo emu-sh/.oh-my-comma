@@ -16,7 +16,7 @@
 
 # This is the install script for https://emu.sh/
 # Located on git at https://github.com/emu-sh/.oh-my-comma
-# To install this, ssh into your comma device and paste: '
+# To install this, ssh into your comma device and paste:
 '
 bash <(curl -fsSL install.emu.sh) # the brain of the bird
 source /home/.bashrc
