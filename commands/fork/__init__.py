@@ -144,9 +144,9 @@ class Fork(CommandBase):
   def __get_remote_info(self, username):
     for default_username in self.remote_defaults:
       remote_info = self.remote_defaults[default_username]
+      remote_info.username = default_username  # add dict key to class instance so we don't have to return a tuple
+      remote_info.username_aliases.append(default_username)  # so default branch works when user enters the actual name
       if username in remote_info.username_aliases:
-        remote_info.username = default_username  # add dict key to class instance so we don't have to return a tuple
-        remote_info.username_aliases.append(default_username)  # so default branch works when user enters the actual name
         return remote_info
     return None
 
