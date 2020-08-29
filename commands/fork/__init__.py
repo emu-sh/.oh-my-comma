@@ -91,13 +91,14 @@ class Fork(CommandBase):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['list'].parser)
+    specified_fork = flags.fork
     if e is not None:
       error(e)
       self._help('list')
       return
 
     installed_forks = self.fork_params.get('installed_forks')
-    if flags.fork is None:
+    if specified_fork is None:
       max_branches = 4  # max branches to display per fork when listing all forks
       success('Installed forks:')
       for idi, fork in enumerate(installed_forks):
@@ -127,16 +128,15 @@ class Fork(CommandBase):
             break
         print()
     else:
-      fork = flags.fork.lower()
-      remote_info = self.__get_remote_info(fork)
+      specified_fork = specified_fork.lower()
+      remote_info = self.__get_remote_info(specified_fork)
       if remote_info is not None:  # there's an overriding default username available
-        fork = remote_info.username
-        flags.fork = remote_info.username
-      if fork not in installed_forks:
-        error('{} not an installed fork! Try installing it with the {}switch{} command'.format(fork, COLORS.CYAN, COLORS.RED))
+        specified_fork = remote_info.username
+      if specified_fork not in installed_forks:
+        error('{} not an installed fork! Try installing it with the {}switch{} command'.format(specified_fork, COLORS.CYAN, COLORS.RED))
         return
-      installed_branches = installed_forks[fork]['installed_branches']
-      success('Installed branches for {}:'.format(flags.fork))
+      installed_branches = installed_forks[specified_fork]['installed_branches']
+      success('Installed branches for {}:'.format(specified_fork))
       for branch in installed_branches:
         print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
 
@@ -144,30 +144,31 @@ class Fork(CommandBase):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
+    username = flags.username
+    branch = flags.branch
     if e is not None:
       error(e)
       self._help('switch')
       return
     else:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
-      if flags.username is flags.branch is None:
+      if username is branch is None:
         error('You must supply either username or branch or both!')
         self._help('switch')
         return
 
-    if flags.username is None:  # branch is specified, so use current checked out fork/username
+    if username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
         info('Assuming current fork for username: {}'.format(COLORS.SUCCESS + _current_fork + COLORS.ENDC))
-        flags.username = _current_fork
+        username = _current_fork
       else:
         error('Current fork is unknown, please switch to a fork first before switching between branches!')
         return
 
-    username = flags.username.lower()
+    username = username.lower()
     remote_info = self.__get_remote_info(username)
     if remote_info is not None:  # user entered an alias (ex. stock, dragonpilot)
       username = remote_info.username
-      flags.username = remote_info.username
 
     installed_forks = self.fork_params.get('installed_forks')
     fork_in_params = True
@@ -195,9 +196,9 @@ class Fork(CommandBase):
 
     # fork has been added as a remote, switch to it
     if fork_in_params:
-      info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
+      info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
     else:
-      info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + flags.username + COLORS.WARNING))
+      info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     if not r:
@@ -215,16 +216,16 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
-    if flags.branch is None:  # user hasn't specified a branch, use remote's default branch
+    if branch is None:  # user hasn't specified a branch, use remote's default branch
       if remote_info is not None:  # there's an overriding default branch specified
         remote_branch = remote_info.default_branch
         local_branch = '{}_{}'.format(remote_info.username, remote_branch)
       else:
         local_branch = '{}_{}'.format(username, default_remote_branch)
         remote_branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
-    elif len(flags.branch) > 0:
-      local_branch = f'{username}_{flags.branch}'
-      remote_branch = flags.branch
+    elif len(branch) > 0:
+      local_branch = f'{username}_{branch}'
+      remote_branch = branch
       if remote_branch not in remote_branches:
         error('The branch you specified does not exist!')
         self.__show_similar_branches(remote_branch, remote_branches)  # if possible
@@ -253,7 +254,7 @@ class Fork(CommandBase):
       return
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
-    success('Successfully checked out {}/{} as {}'.format(flags.username, remote_branch, local_branch))
+    success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
 
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
