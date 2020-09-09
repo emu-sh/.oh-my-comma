@@ -48,6 +48,9 @@ if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
+echo "Remounting /system as rewritable (until NEOS 15)"
+mount -o rw,remount /system
+
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[Y/n] > " choices
@@ -60,9 +63,6 @@ fi
 if [ $update = true ]; then
   echo "\nInstalling emu utilities..."
 fi
-
-echo "Remounting /system as rewritable (until NEOS 15)"
-mount -o rw,remount /system
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   echo "Your system /home/.bashrc exists..."
