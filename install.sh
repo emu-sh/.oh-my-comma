@@ -82,9 +82,9 @@ else
 fi
 
 echo "Checking /home/.config symlink..."
-if [ `readlink -f /home/.config` != "$OH_MY_COMMA_PATH/.config" ]; then
-  echo "Creating a symlink of ${OH_MY_COMMA_PATH} to /home/.config"
-  ln -s ${OH_MY_COMMA_PATH}/.config /home/.config
+if [ `readlink -f /home/.config/powerline-shell` != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
+  echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
+  ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
 else
   echo "Symlink check passed"
 fi
