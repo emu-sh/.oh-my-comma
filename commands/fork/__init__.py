@@ -161,7 +161,7 @@ class Fork(CommandBase):
       return
     else:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
       if flags.username is flags.branch is None:
-        error('You must supply either username or branch or both!')
+        error('You must supply either username or branch or both')
         self._help('switch')
         return
 
