@@ -6,6 +6,7 @@
 ## BEGIN .oh-my-comma magic ###
 
 # If not running interactively, don't do anything
+echo "Hello"
 case $- in
     *i*) ;;
       *) return;;
