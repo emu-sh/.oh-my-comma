@@ -45,6 +45,6 @@ shopt -s histappend
 
 # Change default working directory
 # Just in case openpilot is missing, default to /data
-cd /data ; cd /data/openpilot
+cd /data; cd /data/openpilot
 # auto check git refs, but don't update
-git fetch
+#git fetch
