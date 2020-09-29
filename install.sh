@@ -28,8 +28,8 @@ GIT_BRANCH_NAME=master
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
 OMC_VERSION=0.1.9
 
-update_print() {  # only prints if not updating
-  if [ "$update" = true ]; then
+update_echo() {  # only prints if not updating
+  if [ "$update" != true ]; then
     echo "$1"
   fi
 }
@@ -38,8 +38,6 @@ update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
 fi
-
-update_print "THIS IS A TEST!"
 
 if [ $update = false ]; then
   [[ "$DEBUG" == 'true' ]] && set -x
@@ -68,13 +66,13 @@ if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   esac
 fi
 
-update_print "\nInstalling emu utilities..."
+update_echo "\nInstalling emu utilities..."
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
-  echo "Your system /home/.bashrc exists..."
+  update_echo "Your system /home/.bashrc exists..."
   if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
   then
-    echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
+    update_echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
   else
     echo "Your bashrc file is different than the one on the repo. NEOS 15 will redirect all users to store their bashrc in /data/community"
     echo "Moving your current bashrc to /data/community"
@@ -87,8 +85,8 @@ else
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
 fi
 
-echo "Checking /home/.config symlink..."
-if [ `readlink -f /home/.config/powerline-shell` != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
+update_echo "Checking /home/.config symlink..."
+if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
   echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
   ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
 else
