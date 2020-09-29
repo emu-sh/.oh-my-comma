@@ -51,6 +51,7 @@ if (( ( $(current_epoch) - LAST_EPOCH ) < $epoch_target )); then
 fi
 
 cd ${OH_MY_COMMA_PATH}
+
 git fetch
 OMC_UPSTREAM=${1:-'@{u}'}
 OMC_LOCAL=$(git rev-parse @)
