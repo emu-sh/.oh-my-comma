@@ -28,6 +28,12 @@ GIT_BRANCH_NAME=master
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
 OMC_VERSION=0.1.9
 
+function update_print {  # only prints if not updating
+  if [ $update != true ]; then
+    echo "$1"
+  fi
+}
+
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
@@ -60,9 +66,7 @@ if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   esac
 fi
 
-if [ $update != true ]; then
-  echo "\nInstalling emu utilities..."
-fi
+update_print "\nInstalling emu utilities..."
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   echo "Your system /home/.bashrc exists..."
