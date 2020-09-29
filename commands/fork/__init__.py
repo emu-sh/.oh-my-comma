@@ -156,18 +156,18 @@ class Fork(CommandBase):
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
     print(type(flags), type(e), e)
-    username = flags.username
-    branch = flags.branch
     if e is not None:
       error(e)
       self._help('switch')
       return
     else:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
-      if username is branch is None:
+      if flags.username is flags.branch is None:
         error('You must supply either username or branch or both!')
         self._help('switch')
         return
 
+    username = flags.username
+    branch = flags.branch
     if username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
