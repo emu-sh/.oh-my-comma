@@ -48,7 +48,5 @@ shopt -s histappend
 cd /data
 cd /data/openpilot || exit
 if [ ! -f "/data/community/.oh-my-comma/.cloning" ]; then
-  # auto check git refs, but don't update
-  echo "Git fetching!\n"
-  git fetch
+  git fetch  # auto check git refs, but don't update
 fi
