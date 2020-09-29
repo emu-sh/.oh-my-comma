@@ -45,4 +45,9 @@ shopt -s histappend
 
 # Change default working directory
 # Just in case openpilot is missing, default to /data
-cd /data; cd /data/openpilot
+cd /data
+cd /data/openpilot || exit
+if [ -f "/data/community/.oh-my-comma/.cloning" ]; then
+  # auto check git refs, but don't update
+  git fetch
+fi
