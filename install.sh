@@ -54,7 +54,7 @@ if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
-echo "Remounting /system as rewritable (until NEOS 15)"
+update_echo "Remounting /system as rewritable (until NEOS 15)"
 mount -o rw,remount /system
 
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
@@ -93,7 +93,7 @@ else
   echo "Symlink check passed"
 fi
 
-echo "Remounting /system as read-only"
+update_echo "Remounting /system as read-only"
 mount -o r,remount /system
 
 #Coping user bashrc, outside of system partition
@@ -121,7 +121,7 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
 
   if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu.sh'
   then
-    echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
+    update_echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
     printf "\n$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
