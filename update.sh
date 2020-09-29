@@ -22,7 +22,7 @@ echo "======= TO ======="
 
 if git -C $OH_MY_COMMA_PATH log --stat -1 | grep -q 'default-bashrcs/.bashrc-community'; then
   if [ ${PREV_VERSION} = ${CURRENT_VERSION} ]; then
-    printf "\n\33[38;5;190mThe default .bashrc has been updated! The change has not been applied to retain your changes.\nTo update and reset your .bashrc, run the command:\n"
+    printf "\n\33[38;5;190mThe default .bashrc has been updated! The update has not been applied to retain your custom changes.\nTo update and reset your .bashrc, run the command:\n"
     printf "\033[92mcp -fr /data/community/.oh-my-comma/default-bashrcs/.bashrc-community /data/community/.bashrc\n\n"
     printf "\33[38;5;190mThis will wipe any custom changes you've made!\033[0m\n"
   fi
