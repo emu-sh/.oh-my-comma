@@ -39,6 +39,8 @@ if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
 fi
 
+update_print "THIS IS A TEST!"
+
 if [ $update = false ]; then
   [[ "$DEBUG" == 'true' ]] && set -x
 fi
