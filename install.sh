@@ -153,9 +153,9 @@ else
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
-#if [ ${CURRENT_BRANCH} != "master" ]; then
-#  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n"
-#fi
+if [ ${CURRENT_BRANCH} != "master" ]; then
+  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n"
+fi
 
 update_echo "Current version: $OMC_VERSION"  # prints in update.sh
 if [ "$update" != true ]; then
