@@ -157,9 +157,11 @@ CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 #  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n"
 #fi
 
-echo "Current version: $OMC_VERSION"
-printf "\033[0mYou may need to run the following to reflect the update:\n\033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
-printf "\033[0m\n\n"
+update_echo "Current version: $OMC_VERSION"  # prints in update.sh
+if [ "$update" != true ]; then
+  printf "\033[0mYou may need to run the following to initialize emu:\n\033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
+  printf "\033[0m\n\n"
+fi
 
 if [ $update = false ]; then
   set +x
