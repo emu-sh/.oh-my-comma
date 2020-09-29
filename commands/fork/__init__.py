@@ -155,6 +155,7 @@ class Fork(CommandBase):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
+    print(type(flags), type(e), e)
     username = flags.username
     branch = flags.branch
     if e is not None:
