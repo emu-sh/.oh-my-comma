@@ -6,7 +6,6 @@
 ## BEGIN .oh-my-comma magic ###
 
 # If not running interactively, don't do anything
-echo "Hello"
 case $- in
     *i*) ;;
       *) return;;
@@ -47,5 +46,3 @@ shopt -s histappend
 # Change default working directory
 # Just in case openpilot is missing, default to /data
 cd /data; cd /data/openpilot
-# auto check git refs, but don't update
-#git fetch
