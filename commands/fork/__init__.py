@@ -15,7 +15,7 @@ REMOTE_BRANCH_START = 'Remote branch:'
 CLONING_PATH = '{}/.cloning'.format(OH_MY_COMMA_PATH)
 
 
-def __set_cloning(cloning):
+def set_cloning(cloning):
   if cloning:
     if not os.path.exists(CLONING_PATH):
       with open(CLONING_PATH, 'w') as f:
@@ -388,9 +388,9 @@ class Fork(CommandBase):
       success('Backed up your current openpilot install to {}'.format(bak_dir))
 
     info('Cloning commaai/openpilot into {}, please wait...'.format(OPENPILOT_PATH))
-    self.__set_cloning(True)  # don't git fetch on new sessions
+    set_cloning(True)  # don't git fetch on new sessions
     r = run(['git', 'clone', '-b', self.comma_default_branch, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to stock/release2 for setup
-    self.__set_cloning(False)
+    set_cloning(False)
     if not r:
       error('Error while cloning, please try again')
       return
