@@ -90,7 +90,7 @@ if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.confi
   echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
   ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
 else
-  echo "Symlink check passed"
+  update_echo "Symlink check passed"
 fi
 
 update_echo "Remounting /system as read-only"
