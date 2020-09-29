@@ -20,9 +20,9 @@ printf "Version \033[92m${PREV_VERSION}\033[0m | branch \033[92m${PREV_BRANCH}\0
 printf "Version \033[92m${CURRENT_VERSION}\033[0m | branch \033[92m${CURRENT_BRANCH}\033[0m | remote \033[92m${CURRENT_REMOTE}\033[0m\n"
 echo "======= TO ======="
 
-if git -C $OH_MY_COMMA_PATH log --stat -10 | grep -q 'default-bashrcs/.bashrc-community'; then
+if git -C $OH_MY_COMMA_PATH log --stat -1 | grep -q 'default-bashrcs/.bashrc-community'; then
   if [ "${PREV_VERSION}" = "${CURRENT_VERSION}" ]; then
-    printf "\33[38;5;190mThe default .bashrc has been updated!\033[0m The update has not been applied to retain your custom changes.\nTo update and reset your .bashrc, run the command:\n"
+    printf "\n\33[38;5;190mThe default .bashrc has been updated!\033[0m The update has not been applied to retain your custom changes.\nTo update and reset your .bashrc, run the command:\n"
     printf "\033[92mcp -fr /data/community/.oh-my-comma/default-bashrcs/.bashrc-community /data/community/.bashrc\033[0m\n\n"
     printf "This will wipe any custom changes you've made!\n"
   fi
