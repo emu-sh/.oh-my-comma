@@ -51,4 +51,4 @@ if [ ! -f "/data/community/.oh-my-comma/.cloning" ]; then
   git fetch  # auto check git refs, but don't update
 fi
 
-# change 3
+# change 4
