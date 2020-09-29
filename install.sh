@@ -158,7 +158,7 @@ CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 #fi
 
 update_echo "Current version: $OMC_VERSION"  # prints in update.sh
-if [ "$update" = true ]; then
+if [ "$update" != true ]; then
   printf "\033[0mYou may need to run the following to initialize emu:\n\033[92msource %s/emu.sh\n" "${OH_MY_COMMA_PATH}"
 fi
 
