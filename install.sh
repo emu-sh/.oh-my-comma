@@ -162,7 +162,7 @@ if [ "$update" != true ]; then
   printf "\033[0mYou may need to run the following to initialize emu:\n\033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
 fi
 
-printf "\033[0m\n\n"  # reset color
+printf "\033[0m\n"  # reset color
 
 if [ $update = false ]; then
   set +x
