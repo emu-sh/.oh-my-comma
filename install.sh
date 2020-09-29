@@ -113,7 +113,7 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
     chmod 755 ${COMMUNITY_BASHRC_PATH}
     mv ${COMMUNITY_BASHRC_PATH} ${COMMUNITY_PATH}/.bashrc.lock
     sed -i.bak.$(date +"%Y-%m-%d-%T") -e "/^source \/data\/community\/\.oh-my-comma\/emu-utils\.sh$/d" ${COMMUNITY_BASHRC_PATH}.lock
-    echo "$(sed '/### End of \.oh-my-comma magic ###/q' ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n$(cat ${COMMUNITY_BASHRC_PATH}.lock)\n" >> ${COMMUNITY_BASHRC_PATH} 
+    printf "$(sed '/### End of \.oh-my-comma magic ###/q' ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n$(cat ${COMMUNITY_BASHRC_PATH}.lock)\n" >> ${COMMUNITY_BASHRC_PATH}
     rm ${COMMUNITY_BASHRC_PATH}.lock
     chmod 755 ${COMMUNITY_BASHRC_PATH}
     fi
@@ -124,13 +124,13 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
     update_echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
-    printf "\n$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
+    printf "\n%s\n" "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)" >>  ${COMMUNITY_BASHRC_PATH}
   fi
 else
   echo "Creating the community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   touch ${COMMUNITY_BASHRC_PATH}
   chmod 755 ${COMMUNITY_BASHRC_PATH}
-  printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
+  printf "%s\n" "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)" >>  ${COMMUNITY_BASHRC_PATH}
 fi
 touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
@@ -138,9 +138,9 @@ chmod 775 ${COMMUNITY_PATH}/.bash_history
 if [ $update = false ]; then
   printf "    Contents of system bashrc:   \n"
   cat ${SYSTEM_BASHRC_PATH}
-  printf "      End of $SYSTEM_BASHRC_PATH       \n\n  Contents of community bashrc:  \n"
+  printf "      End of %s       \n\n  Contents of community bashrc:  \n" "$SYSTEM_BASHRC_PATH"
   cat ${COMMUNITY_BASHRC_PATH}
-  printf " End of $COMMUNITY_BASHRC_PATH  \n\n"
+  printf " End of %s  \n\n" "$COMMUNITY_BASHRC_PATH"
 fi
 
 printf "\033[92m"
@@ -153,8 +153,8 @@ else
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
-if [ ${CURRENT_BRANCH} != "master" ]; then
-  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n"
+if [ "${CURRENT_BRANCH}" != "master" ]; then
+  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n" "${CURRENT_BRANCH}"
 fi
 
 update_echo "Current version: $OMC_VERSION"  # prints in update.sh
