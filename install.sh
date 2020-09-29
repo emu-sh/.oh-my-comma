@@ -29,7 +29,7 @@ GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
 OMC_VERSION=0.1.9
 
 update_print() {  # only prints if not updating
-  if [ "$update" != true ]; then
+  if [ "$update" = true ]; then
     echo "$1"
   fi
 }
