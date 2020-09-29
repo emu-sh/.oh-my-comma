@@ -60,7 +60,7 @@ if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   esac
 fi
 
-if [ $update = true ]; then
+if [ $update != true ]; then
   echo "\nInstalling emu utilities..."
 fi
 
