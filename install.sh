@@ -160,8 +160,9 @@ CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 update_echo "Current version: $OMC_VERSION"  # prints in update.sh
 if [ "$update" != true ]; then
   printf "\033[0mYou may need to run the following to initialize emu:\n\033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
-  printf "\033[0m\n\n"
 fi
+
+printf "\033[0m\n\n"  # reset color
 
 if [ $update = false ]; then
   set +x
