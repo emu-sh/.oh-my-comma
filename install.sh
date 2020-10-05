@@ -26,7 +26,13 @@ COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 GIT_BRANCH_NAME=master
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
-OMC_VERSION=0.1.9
+OMC_VERSION=0.1.10
+
+install_echo() {  # only prints if not updating
+  if [ "$update" != true ]; then
+    echo "$1"
+  fi
+}
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
@@ -48,7 +54,7 @@ if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
-echo "Remounting /system as rewritable (until NEOS 15)"
+install_echo "Remounting /system as rewritable (until NEOS 15)"
 mount -o rw,remount /system
 
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
@@ -60,15 +66,13 @@ if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   esac
 fi
 
-if [ $update = true ]; then
-  echo "\nInstalling emu utilities..."
-fi
+install_echo "\nInstalling emu utilities..."
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
-  echo "Your system /home/.bashrc exists..."
+  install_echo "Your system /home/.bashrc exists..."
   if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
   then
-    echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
+    install_echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
   else
     echo "Your bashrc file is different than the one on the repo. NEOS 15 will redirect all users to store their bashrc in /data/community"
     echo "Moving your current bashrc to /data/community"
@@ -81,15 +85,15 @@ else
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
 fi
 
-echo "Checking /home/.config symlink..."
-if [ `readlink -f /home/.config/powerline-shell` != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
+install_echo "Checking /home/.config symlink..."
+if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
   echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
   ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
 else
-  echo "Symlink check passed"
+  install_echo "Symlink check passed"
 fi
 
-echo "Remounting /system as read-only"
+install_echo "Remounting /system as read-only"
 mount -o r,remount /system
 
 #Coping user bashrc, outside of system partition
@@ -109,7 +113,7 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
     chmod 755 ${COMMUNITY_BASHRC_PATH}
     mv ${COMMUNITY_BASHRC_PATH} ${COMMUNITY_PATH}/.bashrc.lock
     sed -i.bak.$(date +"%Y-%m-%d-%T") -e "/^source \/data\/community\/\.oh-my-comma\/emu-utils\.sh$/d" ${COMMUNITY_BASHRC_PATH}.lock
-    echo "$(sed '/### End of \.oh-my-comma magic ###/q' ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n$(cat ${COMMUNITY_BASHRC_PATH}.lock)\n" >> ${COMMUNITY_BASHRC_PATH} 
+    printf "$(sed '/### End of \.oh-my-comma magic ###/q' ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n$(cat ${COMMUNITY_BASHRC_PATH}.lock)\n" >> ${COMMUNITY_BASHRC_PATH}
     rm ${COMMUNITY_BASHRC_PATH}.lock
     chmod 755 ${COMMUNITY_BASHRC_PATH}
     fi
@@ -117,16 +121,16 @@ if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
 
   if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu.sh'
   then
-    echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
+    install_echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
   else
     echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
-    printf "\n$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
+    printf "\n%s\n" "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)" >>  ${COMMUNITY_BASHRC_PATH}
   fi
 else
   echo "Creating the community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   touch ${COMMUNITY_BASHRC_PATH}
   chmod 755 ${COMMUNITY_BASHRC_PATH}
-  printf "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n" >>  ${COMMUNITY_BASHRC_PATH}
+  printf "%s\n" "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)" >>  ${COMMUNITY_BASHRC_PATH}
 fi
 touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
@@ -134,9 +138,9 @@ chmod 775 ${COMMUNITY_PATH}/.bash_history
 if [ $update = false ]; then
   printf "    Contents of system bashrc:   \n"
   cat ${SYSTEM_BASHRC_PATH}
-  printf "      End of $SYSTEM_BASHRC_PATH       \n\n  Contents of community bashrc:  \n"
+  printf "      End of %s       \n\n  Contents of community bashrc:  \n" "$SYSTEM_BASHRC_PATH"
   cat ${COMMUNITY_BASHRC_PATH}
-  printf " End of $COMMUNITY_BASHRC_PATH  \n\n"
+  printf " End of %s  \n\n" "$COMMUNITY_BASHRC_PATH"
 fi
 
 printf "\033[92m"
@@ -149,13 +153,16 @@ else
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
-if [ ${CURRENT_BRANCH} != "master" ]; then
-  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is ${CURRENT_BRANCH}. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n"
+if [ "${CURRENT_BRANCH}" != "master" ]; then
+  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n" "${CURRENT_BRANCH}"
 fi
 
-echo "Current version: $OMC_VERSION"
-printf "\033[0mYou may need to run the following to reflect the update:\n\033[92msource ${OH_MY_COMMA_PATH}/emu.sh"
-printf "\033[0m\n\n"
+install_echo "Current version: $OMC_VERSION"  # prints in update.sh
+if [ "$update" != true ]; then
+  printf "\033[0mYou may need to run the following to initialize emu:\n\033[92msource %s/emu.sh\n" "${OH_MY_COMMA_PATH}"
+fi
+
+printf "\033[0m\n"  # reset color
 
 if [ $update = false ]; then
   set +x

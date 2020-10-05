@@ -5,13 +5,24 @@ import os
 import json
 from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
-from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
+from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS, OH_MY_COMMA_PATH
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 REMOTE_ALREADY_EXISTS = 'already exists'
 DEFAULT_BRANCH_START = 'HEAD branch: '
 REMOTE_BRANCHES_START = 'Remote branches:\n'
 REMOTE_BRANCH_START = 'Remote branch:'
+CLONING_PATH = '{}/.cloning'.format(OH_MY_COMMA_PATH)
+
+
+def set_cloning(cloning):
+  if cloning:
+    if not os.path.exists(CLONING_PATH):
+      with open(CLONING_PATH, 'w') as f:
+        pass
+  else:
+    if os.path.exists(CLONING_PATH):
+      os.remove(CLONING_PATH)
 
 
 def valid_fork_url(url):
@@ -144,18 +155,18 @@ class Fork(CommandBase):
     if not self._init():
       return
     flags, e = self.parse_flags(self.commands['switch'].parser)
-    username = flags.username
-    branch = flags.branch
     if e is not None:
       error(e)
       self._help('switch')
       return
     else:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
-      if username is branch is None:
-        error('You must supply either username or branch or both!')
+      if flags.username is flags.branch is None:
+        error('You must supply either username or branch or both')
         self._help('switch')
         return
 
+    username = flags.username
+    branch = flags.branch
     if username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
@@ -377,7 +388,9 @@ class Fork(CommandBase):
       success('Backed up your current openpilot install to {}'.format(bak_dir))
 
     info('Cloning commaai/openpilot into {}, please wait...'.format(OPENPILOT_PATH))
+    set_cloning(True)  # don't git fetch on new sessions
     r = run(['git', 'clone', '-b', self.comma_default_branch, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to stock/release2 for setup
+    set_cloning(False)
     if not r:
       error('Error while cloning, please try again')
       return

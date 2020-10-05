@@ -120,7 +120,7 @@ def run(cmd, out_file=None):
   try:
     r = subprocess.call(cmd, stdout=f)
     return not r
-  except Exception as e:
+  except (Exception, KeyboardInterrupt) as e:
     # print(e)
     return False
 
