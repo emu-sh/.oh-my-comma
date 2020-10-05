@@ -1,3 +1,12 @@
+Release 0.1.11 (2020-10-05)
+=====
+
+* Don't fetch in new sessions while cloning
+* Clean up update screen
+* Exception catching:
+  * When user enters branch for fork switch without the -b flag
+  * KeyboardInterrupt exception while cloning
+
 Release 0.1.10 (2020-08-28)
 =====
 
