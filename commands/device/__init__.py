@@ -25,7 +25,12 @@ class Device(CommandBase):
 
   def _shutdown(self):
     flags, e = self.parse_flags(self.commands['shutdown'].parser)
-    if e is None and flags.reboot:
+    if e is not None:
+      error(e)
+      self._help('switch')
+      return
+
+    if flags.reboot:
       self.__reboot()
       return
     # check_output('am start -n android/com.android.internal.app.ShutdownActivity')
