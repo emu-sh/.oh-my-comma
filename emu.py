@@ -24,14 +24,12 @@ class Emu(BaseFunctions):
 
   def parse(self):
     cmd = self.next_arg()
-
     if cmd is None:
       self.print_commands(error_msg='You must specify a command for emu. Some options are:', ascii_art=True)
       return
     if cmd not in self.commands:
       self.print_commands(error_msg='Unknown command! Try one of these:')
       return
-
     self.commands[cmd].main(self.args, cmd)
 
 
