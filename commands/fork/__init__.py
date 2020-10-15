@@ -104,7 +104,7 @@ class Fork(CommandBase):
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
                                               Flag(['-b', '--branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str'),
-                                              Flag(['-f', '--force'], '🏋️‍♀️Similar to checkout -f, force checks out new branch overwriting any changes')]),
+                                              Flag(['-f', '--force'], '🏋️‍♀️ Similar to checkout -f, force checks out new branch overwriting any changes')]),
                      'list': Command(description='📜 See a list of installed forks and branches',
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
 
