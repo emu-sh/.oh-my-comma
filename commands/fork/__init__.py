@@ -5,7 +5,7 @@ import os
 import json
 from datetime import datetime
 from commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar, TimeDebugger
+from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS, OH_MY_COMMA_PATH
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
