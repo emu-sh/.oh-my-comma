@@ -285,7 +285,6 @@ class Fork(CommandBase):
     if reinit_subs:
       info('✅ Successfully reinitialized submodules!')
 
-
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
     if username not in installed_forks:
