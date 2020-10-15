@@ -32,20 +32,26 @@ class ArgumentParser(argparse.ArgumentParser):
 class TimeDebugger:
   def __init__(self, round_to=4):
     self.round_to = round_to
-    self.reset()
+    self.reset(full=True)
 
-  def reset(self):
+  def reset(self, full=False):
     self.last_time = time.time()
+    if full:
+      self.start_time = self.last_time
 
-  def print(self, msg=None):
-    elapsed = time.time() - self.last_time
+  def print(self, msg=None, total=False):
+    elapsed = round(time.time() - self.last_time, self.round_to)
     if msg is not None:
       msg = 'Time to {}'.format(msg)
     else:
       msg = 'Time elapsed'
-    print('{}: {} sec.'.format(msg, round(elapsed, self.round_to)))
+    print('{}: {} sec.'.format(msg, elapsed))
 
-    self.reset()
+    if total:
+      elapsed = round(time.time() - self.start_time, self.round_to)
+      print('Total: {} sec.'.format(elapsed))
+
+    self.reset(total)
 
 
 class BaseFunctions:

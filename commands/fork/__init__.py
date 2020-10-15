@@ -228,6 +228,7 @@ class Fork(CommandBase):
     td.print('remote show')
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
     td.print('__get_remote_branches')
+    td.print(total=True)
     if remote_branches is None:
       return
 
