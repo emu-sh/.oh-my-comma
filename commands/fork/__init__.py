@@ -236,7 +236,6 @@ class Fork(CommandBase):
     td.print('remote show')
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
 
-    td.print(total=True)
     if remote_branches is None:
       return
 
@@ -286,6 +285,7 @@ class Fork(CommandBase):
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
     success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
+    td.print(total=True)
 
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
