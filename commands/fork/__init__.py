@@ -311,12 +311,10 @@ class Fork(CommandBase):
         print(' - {}{}'.format(cb, COLORS.ENDC))
 
   def __prune_remote_branches(self, username):  # remove deleted remote branches locally
-    # TODO: Limit this operation to once every day. Takes about 300 ms every switch command
     last_prune = self.fork_params.get('last_prune')
     if isinstance(last_prune, str) and datetime.now().strftime("%d") == last_prune:
-      print('not pruning, still same day')
       return
-    print('days different, pruning!')
+    self.fork_params.put('last_prune', datetime.now().strftime("%d"))
 
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
     if r.output == '':  # nothing to prune
@@ -335,7 +333,6 @@ class Fork(CommandBase):
       else:
         error('Please try again, something went wrong:')
         print(r.output)
-    self.fork_params.put('last_prune', datetime.now().strftime("%d"))
 
   def __get_remote_info(self, username):
     for default_username in self.remote_defaults:
