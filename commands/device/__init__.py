@@ -19,16 +19,16 @@ class Device(CommandBase):
     check_output('am start -a android.settings.SETTINGS')
     success('⚙️ Opened settings!')
 
-  def _reboot(self):
-    check_output('am start -a android.intent.action.REBOOT')
+  def __reboot(self):
+    # check_output('am start -a android.intent.action.REBOOT')
     success('👋 See you in a bit!')
 
   def _shutdown(self):
     flags, e = self.parse_flags(self.commands['shutdown'].parser)
     if e is None and flags.reboot:
-      self._reboot()
+      self.__reboot()
       return
-    check_output('am start -n android/com.android.internal.app.ShutdownActivity')
+    # check_output('am start -n android/com.android.internal.app.ShutdownActivity')
     success('🌙 Goodnight!')
 
   def _battery(self):
