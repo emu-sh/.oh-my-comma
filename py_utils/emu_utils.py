@@ -138,7 +138,7 @@ def check_output(cmd, cwd=None):
     return Output(e.output)  # command executed but it resulted in error
 
 
-def run(cmd, out_file=None):
+def run(cmd, out_file=None):  # todo: return output with same format as check_output, but also output to user (current behavior)
   """
   If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
   The status is returned, True being success, False for failure
@@ -152,7 +152,6 @@ def run(cmd, out_file=None):
 
   try:
     r = subprocess.call(cmd, stdout=f)
-    print(r)
     return not r
   except (Exception, KeyboardInterrupt) as e:
     # print(e)
