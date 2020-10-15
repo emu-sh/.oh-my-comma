@@ -227,16 +227,15 @@ class Fork(CommandBase):
     if not r:
       error('Error while fetching remote, please try again')
       return
-    td.reset()
-    self.__add_fork(username)
-    td.print('__add_fork function')
 
+    self.__add_fork(username)
     self.__prune_remote_branches(username)
-    td.print('prune remote branches')
+
+    td.reset()
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     td.print('remote show')
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
-    td.print('__get_remote_branches')
+
     td.print(total=True)
     if remote_branches is None:
       return
@@ -245,6 +244,7 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
+    td.reset()
     if branch is None:  # user hasn't specified a branch, use remote's default branch
       if remote_info is not None:  # there's an overriding default branch specified
         remote_branch = remote_info.default_branch
@@ -262,7 +262,7 @@ class Fork(CommandBase):
     else:
       error('Error with branch!')
       return
-
+    td.print('branch parsing')
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     if remote_branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(local_branch, f'{username}/{remote_branch}'))
@@ -276,8 +276,10 @@ class Fork(CommandBase):
       if not r.success:
         error(r.output)
         return
+    td.print('git checkout')
     # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
     r = check_output(['git', '-C', OPENPILOT_PATH, 'reset', '--hard', f'{username}/{remote_branch}'])
+    td.print('reset --hard')
     if not r.success:
       error(r.output)
       return
