@@ -230,7 +230,7 @@ class Fork(CommandBase):
     td.reset()
     self.__add_fork(username)
     td.print('__add_fork function')
-
+    self.fork_params.put('last_prune', '16')
     self.__prune_remote_branches(username)
     td.print('prune remote branches')
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
