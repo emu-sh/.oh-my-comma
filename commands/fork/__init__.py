@@ -279,8 +279,6 @@ class Fork(CommandBase):
       return
 
     self.__init_submodules()
-
-
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
     success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
