@@ -42,15 +42,15 @@ class TimeDebugger:
       self.start_time = self.last_time
 
   def print(self, msg=None, total=False):
-    elapsed = time.time() - self.last_time
-    elapsed *= 1000 if self.convention == 'ms' else 1
-    if msg is not None:
-      msg = 'Time to {}'.format(msg)
+    if not total:
+      elapsed = time.time() - self.last_time
+      elapsed *= 1000 if self.convention == 'ms' else 1
+      if msg is not None:
+        msg = 'Time to {}'.format(msg)
+      else:
+        msg = 'Time elapsed'
+      print('{}: {} {}'.format(msg, round(elapsed, self.round_to), self.convention))
     else:
-      msg = 'Time elapsed'
-    print('{}: {} {}'.format(msg, round(elapsed, self.round_to), self.convention))
-
-    if total:
       elapsed = time.time() - self.start_time
       elapsed *= 1000 if self.convention == 'ms' else 1
       print('Total: {} {}'.format(round(elapsed, self.round_to), self.convention))
