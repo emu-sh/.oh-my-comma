@@ -212,7 +212,7 @@ class Fork(CommandBase):
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
-    td = TimeDebugger('ms', silent=True)
+    td = TimeDebugger('ms', silent=False)
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     td.print('git fetch')
     if not r:
@@ -331,13 +331,12 @@ class Fork(CommandBase):
         return remote_info
     return None
 
-  def __get_remote_branches(self, r):
-    td = TimeDebugger('ms')
+  @staticmethod
+  def __get_remote_branches(r):
     # get remote's branches to verify from output of command in parent function
     if not r.success:
       error(r.output)
       return None, None
-    td.print('r.success')
     if REMOTE_BRANCHES_START in r.output:
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
       remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
@@ -349,7 +348,6 @@ class Fork(CommandBase):
         if ' ' in b or b == '':  # end of branches
           break
         remote_branches.append(b)
-      td.print('get remote branches')
     elif REMOTE_BRANCH_START in r.output:  # remote has single branch, shouldn't need to handle stale here
       start_remote_branch = r.output.index(REMOTE_BRANCH_START)
       remote_branches = r.output[start_remote_branch + len(REMOTE_BRANCH_START):].split('\n')
@@ -366,8 +364,6 @@ class Fork(CommandBase):
     default_branch = r.output[start_default_branch + len(DEFAULT_BRANCH_START):]
     end_default_branch = default_branch.index('\n')
     default_branch = default_branch[:end_default_branch]
-    td.print('get default branch')
-    td.print(total=True)
     return remote_branches, default_branch
 
   # def _reset_hard(self):  # todo: this functionality
