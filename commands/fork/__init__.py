@@ -397,6 +397,7 @@ class Fork(CommandBase):
     r = check_output(['git', '-C', OPENPILOT_PATH, 'submodule', 'status'])
     print(len(r.output))
     if len(r.output):
+      info('Submodules detected, reinitializing!')
       r0 = check_output(['git', 'submodule', 'deinit', '--all', '-f'])
       r1 = check_output(['git', 'submodule', 'update', '--init', '--recursive'])
       if not r0.success or not r1.success:
