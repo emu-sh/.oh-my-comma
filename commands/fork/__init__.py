@@ -272,7 +272,10 @@ class Fork(CommandBase):
         command.append('-f')
       r = run(command)
       if not r:
-        error('Error while checking out branch, please try again')
+        if 'would be overwritten' in r:
+          error('Run the same command with -f flag to proceed and overwrite any changes')
+        else:
+          error('Error while checking out branch, please try again')
         return
       self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
     else:  # already installed branch, checking out fork_branch from f'{username}/{branch}'
@@ -281,8 +284,13 @@ class Fork(CommandBase):
         command.append('-f')
       r = run(command)
       if not r:
-        error('Error while checking out branch, please try again')
+        if 'would be overwritten' in r:
+          error('Run the same command with -f flag to proceed and overwrite any changes')
+        else:
+          error('Error while checking out branch, please try again')
         return
+
+
     td.print('git checkout')
     # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
     r = check_output(['git', '-C', OPENPILOT_PATH, 'reset', '--hard', f'{username}/{remote_branch}'])
@@ -393,9 +401,9 @@ class Fork(CommandBase):
     default_branch = default_branch[:end_default_branch]
     return remote_branches, default_branch
 
-  def __init_submodules(self):
+  @staticmethod
+  def __init_submodules():
     r = check_output(['git', '-C', OPENPILOT_PATH, 'submodule', 'status'])
-    print(len(r.output))
     if len(r.output):
       info('Submodules detected, reinitializing!')
       r0 = check_output(['git', 'submodule', 'deinit', '--all', '-f'])
