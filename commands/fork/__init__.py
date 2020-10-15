@@ -290,6 +290,10 @@ class Fork(CommandBase):
     if not r.success:
       error(r.output)
       return
+
+    self.__init_submodules()
+
+
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
     success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
@@ -308,7 +312,8 @@ class Fork(CommandBase):
     installed_forks[username]['installed_branches'].append(branch)
     self.fork_params.put('installed_forks', installed_forks)
 
-  def __show_similar_branches(self, branch, branches):
+  @staticmethod
+  def __show_similar_branches(branch, branches):
     if len(branches) > 0:
       info('Did you mean:')
       close_branches = most_similar(branch, branches)[:5]
@@ -388,10 +393,14 @@ class Fork(CommandBase):
     default_branch = default_branch[:end_default_branch]
     return remote_branches, default_branch
 
-  # def _reset_hard(self):  # todo: this functionality
-  #   # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
-  #   # git reset --hard arne182/075-clean
-  #   pass
+  def __init_submodules(self):
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'submodule', 'status'])
+    print(len(r.output))
+    if len(r.output):
+      r0 = check_output(['git', 'submodule', 'deinit', '--all', '-f'])
+      r1 = check_output(['git', 'submodule', 'update', '--init', '--recursive'])
+      if not r0.success or not r1.success:
+        error('Error reinitializing submodules for this branch!')
 
   def _init(self):
     if os.path.isdir('/data/community/forks'):
