@@ -264,32 +264,21 @@ class Fork(CommandBase):
       error('Error with branch!')
       return
     td.print('branch parsing')
+
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     if remote_branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(local_branch, f'{username}/{remote_branch}'))
       command = ['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', local_branch, f'{username}/{remote_branch}']
-      if force_switch:
-        command.append('-f')
-      r = run(command)
-      if not r:
-        if 'would be overwritten' in r:
-          error('Run the same command with -f flag to proceed and overwrite any changes')
-        else:
-          error('Error while checking out branch, please try again')
-        return
-      self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
     else:  # already installed branch, checking out fork_branch from f'{username}/{branch}'
       command = ['git', '-C', OPENPILOT_PATH, 'checkout', local_branch]
-      if force_switch:
-        command.append('-f')
-      r = run(command)
-      if not r:
-        if 'would be overwritten' in r:
-          error('Run the same command with -f flag to proceed and overwrite any changes')
-        else:
-          error('Error while checking out branch, please try again')
-        return
 
+    if force_switch:
+      command.append('-f')
+    r = run(command)
+    if not r:
+      error('Error while checking out branch, please try again or use flag --force')
+      return
+    self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
 
     td.print('git checkout')
     # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
@@ -315,10 +304,11 @@ class Fork(CommandBase):
         installed_forks[username]['installed_branches'].append(branch)
       self.fork_params.put('installed_forks', installed_forks)
 
-  def __add_branch(self, username, branch):  # assumes fork exists in params
+  def __add_branch(self, username, branch):  # assumes fork exists in params, doesn't add branch if exists
     installed_forks = self.fork_params.get('installed_forks')
-    installed_forks[username]['installed_branches'].append(branch)
-    self.fork_params.put('installed_forks', installed_forks)
+    if branch not in installed_forks[username]['installed_branches']:
+      installed_forks[username]['installed_branches'].append(branch)
+      self.fork_params.put('installed_forks', installed_forks)
 
   @staticmethod
   def __show_similar_branches(branch, branches):
