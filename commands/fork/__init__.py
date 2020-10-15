@@ -376,6 +376,7 @@ class Fork(CommandBase):
       shutil.rmtree('/data/community/forks')  # remove to save space
     if self.fork_params.get('setup_complete'):
       if os.path.exists(OPENPILOT_PATH):
+        print('remote show init!')
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
         if self.comma_origin_name in r.output.split('\n'):  # sign that we're set up correctly todo: check all forks exist as remotes
           return True
