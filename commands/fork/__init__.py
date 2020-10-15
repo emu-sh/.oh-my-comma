@@ -222,7 +222,7 @@ class Fork(CommandBase):
       info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
     td = TimeDebugger('ms', silent=False)
-    r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username, '--dry-run'])
+    r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     td.print('git fetch')
     if not r:
       error('Error while fetching remote, please try again')
