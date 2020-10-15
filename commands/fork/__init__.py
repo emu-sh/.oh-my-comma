@@ -271,9 +271,9 @@ class Fork(CommandBase):
         return
       self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
     else:  # already installed branch, checking out fork_branch from f'{username}/{branch}'
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', local_branch])
-      if not r.success:
-        error(r.output)
+      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', local_branch])
+      if not r:
+        error('Error while checking out branch, please try again')
         return
     td.print('git checkout')
     # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
