@@ -3,6 +3,7 @@
 import shutil
 import os
 import json
+from datetime import datetime
 from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar, TimeDebugger
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS, OH_MY_COMMA_PATH
@@ -309,9 +310,14 @@ class Fork(CommandBase):
           cb = COLORS.CYAN + cb
         print(' - {}{}'.format(cb, COLORS.ENDC))
 
-  @staticmethod
-  def __prune_remote_branches(username):  # remove deleted remote branches locally
+  def __prune_remote_branches(self, username):  # remove deleted remote branches locally
     # TODO: Limit this operation to once every day. Takes about 300 ms every switch command
+    last_prune = self.fork_params.get('last_prune')
+    if isinstance(last_prune, str) and datetime.now().strftime("%d") == last_prune:
+      print('not pruning, still same day')
+      return
+    print('days different, pruning!')
+
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
     if r.output == '':  # nothing to prune
       return
@@ -329,6 +335,8 @@ class Fork(CommandBase):
       else:
         error('Please try again, something went wrong:')
         print(r.output)
+
+    self.fork_params.put('last_prune', datetime.now().strftime("%d"))
 
   def __get_remote_info(self, username):
     for default_username in self.remote_defaults:
