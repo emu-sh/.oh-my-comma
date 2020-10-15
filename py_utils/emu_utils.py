@@ -152,6 +152,7 @@ def run(cmd, out_file=None):
 
   try:
     r = subprocess.call(cmd, stdout=f)
+    print(r)
     return not r
   except (Exception, KeyboardInterrupt) as e:
     # print(e)
