@@ -281,7 +281,7 @@ class Fork(CommandBase):
     self.__init_submodules()
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
-    info('Successfully checkout out {}/{} as {}'.format(COLORS.SUCCESS + username, remote_branch + COLORS.WARNING, COLORS.SUCCESS + local_branch))
+    info('✅ Successfully checkout out {}/{} as {}'.format(COLORS.SUCCESS + username, remote_branch + COLORS.WARNING, COLORS.SUCCESS + local_branch))
     # success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
 
   def __add_fork(self, username, branch=None):
