@@ -283,7 +283,7 @@ class Fork(CommandBase):
     self.fork_params.put('current_branch', remote_branch)
     info('\n✅ Successfully checkout out {}/{} as {}'.format(COLORS.SUCCESS + username, remote_branch + COLORS.WARNING, COLORS.SUCCESS + local_branch))
     if reinit_subs:
-      info('✅ Successfully reinitialized submodules!')
+      success('✅ Successfully reinitialized submodules!')
 
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
