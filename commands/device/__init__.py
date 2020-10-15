@@ -27,7 +27,7 @@ class Device(CommandBase):
     flags, e = self.parse_flags(self.commands['shutdown'].parser)
     if e is not None:
       error(e)
-      self._help('switch')
+      self._help('shutdown')
       return
 
     if flags.reboot:
