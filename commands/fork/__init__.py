@@ -303,6 +303,7 @@ class Fork(CommandBase):
 
   @staticmethod
   def __prune_remote_branches(username):  # remove deleted remote branches locally
+    return
     td = TimeDebugger('ms', silent=False)
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
     td.print('remote prune --dry-run')
