@@ -303,15 +303,12 @@ class Fork(CommandBase):
 
   @staticmethod
   def __prune_remote_branches(username):  # remove deleted remote branches locally
-    return
-    td = TimeDebugger('ms', silent=False)
+    # TODO: Limit this operation to once every day. Takes about 300 ms every switch command
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
-    td.print('remote prune --dry-run')
     if r.output == '':  # nothing to prune
       return
     branches_to_prune = [b.strip() for b in r.output.split('\n') if 'would prune' in b]
     branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
-    td.print('list comps')
 
     error('\nDeleted remote branches detected:')
     for b in branches_to_prune:
@@ -334,11 +331,14 @@ class Fork(CommandBase):
         return remote_info
     return None
 
-  def __get_remote_branches(self, r):
+  @staticmethod
+  def __get_remote_branches(r):
+    td = TimeDebugger('ms')
     # get remote's branches to verify from output of command in parent function
     if not r.success:
       error(r.output)
       return None, None
+    td.print('r.success')
     if REMOTE_BRANCHES_START in r.output:
       start_remote_branches = r.output.index(REMOTE_BRANCHES_START)
       remote_branches_txt = r.output[start_remote_branches + len(REMOTE_BRANCHES_START):].split('\n')
@@ -350,6 +350,7 @@ class Fork(CommandBase):
         if ' ' in b or b == '':  # end of branches
           break
         remote_branches.append(b)
+      td.print('get remote branches')
     elif REMOTE_BRANCH_START in r.output:  # remote has single branch, shouldn't need to handle stale here
       start_remote_branch = r.output.index(REMOTE_BRANCH_START)
       remote_branches = r.output[start_remote_branch + len(REMOTE_BRANCH_START):].split('\n')
@@ -366,6 +367,7 @@ class Fork(CommandBase):
     default_branch = r.output[start_default_branch + len(DEFAULT_BRANCH_START):]
     end_default_branch = default_branch.index('\n')
     default_branch = default_branch[:end_default_branch]
+    td.print('get default branch')
     return remote_branches, default_branch
 
   # def _reset_hard(self):  # todo: this functionality
