@@ -178,7 +178,6 @@ class Fork(CommandBase):
     username = flags.username
     branch = flags.branch
     force_switch = flags.force
-    print(force_switch)
     if username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
@@ -266,15 +265,16 @@ class Fork(CommandBase):
       return
     td.print('branch parsing')
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
+    force_flag = '-f' if force_switch else ''
     if remote_branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(local_branch, f'{username}/{remote_branch}'))
-      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', local_branch, f'{username}/{remote_branch}'])
+      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', local_branch, f'{username}/{remote_branch}', force_flag])
       if not r:
         error('Error while checking out branch, please try again')
         return
       self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
     else:  # already installed branch, checking out fork_branch from f'{username}/{branch}'
-      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', local_branch])
+      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', local_branch, force_flag])
       if not r:
         error('Error while checking out branch, please try again')
         return
