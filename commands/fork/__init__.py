@@ -212,7 +212,7 @@ class Fork(CommandBase):
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
-    td = TimeDebugger('ms')
+    td = TimeDebugger('ms', silent=True)
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     td.print('git fetch')
     if not r:
@@ -301,7 +301,8 @@ class Fork(CommandBase):
           cb = COLORS.CYAN + cb
         print(' - {}{}'.format(cb, COLORS.ENDC))
 
-  def __prune_remote_branches(self, username):  # remove deleted remote branches locally
+  @staticmethod
+  def __prune_remote_branches(username):  # remove deleted remote branches locally
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
     if r.output == '':  # nothing to prune
       return
