@@ -4,7 +4,7 @@ import shutil
 import os
 import json
 from commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
+from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar, TimeDebugger
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS, OH_MY_COMMA_PATH
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
@@ -206,20 +206,28 @@ class Fork(CommandBase):
         return
 
     # fork has been added as a remote, switch to it
+
     if fork_in_params:
       info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
+    td = TimeDebugger()
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
+    td.print('git fetch')
     if not r:
       error('Error while fetching remote, please try again')
       return
+    td.reset()
     self.__add_fork(username)
+    td.print('__add_fork function')
 
     self.__prune_remote_branches(username)
+    td.print('prune remote branches')
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
+    td.print('remote show')
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
+    td.print('__get_remote_branches')
     if remote_branches is None:
       return
 

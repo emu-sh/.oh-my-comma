@@ -5,6 +5,7 @@ import psutil
 import difflib
 import argparse
 import subprocess
+import time
 if __package__ is None:
   from os import path
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
@@ -26,6 +27,25 @@ FORK_PARAM_PATH = '/data/community/forks.json'
 class ArgumentParser(argparse.ArgumentParser):
   def error(self, message):
     raise Exception('error: {}'.format(message))
+
+
+class TimeDebugger:
+  def __init__(self, round_to=4):
+    self.round_to = round_to
+    self.reset()
+
+  def reset(self):
+    self.last_time = time.time()
+
+  def print(self, msg=None):
+    elapsed = time.time() - self.last_time
+    if msg is not None:
+      msg = 'Time to {}'.format(msg)
+    else:
+      msg = 'Time elapsed'
+    print('{}: {} sec.'.format(msg, round(elapsed, self.round_to)))
+
+    self.reset()
 
 
 class BaseFunctions:
