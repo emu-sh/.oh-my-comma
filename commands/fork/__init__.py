@@ -41,15 +41,23 @@ class ForkParams:
     self.default_params = {'current_fork': None,
                            'current_branch': None,
                            'installed_forks': {},
+                           'last_prune': None,
                            'setup_complete': False}
     self._init()
 
   def _init(self):
-    self.params = self.default_params  # start with default params
-    if not os.path.exists(FORK_PARAM_PATH):  # if first time running, just write default
-      self._write()
-      return
-    self._read()
+    if os.path.exists(FORK_PARAM_PATH):
+      try:
+        self._read()
+        for param in self.default_params:
+          if param not in self.params:
+            self.params[param] = self.default_params[param]
+        return
+      except:
+        pass
+
+    self.params = self.default_params  # default params
+    self._write()  # failed to read, just write default
 
   def get(self, key):
     return self.params[key]
@@ -376,7 +384,6 @@ class Fork(CommandBase):
       shutil.rmtree('/data/community/forks')  # remove to save space
     if self.fork_params.get('setup_complete'):
       if os.path.exists(OPENPILOT_PATH):
-        print('remote show init!')
         r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show'])
         if self.comma_origin_name in r.output.split('\n'):  # sign that we're set up correctly todo: check all forks exist as remotes
           return True
