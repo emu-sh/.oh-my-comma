@@ -12,7 +12,7 @@ class Device(CommandBase):
     self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
                      'reboot': Command(description='⚡ safely reboot your device'),
                      'shutdown': Command(description='🔌 safely shutdown your device',
-                                         flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot the device', dtype='bool')]),
+                                         flags=[Flag(['-r', '--reboot'], 'Safely reboot the device', dtype='bool')]),
                      'settings': Command(description='⚙️ open the Settings app')}
 
   def _settings(self):
