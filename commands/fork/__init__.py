@@ -278,11 +278,12 @@ class Fork(CommandBase):
       error(r.output)
       return
 
-    self.__init_submodules()
+    reinit_subs = self.__init_submodules()
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
     info('✅ Successfully checkout out {}/{} as {}'.format(COLORS.SUCCESS + username, remote_branch + COLORS.WARNING, COLORS.SUCCESS + local_branch))
-    # success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
+    if reinit_subs:
+      info('✅ Successfully reinitialized submodules!')
 
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
@@ -388,6 +389,9 @@ class Fork(CommandBase):
       r1 = check_output(['git', '-C', OPENPILOT_PATH, 'submodule', 'update', '--init', '--recursive'])
       if not r0.success or not r1.success:
         error('Error reinitializing submodules for this branch!')
+      else:
+        return True
+    return False
 
   def _init(self):
     if os.path.isdir('/data/community/forks'):
