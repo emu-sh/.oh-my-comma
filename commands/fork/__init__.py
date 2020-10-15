@@ -212,7 +212,7 @@ class Fork(CommandBase):
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
-    td = TimeDebugger()
+    td = TimeDebugger('ms')
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
     td.print('git fetch')
     if not r:

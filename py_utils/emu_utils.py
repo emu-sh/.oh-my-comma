@@ -30,7 +30,9 @@ class ArgumentParser(argparse.ArgumentParser):
 
 
 class TimeDebugger:
-  def __init__(self, round_to=4):
+  def __init__(self, convention='s', round_to=4):
+    assert convention in ['s', 'ms'], 'Must be "s" or "ms"!'
+    self.convention = convention
     self.round_to = round_to
     self.reset(full=True)
 
@@ -40,16 +42,18 @@ class TimeDebugger:
       self.start_time = self.last_time
 
   def print(self, msg=None, total=False):
-    elapsed = round(time.time() - self.last_time, self.round_to)
+    elapsed = time.time() - self.last_time
+    elapsed *= 1000 if self.convention == 'ms' else 1
     if msg is not None:
       msg = 'Time to {}'.format(msg)
     else:
       msg = 'Time elapsed'
-    print('{}: {} sec.'.format(msg, elapsed))
+    print('{}: {} {}'.format(msg, round(elapsed, self.round_to), self.convention))
 
     if total:
-      elapsed = round(time.time() - self.start_time, self.round_to)
-      print('Total: {} sec.'.format(elapsed))
+      elapsed = time.time() - self.start_time
+      elapsed *= 1000 if self.convention == 'ms' else 1
+      print('Total: {} {}'.format(round(elapsed, self.round_to), self.convention))
 
     self.reset(total)
 
