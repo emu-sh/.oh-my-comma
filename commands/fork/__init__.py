@@ -223,21 +223,15 @@ class Fork(CommandBase):
     else:
       info('Fetching {}\'s fork, this may take a sec...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
 
-    td = TimeDebugger('ms', silent=False)
     r = run(['git', '-C', OPENPILOT_PATH, 'fetch', username])
-    td.print('git fetch')
     if not r:
       error('Error while fetching remote, please try again')
       return
 
     self.__add_fork(username)
     self.__prune_remote_branches(username)
-
-    td.reset()
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
-    td.print('remote show')
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
-
     if remote_branches is None:
       return
 
@@ -245,7 +239,6 @@ class Fork(CommandBase):
       error('Error: Cannot find default branch from fork!')
       return
 
-    td.reset()
     if branch is None:  # user hasn't specified a branch, use remote's default branch
       if remote_info is not None:  # there's an overriding default branch specified
         remote_branch = remote_info.default_branch
@@ -263,7 +256,6 @@ class Fork(CommandBase):
     else:
       error('Error with branch!')
       return
-    td.print('branch parsing')
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     if remote_branch not in installed_forks[username]['installed_branches']:
@@ -280,10 +272,8 @@ class Fork(CommandBase):
       return
     self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
 
-    td.print('git checkout')
     # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
     r = check_output(['git', '-C', OPENPILOT_PATH, 'reset', '--hard', f'{username}/{remote_branch}'])
-    td.print('reset --hard')
     if not r.success:
       error(r.output)
       return
@@ -294,7 +284,6 @@ class Fork(CommandBase):
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
     success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
-    td.print(total=True)
 
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
