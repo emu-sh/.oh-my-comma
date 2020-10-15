@@ -331,8 +331,7 @@ class Fork(CommandBase):
         return remote_info
     return None
 
-  @staticmethod
-  def __get_remote_branches(r):
+  def __get_remote_branches(self, r):
     td = TimeDebugger('ms')
     # get remote's branches to verify from output of command in parent function
     if not r.success:
