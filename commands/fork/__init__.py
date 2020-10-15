@@ -368,6 +368,7 @@ class Fork(CommandBase):
     end_default_branch = default_branch.index('\n')
     default_branch = default_branch[:end_default_branch]
     td.print('get default branch')
+    td.print(total=True)
     return remote_branches, default_branch
 
   # def _reset_hard(self):  # todo: this functionality
