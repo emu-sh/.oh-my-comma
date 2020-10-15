@@ -14,6 +14,7 @@ if __package__ is None:
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
 
+
 class Emu(BaseFunctions):
   def __init__(self, args):
     self.name = 'emu'

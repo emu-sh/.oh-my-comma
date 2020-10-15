@@ -3,6 +3,7 @@
 from py_utils.colors import COLORS
 from py_utils.emu_utils import ArgumentParser, BaseFunctions, success, error
 
+
 class CommandBase(BaseFunctions):
   def __init__(self):
     self.name = ''
@@ -77,6 +78,7 @@ class CommandBase(BaseFunctions):
       print('\n'.join(cmds_to_print))
     return has_extra_info
 
+
 class Flag:
   def __init__(self, aliases, description, required=False, dtype='bool'):
     if isinstance(aliases, str):
@@ -88,6 +90,7 @@ class Flag:
     self.dtype = dtype
     if self.required and self.aliases[0][0] == '-':
       raise Exception('Positional arguments cannot be required!')
+
 
 class Command:
   def __init__(self, description=None, commands=None, flags=None):
