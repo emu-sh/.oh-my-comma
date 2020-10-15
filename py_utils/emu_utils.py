@@ -6,8 +6,10 @@ import difflib
 import argparse
 import subprocess
 import time
+
 if __package__ is None:
   from os import path
+
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
   from py_utils.colors import COLORS
 else:
@@ -57,7 +59,6 @@ class TimeDebugger:
       elapsed = time.time() - self.start_time
       elapsed *= 1000 if self.convention == 'ms' else 1
       print('Total: {} {}'.format(round(elapsed, self.round_to), self.convention))
-
     self.reset(total)
 
 
@@ -128,6 +129,7 @@ def check_output(cmd, cwd=None):
     def __init__(self, output='', s=True):
       self.output = output
       self.success = s
+
   if isinstance(cmd, str):
     cmd = cmd.split()
   try:
