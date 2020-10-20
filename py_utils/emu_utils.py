@@ -186,7 +186,7 @@ def error(msg, end='\n', ret=False, start=''):
   :param ret: Whether to return the formatted string, or print it
   :return: The formatted string if ret is True
   """
-  e = '❌' + start + '{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC)
+  e = start + '❌ {}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC)
   if ret:
     return e
   print(e, end=end)
