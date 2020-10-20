@@ -178,7 +178,7 @@ def is_affirmative():
   return i in ['y', 'yes', 'sure', '']
 
 
-def error(msg, end='\n', ret=False):
+def error(msg, end='\n', ret=False, start=''):
   """
   The following applies to error, warning, and success methods
   :param msg: The message to display
@@ -186,7 +186,7 @@ def error(msg, end='\n', ret=False):
   :param ret: Whether to return the formatted string, or print it
   :return: The formatted string if ret is True
   """
-  e = '❌ {}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC)
+  e = '❌' + start + '{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC)
   if ret:
     return e
   print(e, end=end)
