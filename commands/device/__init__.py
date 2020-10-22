@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, warning, error, check_output, COLORS, success
+from py_utils.emu_utils import error, check_output, COLORS, success
+
 
 class Device(CommandBase):
   def __init__(self):
@@ -12,26 +13,34 @@ class Device(CommandBase):
     self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
                      'reboot': Command(description='⚡ safely reboot your device'),
                      'shutdown': Command(description='🔌 safely shutdown your device',
-                                         flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot the device', dtype='bool')]),
+                                         flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot your device', dtype='bool')]),
                      'settings': Command(description='⚙️ open the Settings app')}
 
-  def _settings(self):
+  @staticmethod
+  def _settings():
     check_output('am start -a android.settings.SETTINGS')
     success('⚙️ Opened settings!')
 
-  def _reboot(self):
+  @staticmethod
+  def __reboot():
     check_output('am start -a android.intent.action.REBOOT')
     success('👋 See you in a bit!')
 
   def _shutdown(self):
     flags, e = self.parse_flags(self.commands['shutdown'].parser)
-    if e is None and flags.reboot:
-      self._reboot()
+    if e is not None:
+      error(e)
+      self._help('shutdown')
+      return
+
+    if flags.reboot:
+      self.__reboot()
       return
     check_output('am start -n android/com.android.internal.app.ShutdownActivity')
     success('🌙 Goodnight!')
 
-  def _battery(self):
+  @staticmethod
+  def _battery():
     r = check_output('dumpsys batterymanager')
     if not r:
       error('Unable to get battery status!')

@@ -3,6 +3,7 @@
 import shutil
 import os
 import json
+from datetime import datetime
 from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS, OH_MY_COMMA_PATH
@@ -41,15 +42,23 @@ class ForkParams:
     self.default_params = {'current_fork': None,
                            'current_branch': None,
                            'installed_forks': {},
+                           'last_prune': None,
                            'setup_complete': False}
     self._init()
 
   def _init(self):
-    self.params = self.default_params  # start with default params
-    if not os.path.exists(FORK_PARAM_PATH):  # if first time running, just write default
-      self._write()
-      return
-    self._read()
+    if os.path.exists(FORK_PARAM_PATH):
+      try:
+        self._read()
+        for param in self.default_params:
+          if param not in self.params:
+            self.params[param] = self.default_params[param]
+        return
+      except:
+        pass
+
+    self.params = self.default_params  # default params
+    self._write()  # failed to read, just write default
 
   def get(self, key):
     return self.params[key]
@@ -94,7 +103,8 @@ class Fork(CommandBase):
 
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
-                                              Flag(['-b', '--branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str')]),
+                                              Flag(['-b', '--branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str'),
+                                              Flag(['-f', '--force'], '💪 Similar to checkout -f, force checks out new branch overwriting any changes')]),
                      'list': Command(description='📜 See a list of installed forks and branches',
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
 
@@ -167,6 +177,7 @@ class Fork(CommandBase):
 
     username = flags.username
     branch = flags.branch
+    force_switch = flags.force
     if username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
@@ -215,8 +226,8 @@ class Fork(CommandBase):
     if not r:
       error('Error while fetching remote, please try again')
       return
-    self.__add_fork(username)
 
+    self.__add_fork(username)
     self.__prune_remote_branches(username)
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'show', username])
     remote_branches, default_remote_branch = self.__get_remote_branches(r)
@@ -234,38 +245,41 @@ class Fork(CommandBase):
       else:
         local_branch = '{}_{}'.format(username, default_remote_branch)
         remote_branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
-    elif len(branch) > 0:
+    else:
       local_branch = f'{username}_{branch}'
       remote_branch = branch
       if remote_branch not in remote_branches:
         error('The branch you specified does not exist!')
         self.__show_similar_branches(remote_branch, remote_branches)  # if possible
         return
-    else:
-      error('Error with branch!')
-      return
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     if remote_branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(local_branch, f'{username}/{remote_branch}'))
-      r = run(['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', local_branch, f'{username}/{remote_branch}'])
-      if not r:
-        error('Error while checking out branch, please try again')
-        return
-      self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
+      command = ['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', local_branch, f'{username}/{remote_branch}']
     else:  # already installed branch, checking out fork_branch from f'{username}/{branch}'
-      r = check_output(['git', '-C', OPENPILOT_PATH, 'checkout', local_branch])
-      if not r.success:
-        error(r.output)
-        return
+      command = ['git', '-C', OPENPILOT_PATH, 'checkout', local_branch]
+
+    if force_switch:
+      command.append('-f')
+    r = run(command)
+    if not r:
+      error('Error while checking out branch, please try again or use flag --force')
+      return
+    self.__add_branch(username, remote_branch)  # we can deduce fork branch from username and original branch f({username}_{branch})
+
     # reset to remote/branch just to ensure we checked out fully. if remote branch has been force pushed, this will also reset local to remote
     r = check_output(['git', '-C', OPENPILOT_PATH, 'reset', '--hard', f'{username}/{remote_branch}'])
     if not r.success:
       error(r.output)
       return
+
+    reinit_subs = self.__init_submodules()
     self.fork_params.put('current_fork', username)
     self.fork_params.put('current_branch', remote_branch)
-    success('Successfully checked out {}/{} as {}'.format(username, remote_branch, local_branch))
+    info('\n✅ Successfully checked out {}/{} as {}'.format(COLORS.SUCCESS + username, remote_branch + COLORS.WARNING, COLORS.SUCCESS + local_branch))
+    if reinit_subs:
+      success('✅ Successfully reinitialized submodules!')
 
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
@@ -275,12 +289,14 @@ class Fork(CommandBase):
         installed_forks[username]['installed_branches'].append(branch)
       self.fork_params.put('installed_forks', installed_forks)
 
-  def __add_branch(self, username, branch):  # assumes fork exists in params
+  def __add_branch(self, username, branch):  # assumes fork exists in params, doesn't add branch if exists
     installed_forks = self.fork_params.get('installed_forks')
-    installed_forks[username]['installed_branches'].append(branch)
-    self.fork_params.put('installed_forks', installed_forks)
+    if branch not in installed_forks[username]['installed_branches']:
+      installed_forks[username]['installed_branches'].append(branch)
+      self.fork_params.put('installed_forks', installed_forks)
 
-  def __show_similar_branches(self, branch, branches):
+  @staticmethod
+  def __show_similar_branches(branch, branches):
     if len(branches) > 0:
       info('Did you mean:')
       close_branches = most_similar(branch, branches)[:5]
@@ -293,13 +309,18 @@ class Fork(CommandBase):
         print(' - {}{}'.format(cb, COLORS.ENDC))
 
   def __prune_remote_branches(self, username):  # remove deleted remote branches locally
+    last_prune = self.fork_params.get('last_prune')
+    if isinstance(last_prune, str) and datetime.now().strftime("%d") == last_prune:
+      return
+    self.fork_params.put('last_prune', datetime.now().strftime("%d"))
+
     r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'prune', username, '--dry-run'])
     if r.output == '':  # nothing to prune
       return
     branches_to_prune = [b.strip() for b in r.output.split('\n') if 'would prune' in b]
     branches_to_prune = [b[b.index(username):] for b in branches_to_prune]
 
-    error('\nDeleted remote branches detected:')
+    error('Deleted remote branches detected:', start='\n')
     for b in branches_to_prune:
       print(COLORS.CYAN + '  - {}'.format(b) + COLORS.ENDC)
     warning('\nWould you like to delete them locally?')
@@ -320,7 +341,8 @@ class Fork(CommandBase):
         return remote_info
     return None
 
-  def __get_remote_branches(self, r):
+  @staticmethod
+  def __get_remote_branches(r):
     # get remote's branches to verify from output of command in parent function
     if not r.success:
       error(r.output)
@@ -354,10 +376,18 @@ class Fork(CommandBase):
     default_branch = default_branch[:end_default_branch]
     return remote_branches, default_branch
 
-  # def _reset_hard(self):  # todo: this functionality
-  #   # to reset --hard with this repo structure, we need to give it the actual remote's branch name, not with username prepended. like:
-  #   # git reset --hard arne182/075-clean
-  #   pass
+  @staticmethod
+  def __init_submodules():
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'submodule', 'status'])
+    if len(r.output):
+      info('Submodules detected, reinitializing!')
+      r0 = check_output(['git', '-C', OPENPILOT_PATH, 'submodule', 'deinit', '--all', '-f'])
+      r1 = check_output(['git', '-C', OPENPILOT_PATH, 'submodule', 'update', '--init', '--recursive'])
+      if not r0.success or not r1.success:
+        error('Error reinitializing submodules for this branch!')
+      else:
+        return True
+    return False
 
   def _init(self):
     if os.path.isdir('/data/community/forks'):

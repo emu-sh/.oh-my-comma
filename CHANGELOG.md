@@ -1,3 +1,15 @@
+Release 0.1.12 (2020-10-22)
+=====
+
+* Force reinitializes when submodules detected on the branch we're switching to
+  * Fixes openpilot not starting when switching away and back to a branch with submodule
+* Show what git is doing when switching branches (make checkout verbose)
+* Speed up switching by ~300ms by only pruning once every 24 hrs.
+* Add `--force` flag to switch command, same as `git checkout -f`
+* Fix `shutdown` command happily taking any argument without error, defaulting to shutdown when not `-r`
+* Add x emoji (❌) prepended to all errors using error function, makes errors stand out more.
+
+
 Release 0.1.11 (2020-10-05)
 =====
 

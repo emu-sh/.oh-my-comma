@@ -5,8 +5,11 @@ import psutil
 import difflib
 import argparse
 import subprocess
+import time
+
 if __package__ is None:
   from os import path
+
   sys.path.append(path.abspath(path.join(path.dirname(__file__), '../py_utils')))
   from py_utils.colors import COLORS
 else:
@@ -26,6 +29,37 @@ FORK_PARAM_PATH = '/data/community/forks.json'
 class ArgumentParser(argparse.ArgumentParser):
   def error(self, message):
     raise Exception('error: {}'.format(message))
+
+
+class TimeDebugger:
+  def __init__(self, convention='s', round_to=4, silent=False):
+    assert convention in ['s', 'ms'], 'Must be "s" or "ms"!'
+    self.convention = convention
+    self.round_to = round_to
+    self.silent = silent
+    self.reset(full=True)
+
+  def reset(self, full=False):
+    self.last_time = time.time()
+    if full:
+      self.start_time = self.last_time
+
+  def print(self, msg=None, total=False):
+    if self.silent:
+      return
+    if not total:
+      elapsed = time.time() - self.last_time
+      elapsed *= 1000 if self.convention == 'ms' else 1
+      if msg is not None:
+        msg = 'Time to {}'.format(msg)
+      else:
+        msg = 'Time elapsed'
+      print('{}: {} {}'.format(msg, round(elapsed, self.round_to), self.convention))
+    else:
+      elapsed = time.time() - self.start_time
+      elapsed *= 1000 if self.convention == 'ms' else 1
+      print('Total: {} {}'.format(round(elapsed, self.round_to), self.convention))
+    self.reset(total)
 
 
 class BaseFunctions:
@@ -95,6 +129,7 @@ def check_output(cmd, cwd=None):
     def __init__(self, output='', s=True):
       self.output = output
       self.success = s
+
   if isinstance(cmd, str):
     cmd = cmd.split()
   try:
@@ -105,7 +140,7 @@ def check_output(cmd, cwd=None):
     return Output(e.output)  # command executed but it resulted in error
 
 
-def run(cmd, out_file=None):
+def run(cmd, out_file=None):  # todo: return output with same format as check_output, but also output to user (current behavior)
   """
   If cmd is a string, it is split into a list, otherwise it doesn't modify cmd.
   The status is returned, True being success, False for failure
@@ -143,7 +178,7 @@ def is_affirmative():
   return i in ['y', 'yes', 'sure', '']
 
 
-def error(msg, end='\n', ret=False):
+def error(msg, end='\n', ret=False, start=''):
   """
   The following applies to error, warning, and success methods
   :param msg: The message to display
@@ -151,7 +186,7 @@ def error(msg, end='\n', ret=False):
   :param ret: Whether to return the formatted string, or print it
   :return: The formatted string if ret is True
   """
-  e = '{}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC)
+  e = start + '❌ {}{}{}'.format(COLORS.FAIL, msg, COLORS.ENDC)
   if ret:
     return e
   print(e, end=end)

@@ -14,6 +14,7 @@ if __package__ is None:
 sys.path.append(OPENPILOT_PATH)  # for importlib
 DEBUG = not path.exists('/data/params/d')
 
+
 class Emu(BaseFunctions):
   def __init__(self, args):
     self.name = 'emu'
@@ -23,14 +24,12 @@ class Emu(BaseFunctions):
 
   def parse(self):
     cmd = self.next_arg()
-
     if cmd is None:
       self.print_commands(error_msg='You must specify a command for emu. Some options are:', ascii_art=True)
       return
     if cmd not in self.commands:
       self.print_commands(error_msg='Unknown command! Try one of these:')
       return
-
     self.commands[cmd].main(self.args, cmd)
 
 
