@@ -217,7 +217,6 @@ class Fork(CommandBase):
         return
 
     # fork has been added as a remote, switch to it
-
     if fork_in_params:
       info('Fetching {}\'s latest changes...'.format(COLORS.SUCCESS + username + COLORS.WARNING))
     else:
