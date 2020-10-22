@@ -245,16 +245,13 @@ class Fork(CommandBase):
       else:
         local_branch = '{}_{}'.format(username, default_remote_branch)
         remote_branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
-    elif len(branch) > 0:
+    else:
       local_branch = f'{username}_{branch}'
       remote_branch = branch
       if remote_branch not in remote_branches:
         error('The branch you specified does not exist!')
         self.__show_similar_branches(remote_branch, remote_branches)  # if possible
         return
-    else:
-      error('Error with branch!')
-      return
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     if remote_branch not in installed_forks[username]['installed_branches']:
