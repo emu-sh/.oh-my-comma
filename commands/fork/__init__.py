@@ -111,12 +111,8 @@ class Fork(CommandBase):
   def _list(self):
     if not self._init():
       return
-    flags, e = self.parse_flags(self.commands['list'].parser)
+    flags = self.get_flags('list')
     specified_fork = flags.fork
-    if e is not None:
-      error(e)
-      self._help('list')
-      return
 
     installed_forks = self.fork_params.get('installed_forks')
     if specified_fork is None:
