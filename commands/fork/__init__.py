@@ -304,7 +304,7 @@ class Fork(CommandBase):
       info('Did you mean:')
       close_branches = most_similar(branch, branches)[:5]
       for idx in range(len(close_branches)):
-        cb = close_branches[idx]
+        cb = close_branches[idx][0]
         if idx == 0:
           cb = COLORS.OKGREEN + cb
         else:
