@@ -14,30 +14,30 @@ class Device(CommandBase):
                      'reboot': Command(description='⚡ safely reboot your device'),
                      'shutdown': Command(description='🔌 safely shutdown your device',
                                          flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot your device', dtype='bool')]),
-                     'settings': Command(description='⚙️ open the Settings app')}
+                     'settings': Command(description='⚙️ open the Settings app',
+                                         flags=[Flag(['-c', '--close'], 'Closes the settings application', dtype='bool')])}
 
-  @staticmethod
-  def _settings():
-    check_output('am start -a android.settings.SETTINGS')
-    success('⚙️ Opened settings!')
-
-  @staticmethod
-  def __reboot():
-    check_output('am start -a android.intent.action.REBOOT')
-    success('👋 See you in a bit!')
+  def _settings(self):
+    flags = self.get_flags('settings')
+    if flags.close:
+      check_output('kill $(pgrep com.android.settings)', shell=True)
+      success('⚙️ Closed settings!')
+    else:
+      check_output('am start -a android.settings.SETTINGS')
+      success('⚙️ Opened settings!')
 
   def _shutdown(self):
-    flags, e = self.parse_flags(self.commands['shutdown'].parser)
-    if e is not None:
-      error(e)
-      self._help('shutdown')
-      return
-
+    flags = self.get_flags('shutdown')
     if flags.reboot:
       self.__reboot()
       return
     check_output('am start -n android/com.android.internal.app.ShutdownActivity')
     success('🌙 Goodnight!')
+
+  @staticmethod
+  def __reboot():
+    check_output('am start -a android.intent.action.REBOOT')
+    success('👋 See you in a bit!')
 
   @staticmethod
   def _battery():
