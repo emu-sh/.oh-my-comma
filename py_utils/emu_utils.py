@@ -121,7 +121,7 @@ def input_with_options(options, default=None):
 def most_similar(find, options):
   sims = [[str_sim(i.lower().strip(), find.lower().strip()), i] for i in options]
   sims = sorted(sims, reverse=True)
-  return [o[1] for o in sims]
+  return [[o[1], o[0]] for o in sims]
 
 
 def check_output(cmd, cwd=None):
