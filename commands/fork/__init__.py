@@ -243,8 +243,8 @@ class Fork(CommandBase):
         remote_branch = remote_info.default_branch
         local_branch = '{}_{}'.format(remote_info.username, remote_branch)
       else:
-        local_branch = '{}_{}'.format(username, default_remote_branch)
         remote_branch = default_remote_branch  # for command to checkout correct branch from remote, branch is previously None since user didn't specify
+        local_branch = '{}_{}'.format(username, default_remote_branch)
     else:
       if branch not in remote_branches:
         close_branches = most_similar(branch, remote_branches)  # remote_branches is gauranteed to have at least 1 branch
@@ -252,12 +252,11 @@ class Fork(CommandBase):
           branch = close_branches[0][0]
           info('Unknown branch, using most similar: {}'.format(COLORS.SUCCESS + branch + COLORS.WARNING))
         else:
-          print(close_branches)
           error('The branch you specified does not exist!')
           self.__show_similar_branches(branch, remote_branches)  # if possible
           return
+      remote_branch = branch  # branch is now gauranteed to be in remote_branches
       local_branch = f'{username}_{branch}'
-      remote_branch = branch
 
     # checkout remote branch and prepend username so we can have multiple forks with same branch names locally
     if remote_branch not in installed_forks[username]['installed_branches']:
