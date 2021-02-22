@@ -14,12 +14,22 @@ class Device(CommandBase):
                      'reboot': Command(description='⚡ safely reboot your device'),
                      'shutdown': Command(description='🔌 safely shutdown your device',
                                          flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot your device', dtype='bool')]),
-                     'settings': Command(description='⚙️ open the Settings app')}
+                     'settings': Command(description='⚙️ open the Settings app',
+                                         flags=[Flag(['-c', '--close'], 'Closes the settings application', dtype='bool')])}
 
-  @staticmethod
-  def _settings():
-    check_output('am start -a android.settings.SETTINGS')
-    success('⚙️ Opened settings!')
+  def _settings(self):
+    flags, e = self.parse_flags(self.commands['settings'].parser)
+    if e is not None:
+      error(e)
+      self._help('settings')
+      return
+
+    if flags.close:
+      check_output('kill $(pgrep com.android.settings)')
+      success('⚙️ Closed settings!')
+    else:
+      check_output('am start -a android.settings.SETTINGS')
+      success('⚙️ Opened settings!')
 
   @staticmethod
   def __reboot():
