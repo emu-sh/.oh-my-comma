@@ -30,11 +30,13 @@ class CommandBase(BaseFunctions):
       return
     getattr(self, cmd)()  # call command's function
 
-  def parse_flags(self, parser):
+  def parse_flags(self, cmd_name):
     try:
-      return parser.parse_args(self.args), None
+      return self.commands[cmd_name].parser.parse_args(self.args)
     except Exception as e:
-      return None, e
+      error(e)
+      self._help(cmd_name)
+      exit()
 
   def _help(self, cmd, show_description=True, leading=''):
     has_extra_info = False
@@ -77,14 +79,6 @@ class CommandBase(BaseFunctions):
         cmds_to_print.append(leading + COLORS.FAIL + '  - {}: {}'.format(cmd, success(commands[cmd].description, ret=True)) + COLORS.ENDC)
       print('\n'.join(cmds_to_print))
     return has_extra_info
-
-  def get_flags(self, cmd_name):
-    flags, e = self.parse_flags(self.commands[cmd_name].parser)
-    if e is not None:
-      error(e)
-      self._help(cmd_name)
-      exit()
-    return flags, e
 
 
 class Flag:
