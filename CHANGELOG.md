@@ -1,3 +1,11 @@
+Release 0.1.13 (2021-02-22)
+=====
+
+* Add flag to `emu device settings -c` to close settings app
+* Use most similar remote branch (using difflib) if user types unknown close branch
+* Use existing function in CommandBase for getting flags, exits if fails so no need to catch errors in each command that has flags
+
+
 Release 0.1.12 (2020-10-22)
 =====
 
