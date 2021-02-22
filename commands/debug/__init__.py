@@ -15,11 +15,7 @@ class Debug(CommandBase):
     self.default_path = '/data/output.log'
 
   def _controlsd(self):
-    flags, e = self.parse_flags(self.commands['controlsd'].parser)
-    if e is not None:
-      error(e)
-      return
-
+    flags = self.get_flags('controlsd')
     out_file = self.default_path
     if flags.output is not None:
       out_file = flags.output
