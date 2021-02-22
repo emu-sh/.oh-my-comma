@@ -250,7 +250,7 @@ class Fork(CommandBase):
         close_branches = most_similar(branch, remote_branches)  # remote_branches is gauranteed to have at least 1 branch
         if close_branches[0][1] > 0.5:
           branch = close_branches[0][0]
-          info('Unknown branch, using most similar: {}'.format(COLORS.SUCCESS + branch + COLORS.WARNING))
+          info('Unknown branch, checking out most similar: {}'.format(COLORS.SUCCESS + branch + COLORS.WARNING))
         else:
           error('The branch you specified does not exist!')
           self.__show_similar_branches(branch, remote_branches)  # if possible
