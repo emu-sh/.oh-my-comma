@@ -4,6 +4,7 @@ from commands.base import CommandBase, Command, Flag
 from py_utils.emu_utils import run, kill, warning, error
 from py_utils.emu_utils import OPENPILOT_PATH
 
+
 class Debug(CommandBase):
   def __init__(self):
     super().__init__()
