@@ -18,14 +18,15 @@ class Device(CommandBase):
                                          flags=[Flag(['-c', '--close'], 'Closes the settings application', dtype='bool')])}
 
   def _settings(self):
-    flags, e = self.parse_flags(self.commands['settings'].parser)
-    if e is not None:
-      error(e)
-      self._help('settings')
-      return
+    flags, e = self.get_flags('settings')
+    # flags, e = self.parse_flags(self.commands['settings'].parser)
+    # if e is not None:
+    #   error(e)
+    #   self._help('settings')
+    #   return
 
     if flags.close:
-      c = check_output('kill $(pgrep com.android.settings)', shell=True)
+      check_output('kill $(pgrep com.android.settings)', shell=True)
       success('⚙️ Closed settings!')
     else:
       check_output('am start -a android.settings.SETTINGS')

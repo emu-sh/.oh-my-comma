@@ -78,6 +78,13 @@ class CommandBase(BaseFunctions):
       print('\n'.join(cmds_to_print))
     return has_extra_info
 
+  def get_flags(self, cmd_name):
+    flags, e = self.parse_flags(self.commands[cmd_name].parser)
+    if e is not None:
+      error(e)
+      self._help(cmd_name)
+      exit()
+
 
 class Flag:
   def __init__(self, aliases, description, required=False, dtype='bool'):
