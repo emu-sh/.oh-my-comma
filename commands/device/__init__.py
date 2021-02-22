@@ -25,7 +25,8 @@ class Device(CommandBase):
       return
 
     if flags.close:
-      print(check_output('kill $(pgrep com.android.settings)'))
+      c = check_output('kill $(pgrep com.android.settings)')
+      print(c.output)
       success('⚙️ Closed settings!')
     else:
       check_output('am start -a android.settings.SETTINGS')
