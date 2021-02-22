@@ -18,7 +18,7 @@ class Device(CommandBase):
                                          flags=[Flag(['-c', '--close'], 'Closes the settings application', dtype='bool')])}
 
   def _settings(self):
-    flags = self.parse_flags('settings')
+    flags = self.get_flags('settings')
     if flags.close:
       check_output('kill $(pgrep com.android.settings)', shell=True)
       success('⚙️ Closed settings!')
@@ -32,7 +32,7 @@ class Device(CommandBase):
     success('👋 See you in a bit!')
 
   def _shutdown(self):
-    flags = self.parse_flags(self.commands['shutdown'].parser)
+    flags = self.get_flags('shutdown')
 
     if flags.reboot:
       self.__reboot()
