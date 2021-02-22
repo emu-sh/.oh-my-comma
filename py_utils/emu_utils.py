@@ -124,16 +124,16 @@ def most_similar(find, options):
   return [[o[1], o[0]] for o in sims]
 
 
-def check_output(cmd, cwd=None):
+def check_output(cmd, cwd=None, shell=False):
   class Output:
     def __init__(self, output='', s=True):
       self.output = output
       self.success = s
 
-  if isinstance(cmd, str):
+  if isinstance(cmd, str) and not shell:
     cmd = cmd.split()
   try:
-    return Output(subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8'))
+    return Output(subprocess.check_output(cmd, cwd=cwd, stderr=subprocess.STDOUT, encoding='utf8', shell=shell))
   except subprocess.CalledProcessError as e:
     if e.output is None:
       return Output(e, s=False)  # command failed to execute
