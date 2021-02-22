@@ -84,6 +84,7 @@ class CommandBase(BaseFunctions):
       error(e)
       self._help(cmd_name)
       exit()
+    return flags, e
 
 
 class Flag:
