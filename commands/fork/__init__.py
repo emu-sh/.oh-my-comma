@@ -387,6 +387,8 @@ class Fork(CommandBase):
     return False
 
   def _init(self):
+    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'credential.helper', '\'cache --timeout=3600\''])
+    print('ran command!')
     if os.path.isdir('/data/community/forks'):
       shutil.rmtree('/data/community/forks')  # remove to save space
     if self.fork_params.get('setup_complete'):
@@ -438,7 +440,7 @@ class Fork(CommandBase):
     check_output(['git', '-C', OPENPILOT_PATH, 'config', 'push.default', 'upstream'])  # not game breaking if this fails
 
     # remember username and password of user for pushing
-    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'credential.helper', 'cache'])
+    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'credential.helper', '\'cache --timeout=3600\''])
 
     success('Fork management set up successfully! You\'re on {}/{}'.format(self.comma_origin_name, self.comma_default_branch))
     success('To get started, try running: {}emu fork switch (username) [-b BRANCH]{}'.format(COLORS.RED, COLORS.ENDC))
