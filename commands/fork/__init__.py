@@ -437,6 +437,9 @@ class Fork(CommandBase):
     # set git config push.default to `upstream` to remove differently named remote branch warning when pushing
     check_output(['git', '-C', OPENPILOT_PATH, 'config', 'push.default', 'upstream'])  # not game breaking if this fails
 
+    # remember username and password of user for pushing
+    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'credential.helper', 'cache'])
+
     success('Fork management set up successfully! You\'re on {}/{}'.format(self.comma_origin_name, self.comma_default_branch))
     success('To get started, try running: {}emu fork switch (username) [-b BRANCH]{}'.format(COLORS.RED, COLORS.ENDC))
     self.__add_fork(self.comma_origin_name, self.comma_default_branch)
