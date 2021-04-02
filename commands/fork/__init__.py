@@ -387,7 +387,7 @@ class Fork(CommandBase):
     return False
 
   def _init(self):
-    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'credential.helper', '\'cache --timeout=3600\''])
+    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'credential.helper', 'cache --timeout=3600'])
     print('ran command!')
     if os.path.isdir('/data/community/forks'):
       shutil.rmtree('/data/community/forks')  # remove to save space
