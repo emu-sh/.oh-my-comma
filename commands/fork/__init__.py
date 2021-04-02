@@ -253,7 +253,6 @@ class Fork(CommandBase):
     if remote_branch not in installed_forks[username]['installed_branches']:
       info('New branch! Tracking and checking out {} from {}'.format(local_branch, f'{username}/{remote_branch}'))
       command = ['git', '-C', OPENPILOT_PATH, 'checkout', '--track', '-b', local_branch, f'{username}/{remote_branch}']
-      print(command)
     else:  # already installed branch, checking out fork_branch from f'{username}/{branch}'
       command = ['git', '-C', OPENPILOT_PATH, 'checkout', local_branch]
 
