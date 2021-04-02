@@ -1,3 +1,13 @@
+Release 0.1.14 (2021-04-02)
+=====
+
+* Remember user's GitHub credentials for 1 day (for pushing)
+* When `git push`ing, Git will no longer bother you about your local branch's name not matching the remote's
+  * You need to re-set up fork management for these two improvements
+* Fix issue where it would lock user out from `ssh` if a `/openpilot` directory doesn't exist
+  * You need to apply the changes manually in your `/data/community/.bashrc` file from [this commit](https://github.com/emu-sh/.oh-my-comma/commit/ea67a5960cf3e4aeb93627060ca4ed990a71f595)
+
+
 Release 0.1.13 (2021-02-22)
 =====
 

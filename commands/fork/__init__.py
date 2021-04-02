@@ -426,8 +426,18 @@ class Fork(CommandBase):
     if not r.success:
       error(r.output)
       return
+
     # rename release2 to commaai_release2 to align with emu fork standards
-    check_output(['git', '-C', OPENPILOT_PATH, 'branch', '-m', f'{self.comma_origin_name}_{self.comma_default_branch}'])
+    r = check_output(['git', '-C', OPENPILOT_PATH, 'branch', '-m', f'{self.comma_origin_name}_{self.comma_default_branch}'])
+    if not r.success:
+      error(r.output)
+      return
+
+    # set git config push.default to `upstream` to remove differently named remote branch warning when pushing
+    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'push.default', 'upstream'])  # not game breaking if this fails
+
+    # remember username and password of user for pushing
+    check_output(['git', '-C', OPENPILOT_PATH, 'config', 'credential.helper', 'cache --timeout=1440'])  # cache for a day
 
     success('Fork management set up successfully! You\'re on {}/{}'.format(self.comma_origin_name, self.comma_default_branch))
     success('To get started, try running: {}emu fork switch (username) [-b BRANCH]{}'.format(COLORS.RED, COLORS.ENDC))
