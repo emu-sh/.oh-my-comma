@@ -14,6 +14,7 @@ DEFAULT_BRANCH_START = 'HEAD branch: '
 REMOTE_BRANCHES_START = 'Remote branches:\n'
 REMOTE_BRANCH_START = 'Remote branch:'
 CLONING_PATH = '{}/.cloning'.format(OH_MY_COMMA_PATH)
+DEFAULT_REPO_NAME = 'openpilot'
 
 
 def set_cloning(cloning):
@@ -104,6 +105,7 @@ class Fork(CommandBase):
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
                                               Flag(['-b', '--branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str'),
+                                              Flag(['-r', '--repo'], 'The repository name of the fork, if its name isn\'t openpilot', required=False, dtype='str'),
                                               Flag(['-f', '--force'], '💪 Similar to checkout -f, force checks out new branch overwriting any changes')]),
                      'list': Command(description='📜 See a list of installed forks and branches',
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
@@ -168,6 +170,7 @@ class Fork(CommandBase):
 
     username = flags.username
     branch = flags.branch
+    repo_name = flags.repo
     force_switch = flags.force
     if username is None:  # branch is specified, so use current checked out fork/username
       _current_fork = self.fork_params.get('current_fork')
@@ -190,10 +193,12 @@ class Fork(CommandBase):
       if remote_info is not None:
         remote_url = f'https://github.com/{username}/{remote_info.fork_name}'  # dragonpilot doesn't have a GH redirect
       else:  # for most forks, GH will redirect from /openpilot if user renames fork
-        remote_url = f'https://github.com/{username}/openpilot'
+        if repo_name is None:
+          repo_name = DEFAULT_REPO_NAME  # openpilot
+        remote_url = f'https://github.com/{username}/{repo_name}'
 
       if not valid_fork_url(remote_url):
-        error('Invalid username! {} does not exist'.format(remote_url))
+        error('Invalid username{}! {} does not exist'.format('' if flags.repo is None else ' or repository name', remote_url))
         return
 
       r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'add', username, remote_url])

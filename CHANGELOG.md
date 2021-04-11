@@ -1,3 +1,9 @@
+Release 0.1.15 (2021-04-11)
+=====
+
+* Add `repo` flag to `emu fork switch` command: if a repository's name isn't openpilot and isn't a GitHub fork (no name redirection), you can use this option the first time you switch to the fork (remembers URL after that).
+
+
 Release 0.1.14 (2021-04-02)
 =====
 
