@@ -105,7 +105,7 @@ class Fork(CommandBase):
     self.commands = {'switch': Command(description='🍴 Switch between any openpilot fork',
                                        flags=[Flag('username', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
                                               Flag(['-b', '--branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str'),
-                                              Flag(['-r', '--repo'], 'The repository name of the fork, if it\'s name isn\'t openpilot', required=False, dtype='str'),
+                                              Flag(['-r', '--repo'], 'The repository name of the fork, if its name isn\'t openpilot', required=False, dtype='str'),
                                               Flag(['-f', '--force'], '💪 Similar to checkout -f, force checks out new branch overwriting any changes')]),
                      'list': Command(description='📜 See a list of installed forks and branches',
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
@@ -198,7 +198,7 @@ class Fork(CommandBase):
         remote_url = f'https://github.com/{username}/{repo_name}'
 
       if not valid_fork_url(remote_url):
-        error('Invalid username! {} does not exist'.format(remote_url))
+        error('Invalid username{}! {} does not exist'.format('' if flags.repo is None else ' or repository name', remote_url))
         return
 
       r = check_output(['git', '-C', OPENPILOT_PATH, 'remote', 'add', username, remote_url])
