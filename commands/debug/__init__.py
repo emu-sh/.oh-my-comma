@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, kill, warning, error
+from py_utils.emu_utils import run, kill, warning, check_output, is_affirmative, error, info
 from py_utils.emu_utils import OPENPILOT_PATH
 
 
@@ -12,8 +12,32 @@ class Debug(CommandBase):
     self.description = 'de-🐛-ing tools'
 
     self.commands = {'controlsd': Command(description='🔬 logs controlsd to /data/output.log by default',
-                                          flags=[Flag(['-o', '--output'], 'Name of file to save log to', dtype='str')])}
+                                          flags=[Flag(['-o', '--output'], 'Name of file to save log to', dtype='str')]),
+                     'reload': Command(description='🔄 kills the current openpilot session and restarts it (all without rebooting)')}
     self.default_path = '/data/output.log'
+
+  def _reload(self):
+    print('This will kill the current openpilot tmux session, create a new session adding its PID to the app cpuset, and relaunch openpilot.')
+    print('Confirm you would like to continue')
+    if not is_affirmative():
+      error('Aborting!')
+      return
+
+    r = check_output('tmux kill-session -t comma')
+    if r.success:
+      info('Killed the current openpilot session')
+    else:
+      warning('Error killing current openpilot session, continuing...')
+
+    r = check_output(['tmux', 'new', '-s', 'comma', '-d', "'touch /data/openpilot/test_file; /data/openpilot/launch_openpilot.sh'"])
+
+
+
+
+  def _kill_and_create_tmux_session(self):
+    r = check_output(['tmux', 'new', '-s', 'comma'])
+    return r.success
+
 
   def _controlsd(self):
     flags = self.get_flags('controlsd')
