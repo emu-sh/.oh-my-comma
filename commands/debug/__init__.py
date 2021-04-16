@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from commands.base import CommandBase, Command, Flag
+from py_utils.colors import COLORS
 from py_utils.emu_utils import run, kill, warning, check_output, is_affirmative, error, info, success
 from py_utils.emu_utils import OPENPILOT_PATH
 
@@ -17,7 +18,7 @@ class Debug(CommandBase):
 
   @staticmethod
   def _reload():
-    info('This will kill the current openpilot tmux session, properly set up a new one, and relaunch openpilot.')
+    info('This will kill the current openpilot tmux session, set up a new one, and relaunch openpilot.')
     info('Confirm you would like to continue')
     if not is_affirmative():
       error('Aborting!')
@@ -36,7 +37,7 @@ class Debug(CommandBase):
                       "/data/openpilot/launch_openpilot.sh"])
     if r.success:
       success('Succesfully started a new tmux session for openpilot!')
-      success('Type tmux a to attach to it')
+      success('Type {}tmux a{} to attach to it'.format(COLORS.FAIL, COLORS.SUCCESS))
 
   def _controlsd(self):
     out_file = '/data/output.log'
