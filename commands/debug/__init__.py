@@ -17,7 +17,7 @@ class Debug(CommandBase):
 
   @staticmethod
   def _reload():
-    info('This will kill the current openpilot tmux session, set up a new one properly, and relaunch openpilot.')
+    info('This will kill the current openpilot tmux session, properly set up a new one, and relaunch openpilot.')
     info('Confirm you would like to continue')
     if not is_affirmative():
       error('Aborting!')
