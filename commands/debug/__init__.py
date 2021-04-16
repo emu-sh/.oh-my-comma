@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import run, kill, warning, check_output, is_affirmative, error, info
+from py_utils.emu_utils import run, kill, warning, check_output, is_affirmative, error, info, success
 from py_utils.emu_utils import OPENPILOT_PATH
 
 
@@ -29,9 +29,14 @@ class Debug(CommandBase):
     else:
       warning('Error killing current openpilot session, continuing...')
 
-    r = check_output(['tmux', 'new', '-s', 'comma', '-d', "touch /data/openpilot/test_file; /data/openpilot/launch_openpilot.sh"])
-    # r = check_output(['touch', '/data/openpilot/test_file'])
-    # r = check_output(['tmux', 'new', '-s', 'comma', '-d', "'touch /data/openpilot/test_file; /data/openpilot/launch_openpilot.sh'"])
+    # Command below thanks to mlp
+    r = check_output(['tmux', 'new', '-s', 'comma', '-d',
+                      "echo $$ > /dev/cpuset/app/tasks;"  # add pid of current shell to app cpuset
+                      "echo $PPID > /dev/cpuset/app/tasks;"  # (our parent, tmux, also gets all the cores)
+                      "/data/openpilot/launch_openpilot.sh"])
+    if r.success:
+      success('Succesfully started a new tmux session for openpilot!')
+      success('Type tmux a to attach to it')
 
 
 
