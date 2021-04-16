@@ -29,7 +29,7 @@ class Debug(CommandBase):
     else:
       warning('Error killing current openpilot session, continuing...')
 
-    r = check_output(['tmux', 'new', '-s', 'comma', '-d', "touch /data/openpilot/test_file"])
+    r = check_output(['tmux', 'new', '-s', 'comma', '-d', "touch /data/openpilot/test_file; /data/openpilot/launch_openpilot.sh"])
     # r = check_output(['touch', '/data/openpilot/test_file'])
     # r = check_output(['tmux', 'new', '-s', 'comma', '-d', "'touch /data/openpilot/test_file; /data/openpilot/launch_openpilot.sh'"])
 
