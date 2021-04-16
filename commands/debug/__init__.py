@@ -17,8 +17,8 @@ class Debug(CommandBase):
     self.default_path = '/data/output.log'
 
   def _reload(self):
-    print('This will kill the current openpilot tmux session, create a new session adding its PID to the app cpuset, and relaunch openpilot.')
-    print('Confirm you would like to continue')
+    info('This will kill the current openpilot tmux session, create a new session adding its PID to the app cpuset, and relaunch openpilot.')
+    info('Confirm you would like to continue')
     if not is_affirmative():
       error('Aborting!')
       return
