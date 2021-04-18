@@ -1,4 +1,4 @@
-Release 0.1.16 (2021-04-15)
+Release 0.1.16 (2021-04-18)
 =====
 
 * Add `emu debug reload` (or simply `reload`) command to restart openpilot without needing to reboot your device.
