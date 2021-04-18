@@ -1,6 +1,7 @@
 alias ll="ls -lAh"
 alias pf="emu panda flash"
 alias controlsd="emu debug controlsd"
+alias reload="emu debug reload"
 alias battery="emu device battery"
 alias shutdown="emu device shutdown"
 alias settings="emu device settings"
