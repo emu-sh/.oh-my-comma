@@ -297,7 +297,7 @@ class Fork(CommandBase):
       success('✅ Successfully reinitialized submodules!')     
 
   def _switchbyid(self):
-    if not self._init():
+    if not self._init(): 
       return
     flags = self.get_flags('switchbyid')
     if flags.userid is flags.branchid is None:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
@@ -305,7 +305,7 @@ class Fork(CommandBase):
       self._help('switchbyid')
       return
 
-    userid = flags.userid
+    userid = flags.userid #TODO , validate inputs for numbers
     branchid = flags.branchid
     repo_name = flags.repo
     force_switch = flags.force
@@ -323,7 +323,7 @@ class Fork(CommandBase):
           error('Error: Invalid userid specified!')
           return
         else:
-          print(installed_forks.values()[userid])
+          print(list(installed_forks.values())[userid])
           
 
 
