@@ -156,11 +156,14 @@ class Fork(CommandBase):
         return
       installed_branches = installed_forks[specified_fork]['installed_branches']
       success('Installed branches for {}:'.format(specified_fork))
+      current_branch = self.fork_params.get('current_branch')
       for branch in installed_branches:
-        print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC),end='')
-        current_branch = self.fork_params.get('current_branch')
         if branch == current_branch:
-            print(' (current)')
+          print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC),end='')
+          print(' (current)')
+        else:
+          print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
+            
        
 
   def _switch(self):
