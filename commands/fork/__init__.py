@@ -121,7 +121,7 @@ class Fork(CommandBase):
       max_branches = 4  # max branches to display per fork when listing all forks
       success('Installed forks:')
       for idi, fork in enumerate(installed_forks):
-        print('- {}. {}{}{}'.format(idi,COLORS.OKBLUE, fork, COLORS.ENDC), end='')
+        print('- {}. {}{}{}'.format(idi+1,COLORS.OKBLUE, fork, COLORS.ENDC), end='')
         current_fork = self.fork_params.get('current_fork')
         if current_fork == fork:
           print(' (current)')
@@ -137,7 +137,7 @@ class Fork(CommandBase):
           success('    Branches:')
         for idx, branch in enumerate(branches):
           if idx < max_branches:
-            print('    - {} {}{}{}'.format(idx,COLORS.RED, branch, COLORS.ENDC), end='')
+            print('    - {}. {}{}{}'.format(idx+1,COLORS.RED, branch, COLORS.ENDC), end='')
             if branch == current_branch and fork == current_fork:
               print(' (current)')
             else:
