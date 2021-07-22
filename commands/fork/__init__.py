@@ -161,8 +161,7 @@ class Fork(CommandBase):
         current_branch = self.fork_params.get('current_branch')
         if branch == current_branch:
             print(' (current)')
-        else:
-            print()
+       
 
   def _switch(self):
     if not self._init():
