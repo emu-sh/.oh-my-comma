@@ -157,7 +157,7 @@ class Fork(CommandBase):
       installed_branches = installed_forks[specified_fork]['installed_branches']
       success('Installed branches for {}:'.format(specified_fork))
       for branch in installed_branches:
-        print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
+        print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC),end='')
         current_branch = self.fork_params.get('current_branch')
         if branch == current_branch:
             print(' (current)')
