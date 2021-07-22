@@ -107,6 +107,11 @@ class Fork(CommandBase):
                                               Flag(['-b', '--branch'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str'),
                                               Flag(['-r', '--repo'], 'The repository name of the fork, if its name isn\'t openpilot', required=False, dtype='str'),
                                               Flag(['-f', '--force'], '💪 Similar to checkout -f, force checks out new branch overwriting any changes')]),
+                     'switchbyid': Command(description='🍴 Switch between any openpilot fork',
+                                       flags=[Flag('userid', '👤 The username of the fork\'s owner to switch to, will use current fork if not provided', required=False, dtype='str'),
+                                              Flag(['-bid', '--branchid'], '🌿 Branch to switch to, will use default branch if not provided', required=False, dtype='str'),
+                                              Flag(['-r', '--repo'], 'The repository name of the fork, if its name isn\'t openpilot', required=False, dtype='str'),
+                                              Flag(['-f', '--force'], '💪 Similar to checkout -f, force checks out new branch overwriting any changes')]),                         
                      'list': Command(description='📜 See a list of installed forks and branches',
                                      flags=[Flag('fork', '🌿 See branches of specified fork', dtype='str')])}
 
@@ -168,8 +173,6 @@ class Fork(CommandBase):
           else:
             print()
             
-       
-
   def _switch(self):
     if not self._init():
       return
@@ -291,7 +294,38 @@ class Fork(CommandBase):
     self.fork_params.put('current_branch', remote_branch)
     info('\n✅ Successfully checked out {}/{} as {}'.format(COLORS.SUCCESS + username, remote_branch + COLORS.WARNING, COLORS.SUCCESS + local_branch))
     if reinit_subs:
-      success('✅ Successfully reinitialized submodules!')
+      success('✅ Successfully reinitialized submodules!')     
+
+  def _switchbyid(self):
+    if not self._init():
+      return
+    flags = self.get_flags('switchbyid')
+    if flags.userid is flags.branchid is None:  # since both are non-required we need custom logic to check user supplied sufficient args/flags
+      error('You must supply either userid or branchid or both')
+      self._help('switchbyid')
+      return
+
+    userid = flags.userid
+    branchid = flags.branchid
+    repo_name = flags.repo
+    force_switch = flags.force
+    if userid is None:  # branch is specified, so use current checked out fork/username
+      _current_fork = self.fork_params.get('current_fork')
+      if _current_fork is not None:  # ...if available
+        info('Assuming current fork for username: {}'.format(COLORS.SUCCESS + _current_fork + COLORS.ENDC))
+        username = _current_fork
+      else:
+        error('Current fork is unknown, please switch to a fork first before switching between branches!')
+        return
+    else:
+        installed_forks = self.fork_params.get('installed_forks')
+        if userid > len(installed_forks):
+          error('Error: Invalid userid specified!')
+          return
+        else:
+          print(installed_forks[userid])
+          
+
 
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
