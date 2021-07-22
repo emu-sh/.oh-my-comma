@@ -134,16 +134,16 @@ class Fork(CommandBase):
           branches.insert(0, current_branch)  # move cur_branch to beginning
 
         if len(branches) > 0:
-          success('   Branches:')
+          success('    Branches:')
         for idx, branch in enumerate(branches):
           if idx < max_branches:
-            print('   - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC), end='')
+            print('    - {} {}{}{}'.format(idx,COLORS.RED, branch, COLORS.ENDC), end='')
             if branch == current_branch and fork == current_fork:
               print(' (current)')
             else:
               print()
           else:
-            print('   - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
+            print('    - {}...see more branches: {}emu fork list {}{}'.format(COLORS.RED, COLORS.CYAN, fork, COLORS.ENDC))
             break
         print()
     else:
