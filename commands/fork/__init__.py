@@ -319,7 +319,7 @@ class Fork(CommandBase):
         return
     else:
         installed_forks = self.fork_params.get('installed_forks')
-        if userid > len(installed_forks):
+        if int(userid) > len(installed_forks):
           error('Error: Invalid userid specified!')
           return
         else:
