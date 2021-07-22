@@ -154,15 +154,19 @@ class Fork(CommandBase):
       if specified_fork not in installed_forks:
         error('{} not an installed fork! Try installing it with the {}switch{} command'.format(specified_fork, COLORS.CYAN, COLORS.RED))
         return
-      installed_branches = installed_forks[specified_fork]['installed_branches']
-      success('Installed branches for {}:'.format(specified_fork))
+      branches = installed_forks[specified_fork]['installed_branches']
       current_branch = self.fork_params.get('current_branch')
-      for branch in installed_branches:
-        if branch == current_branch:
-          print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC),end='')
-          print(' (current)')
-        else:
-          print(' - {}{}{}'.format(COLORS.RED, branch, COLORS.ENDC))
+      if current_branch in branches:
+        branches.remove(current_branch)
+        branches.insert(0, current_branch)  # move cur_branch to beginning
+      if len(branches) > 0:  
+        success('Installed branches for {}:'.format(specified_fork))
+        for idx, branch in enumerate(branches):
+          print('    - {}. {}{}{}'.format(idx+1,COLORS.RED, branch, COLORS.ENDC), end='')
+          if branch == current_branch:
+            print(' (current)')
+          else:
+            print()
             
        
 
