@@ -323,7 +323,7 @@ class Fork(CommandBase):
           error('Error: Invalid userid specified!')
           return
         else:
-          print(list(installed_forks.values())[userid])
+          print(list(installed_forks.values())[int(userid)])
           
 
 
