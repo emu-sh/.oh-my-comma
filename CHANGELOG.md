@@ -1,3 +1,11 @@
+Release 0.1.17 (2021-07-22)
+=====
+
+* Add `emu fork switchbyid` (or simply `switchbyid`) command to easily switch forks and branches using id's/numbers shown from 'emu fork list'.
+* Added settingsc alias to close settings.
+* Added emulist alias to 'emu fork list' to list forks and branches.
+
+
 Release 0.1.16 (2021-04-18)
 =====
 
