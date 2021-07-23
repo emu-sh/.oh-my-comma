@@ -57,6 +57,7 @@ This will essentially perform a git pull and replace all current files in the `/
 ### [Forks](#fork-management)
 - `emu fork`: 🍴 Manage installed forks, or install a new one
   - `emu fork switch`: 🍴 Switch between any openpilot fork
+  - `emu fork switchbyid`: 🍴 Switch between any openpilot fork using id's from 'emu fork list'
   - `emu fork list`: 📜 See a list of installed forks and branches
 ### Panda
 - `emu panda`: 🐼 panda interfacing tools
