@@ -305,7 +305,7 @@ class Fork(CommandBase):
       self._help('switchbyid')
       return
 
-    userid = flags.userid #TODO , validate inputs for numbers
+    userid = flags.userid 
     branchid = flags.branchid
     repo_name = flags.repo
     force_switch = flags.force
@@ -313,21 +313,58 @@ class Fork(CommandBase):
       _current_fork = self.fork_params.get('current_fork')
       if _current_fork is not None:  # ...if available
         info('Assuming current fork for username: {}'.format(COLORS.SUCCESS + _current_fork + COLORS.ENDC))
-        username = _current_fork
+        flags.username = _current_fork
       else:
         error('Current fork is unknown, please switch to a fork first before switching between branches!')
         return
     else:
-        installed_forks = self.fork_params.get('installed_forks')
-        if int(userid) > len(installed_forks):
-          error('Error: Invalid userid specified!')
+       if (userid).isdigit() and  int(userid)>0:
+          userid_int = int(userid)
+       else:
+          error('userid must be a number and greater than 0!')
           return
-        else:
-          print(installed_forks)
-          print(list(installed_forks.values())[int(userid)])
+       installed_forks = self.fork_params.get('installed_forks')
+       if userid_int > len(installed_forks):
+          error('Error: Invalid userid specified, supplied userid is greater than number of forks!')
+          return
+       else:
+          for idx, fork in enumerate(installed_forks):
+            if userid_int == idx+1:
+              flags.username = fork
+              print(fork)
+              break
+    if (branchid).isdigit() and int(branchid) >0:
+      branchid_int = int(branchid)
+    else:
+      error('branchid must be a number and greater than 0!')
+      return
+    branches = installed_forks[flags.username]['installed_branches']
+
+    current_branch = self.fork_params.get('current_branch')
+    if current_branch in branches:
+      branches.remove(current_branch)
+      branches.insert(0, current_branch)  # move cur_branch to beginning so ids align with what is shown in the ui
+    if branchid_int > len(branches):
+          error('Error: Invalid branchid specified, supplied branchid is greater than the number of branches in the fork!')
+          return
+    for idx, branch in enumerate(branches):
+          if branchid_int == idx+1:
+              flags.branch = branch
+              print(branch)
+              break
+    self.args.clear()
+    self.args.append(flags.username)
+    self.args.append("-b")
+    self.args.append(flags.branch)
+    if flags.branch is not None:
+      self.args.append(flags.force)
+      
+    if flags.repo is not None:
+      self.args.append("-b")
+      self.args.append(flags.repo)
+
+    self._switch()
           
-
-
   def __add_fork(self, username, branch=None):
     installed_forks = self.fork_params.get('installed_forks')
     if username not in installed_forks:
