@@ -358,7 +358,7 @@ class Fork(CommandBase):
     self.args.append(flags.branch)
     print(flags.force)
     if flags.force is not None:
-      self.args.append(flags.force)
+      self.args.append("-f")
       
     if flags.repo is not None:
       self.args.append("-b")
