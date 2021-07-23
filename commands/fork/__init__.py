@@ -356,7 +356,8 @@ class Fork(CommandBase):
     self.args.append(flags.username)
     self.args.append("-b")
     self.args.append(flags.branch)
-    if flags.branch is not None:
+    print(flags.force)
+    if flags.force is not None:
       self.args.append(flags.force)
       
     if flags.repo is not None:
