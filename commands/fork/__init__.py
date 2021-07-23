@@ -331,7 +331,6 @@ class Fork(CommandBase):
           for idx, fork in enumerate(installed_forks):
             if userid_int == idx+1:
               flags.username = fork
-              print(fork)
               break
     if (branchid).isdigit() and int(branchid) >0:
       branchid_int = int(branchid)
@@ -350,14 +349,12 @@ class Fork(CommandBase):
     for idx, branch in enumerate(branches):
           if branchid_int == idx+1:
               flags.branch = branch
-              print(branch)
               break
     self.args.clear()
     self.args.append(flags.username)
     self.args.append("-b")
     self.args.append(flags.branch)
-    print(flags.force)
-    if flags.force is not None:
+    if flags.force is not None and flags.force == True:
       self.args.append("-f")
       
     if flags.repo is not None:
