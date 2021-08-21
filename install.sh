@@ -68,7 +68,7 @@ if [ ! -f "$SYSTEM_BASHRC_PATH" ]; then
 fi
 
 update=false
-if [ $# -ge 1 ] && [ $1 = "update" ]; then
+if [ $# -ge 1 ] && [ "$1" = "update" ]; then
   update=true
 fi
 
@@ -80,16 +80,6 @@ fi
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   echo "Cloning .oh-my-comma"
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
-fi
-
-# FIXME: figure out how to install pip packages in AGNOS
-if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
-  echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
-  read -p "[Y/n] > " choices
-  case ${choices} in
-    y|Y ) remount_system rw && pip install powerline-shell && remount_system ro;;
-    * ) echo "Skipping...";;
-  esac
 fi
 
 install_echo "ℹ️  Installing emu utilities\n"
@@ -110,17 +100,13 @@ else
   printf "✅ Success!\n\n"
 fi
 
-# FIXME: not applicable on TICI
-if [ -f /EON ]; then
-  install_echo "Checking /home/.config symlink..."
-  if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
-    remount_system rw  # FIXME: do we need /system rw to access /home on NEOS?
-    echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
-    ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
-    remount_system ro
-  else
-    install_echo "Symlink check passed"
-  fi
+if [ ! -x "$(command -v zsh)" ] && [ $update = false ]; then
+  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
+  read -p "[Y/n] > " choices
+  case ${choices} in
+    y|Y ) apt update && apt install zsh && ./install-oh-my-zsh.zsh;;
+    * ) echo "Skipping...";;
+  esac
 fi
 
 # If community .bashrc file doesn't exist, copy from .bashrc-community
