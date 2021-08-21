@@ -100,7 +100,7 @@ else
   printf "✅ Success!\n\n"
 fi
 
-if [ ! -x "$(command -v zsh)" ] && [ $update = false ]; then
+if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
   echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
   read -p "[Y/n] > " choices
   case ${choices} in
