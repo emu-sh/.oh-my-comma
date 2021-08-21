@@ -78,7 +78,7 @@ fi
 
 if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
   echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
-  read -p "[Y/n] > " choices
+  read -p "[y/N] > " choices
   case ${choices} in
     y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
     * ) echo "Skipping...";;

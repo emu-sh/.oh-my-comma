@@ -9,10 +9,10 @@ if [ ! -f /data/community/.p10k.zsh ]; then
     fi
     ln -s /data/community/.p10k.zsh ~/.p10k.zsh
 fi
-wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-chmod +x install.sh
-ZSH="/data/community/.oh-my-zsh" sh install.sh --unattended
-rm install.sh
+curl https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh --output /data/community/install-ohmyzsh.sh
+chmod +x /data/community/install-ohmyzsh.sh
+ZSH="/data/community/.oh-my-zsh" sh /data/community/install-ohmyzsh.sh --unattended
+rm /data/community/install-ohmyzsh.sh
 mv ~/.zshrc /data/community/.zshrc
 ln -s /data/community/.zshrc ~/.zshrc
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM}/themes/powerlevel10k
