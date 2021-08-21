@@ -35,7 +35,7 @@ install_echo() {  # only prints if not updating
 }
 
 update=false
-if [ $# -ge 1 ] && [ $1 = "update" ]; then
+if [ $# -ge 1 ] && [ "$1" = "update" ]; then
   update=true
 fi
 
@@ -54,17 +54,8 @@ if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
-install_echo "Remounting /system as rewritable (until NEOS 15)"
+install_echo "Remounting /system as rewritable"
 mount -o rw,remount /system
-
-if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
-  echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
-  read -p "[Y/n] > " choices
-  case ${choices} in
-    y|Y ) pip install powerline-shell;;
-    * ) echo "Skipping...";;
-  esac
-fi
 
 install_echo "\nInstalling emu utilities..."
 
@@ -85,12 +76,13 @@ else
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
 fi
 
-install_echo "Checking /home/.config symlink..."
-if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
-  echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
-  ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
-else
-  install_echo "Symlink check passed"
+if [ ! -x "$(command -v zsh)" ] && [ $update = false ]; then
+  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
+  read -p "[Y/n] > " choices
+  case ${choices} in
+    y|Y ) apt update && apt install zsh && ./install-oh-my-zsh.zsh;;
+    * ) echo "Skipping...";;
+  esac
 fi
 
 install_echo "Remounting /system as read-only"
