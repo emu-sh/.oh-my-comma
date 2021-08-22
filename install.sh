@@ -136,14 +136,6 @@ if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
 fi
 
 printf "\033[92m"
-if [ $update = true ]; then
-  printf "Successfully updated emu utilities!\n"
-else
-  echo "Sourcing /home/.bashrc to apply the changes made during installation"
-  source /home/.bashrc
-  printf "\nSuccessfully installed emu utilities\n\n"
-fi
-
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 if [ "${CURRENT_BRANCH}" != "master" ]; then
   printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n" "${CURRENT_BRANCH}"
@@ -158,4 +150,11 @@ printf "\033[0m\n"  # reset color
 
 if [ $update = false ]; then
   set +x
+fi
+if [ $update = true ]; then
+  printf "Successfully updated emu utilities!\n"
+else
+  echo "Sourcing /home/.bashrc to apply the changes made during installation"
+  source /home/.bashrc
+  printf "\nSuccessfully installed emu utilities\n\n"
 fi
