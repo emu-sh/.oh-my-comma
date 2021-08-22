@@ -25,6 +25,7 @@ sed -i '/^# Path to your oh-my-zsh installation./d' ~/.zshrc
 sed -i '/^export ZSH=/d' ~/.zshrc
 sed -i '1iexport ZSH="/data/community/.oh-my-zsh"\nexport ZSH_CUSTOM="/data/community/.oh-my-zsh/custom"\nexport HISTFILE=/data/community/.zsh_history\nZDOTDIR=/data/community\n' ~/.zshrc
 echo 'POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' >>! ~/.zshrc
+echo 'source ~/.p10k.zsh' >>! ~/.zshrc
 sed -i 's/^ZSH_THEME=".\+"$/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' ~/.zshrc
 mv ~/.zshrc /data/community/.zshrc
 ln -s /data/community/.zshrc ~/.zshrc
