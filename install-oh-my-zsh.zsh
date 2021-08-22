@@ -27,11 +27,17 @@ sed -i '1iexport ZSH="/data/community/.oh-my-zsh"\nexport ZSH_CUSTOM="/data/comm
 echo 'POWERLEVEL9K_DISABLE_CONFIGURATION_WIZARD=true' >>! ~/.zshrc
 echo 'source ~/.p10k.zsh' >>! ~/.zshrc
 echo 'source /data/community/.oh-my-comma/emu.sh' >>! ~/.zshrc
+cat <<EOT >> ~/.zshrc
+cd /data
+if [ -d "/data/openpilot" ]; then
+  cd /data/openpilot
+fi
+EOT
 sed -i 's/^ZSH_THEME=".\+"$/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' ~/.zshrc
 mv ~/.zshrc /data/community/.zshrc
 ln -s /data/community/.zshrc ~/.zshrc
 echo "Do you want to make zsh default in terminal sessions by starting zsh from your .bashrc?"
-sed -i '/^zsh/d' /data/community/.bashrc && echo '/data/data/com.termux/files/usr/bin/zsh' >> /data/community/.bashrc
+sed -i '/^zsh/d' /data/community/.bashrc && echo 'exec /data/data/com.termux/files/usr/bin/zsh' >> /data/community/.bashrc
 
 echo "Remounting /system as read-only"
 mount -o r,remount /system
