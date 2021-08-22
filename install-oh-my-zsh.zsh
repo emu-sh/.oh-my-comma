@@ -1,5 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/zsh
 
+echo "Remounting /system as rewritable"
+mount -o rw,remount /system
 export ZSH="/data/community/.oh-my-zsh"
 export ZSH_CUSTOM="/data/community/.oh-my-zsh/custom"
 if [ ! -f /data/community/.p10k.zsh ]; then
@@ -28,3 +30,6 @@ mv ~/.zshrc /data/community/.zshrc
 ln -s /data/community/.zshrc ~/.zshrc
 echo "Do you want to make zsh default in terminal sessions by starting zsh from your .bashrc?"
 sed -i '/^zsh/d' /data/community/.bashrc && echo '/data/data/com.termux/files/usr/bin/zsh' >> /data/community/.bashrc
+
+echo "Remounting /system as read-only"
+mount -o r,remount /system

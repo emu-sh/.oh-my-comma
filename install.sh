@@ -24,7 +24,7 @@ SYSTEM_BASHRC_PATH=/home/.bashrc
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
-GIT_BRANCH_NAME=master
+GIT_BRANCH_NAME=zsh
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
 OMC_VERSION=0.1.16
 
@@ -76,15 +76,6 @@ else
   cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
 fi
 
-if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
-  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
-  read -p "[y/N] > " choices
-  case ${choices} in
-    y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
-    * ) echo "Skipping...";;
-  esac
-fi
-
 install_echo "Remounting /system as read-only"
 mount -o r,remount /system
 
@@ -133,6 +124,15 @@ if [ $update = false ]; then
   printf "      End of %s       \n\n  Contents of community bashrc:  \n" "$SYSTEM_BASHRC_PATH"
   cat ${COMMUNITY_BASHRC_PATH}
   printf " End of %s  \n\n" "$COMMUNITY_BASHRC_PATH"
+fi
+
+if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
+  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
+  read -p "[y/N] > " choices
+  case ${choices} in
+    y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
+    * ) echo "Skipping...";;
+  esac
 fi
 
 printf "\033[92m"
