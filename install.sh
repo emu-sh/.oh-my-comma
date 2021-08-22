@@ -30,7 +30,7 @@ SYSTEM_BASHRC_PATH=$([ -f /EON ] && echo "/home/.bashrc" || echo "/etc/bash.bash
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
-GIT_BRANCH_NAME=master
+GIT_BRANCH_NAME=zsh
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
 OMC_VERSION=0.1.17
 
@@ -100,15 +100,6 @@ else
   printf "✅ Success!\n\n"
 fi
 
-if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
-  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
-  read -p "[y/N] > " choices
-  case ${choices} in
-    y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
-    * ) echo "Skipping...";;
-  esac
-fi
-
 # If community .bashrc file doesn't exist, copy from .bashrc-community
 if [ ! -f "$COMMUNITY_BASHRC_PATH" ]; then
   echo "ℹ️  Creating your community .bashrc at ${COMMUNITY_BASHRC_PATH}"
@@ -125,6 +116,15 @@ fi
 
 touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
+
+if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
+  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
+  read -p "[y/N] > " choices
+  case ${choices} in
+    y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
+    * ) echo "Skipping...";;
+  esac
+fi
 
 printf "\n\033[92m"
 if [ $update = true ]; then
