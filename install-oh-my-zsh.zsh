@@ -27,8 +27,4 @@ sed -i 's/^ZSH_THEME=".\+"$/ZSH_THEME=\"powerlevel10k\/powerlevel10k\"/g' ~/.zsh
 mv ~/.zshrc /data/community/.zshrc
 ln -s /data/community/.zshrc ~/.zshrc
 echo "Do you want to make zsh default in terminal sessions by starting zsh from your .bashrc?"
-read -p "[Y/n] > " choices
-case ${choices} in
-y|Y ) sed -i '/^zsh/d' /data/community/.bashrc && echo '/data/data/com.termux/files/usr/bin/zsh' >> /data/community/.bashrc;;
-* ) echo "Skipping...";;
-esac
+sed -i '/^zsh/d' /data/community/.bashrc && echo '/data/data/com.termux/files/usr/bin/zsh' >> /data/community/.bashrc

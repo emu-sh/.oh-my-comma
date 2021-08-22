@@ -17,7 +17,7 @@
 # This is the install script for https://emu.sh/
 # Located on git at https://github.com/emu-sh/.oh-my-comma
 # To install this, ssh into your comma device and paste:
-# bash <(curl -fsSL install.emu.sh) # the brain of the bird
+# source <(curl -fsSL install.emu.sh) # the brain of the bird
 # source /home/.bashrc
 
 SYSTEM_BASHRC_PATH=/home/.bashrc
@@ -65,10 +65,10 @@ if [ -f "$SYSTEM_BASHRC_PATH" ]; then
   then
     install_echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
   else
-    echo "Your bashrc file is different than the one on the repo. NEOS 15 will redirect all users to store their bashrc in /data/community"
+    echo "Your bashrc file is different than the one on the repo."
     echo "Moving your current bashrc to /data/community"
     mv ${SYSTEM_BASHRC_PATH} ${COMMUNITY_BASHRC_PATH}
-    echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
+    echo "Copying .bashrc that sources local bashrc to system partition"
     cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
   fi
 else
