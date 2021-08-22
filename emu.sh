@@ -2,7 +2,7 @@
 SYSTEM_BASHRC_PATH=/home/.bashrc
 export COMMUNITY_PATH=/data/community
 export COMMUNITY_BASHRC_PATH=${COMMUNITY_PATH}/.bashrc
-export OH_MY_COMMA_PATH="$(dirname $(readlink -f $0))"
+export OH_MY_COMMA_PATH="/data/community/.oh-my-comma"
 
 source ${OH_MY_COMMA_PATH}/aliases.sh
 
