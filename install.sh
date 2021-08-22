@@ -118,7 +118,7 @@ touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
 
 if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
-  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal.]"
+  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal. see: https://www.nerdfonts.com/font-downloads]"
   read -p "[y/N] > " choices
   case ${choices} in
     y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
