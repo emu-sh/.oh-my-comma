@@ -65,7 +65,7 @@ install_echo "Remounting .bashrc partition as writable"
 if [ -f /EON ]; then
   mount -o rw,remount /system
 else
-  mount -o rw,remount /
+  sudo mount -o rw,remount /
 fi
 
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
@@ -108,7 +108,7 @@ install_echo "Remounting .bashrc partition as read-only"
 if [ -f /EON ]; then
   mount -o r,remount /system
 else
-  mount -o r,remount /
+  sudo mount -o r,remount /
 fi
 
 #Coping user bashrc, outside of system partition
