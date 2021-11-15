@@ -36,7 +36,8 @@ OMC_VERSION=0.1.17
 
 install_echo() {  # only prints if not updating
   if [ "$update" != true ]; then
-    printf "%s\n" "$1"
+    # shellcheck disable=SC2059
+    printf -- "$1\n"
   fi
 }
 
@@ -102,27 +103,22 @@ else
   # Append community .bashrc source onto system .bashrc
   remount_system rw
   echo "Sourcing community .bashrc in system .bashrc"
-  printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" >> "$SYSTEM_BASHRC_PATH"
+  printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" >> "$SYSTEM_BASHRC_PATH" || exit 1
   remount_system ro
-  printf "\nSuccess!\n\n"
+  printf "Success!\n\n"
 fi
 
 # FIXME: not applicable on TICI
 if [ -f /EON ]; then
   install_echo "Checking /home/.config symlink..."
   if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
+    remount_system rw  # FIXME: do we need /system rw to access /home on NEOS?
     echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
     ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
+    remount_system ro
   else
     install_echo "Symlink check passed"
   fi
-fi
-
-install_echo "Remounting .bashrc partition as read-only"
-if [ -f /EON ]; then
-  mount -o r,remount /system
-else
-  sudo mount -o ro,remount /
 fi
 
 # If community .bashrc file doesn't exist, copy from .bashrc-community
@@ -130,11 +126,11 @@ if [ ! -f "$COMMUNITY_BASHRC_PATH" ]; then
   echo "Creating your community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   install_community_bashrc
 elif [ $update = false ]; then
-  echo "A community .bashrc file already exists at ${COMMUNITY_BASHRC_PATH}, but you're installing .oh-my.comma"
-  echo "Would you like to overwrite it with the default to make sure it's up to date?"
+  printf "\nA .bashrc file already exists at ${COMMUNITY_BASHRC_PATH}, but you're installing .oh-my.comma\n"
+  printf "Would you like to overwrite it with the default to make sure it's up to date?\n\n"
   read -p "[Y/n]: " overwrite
   case ${overwrite} in
-    n|N ) echo "Skipping...";;
+    n|N ) printf "Skipping...\n\n";;
     * ) install_community_bashrc;;
   esac
 fi
@@ -142,13 +138,11 @@ fi
 touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
 
-printf "\033[92m"
+printf "\n\033[92m"
 if [ $update = true ]; then
   printf "Successfully updated emu utilities!\n"
 else
-  echo "Sourcing ${SYSTEM_BASHRC_PATH} to apply the changes made during installation"
-  source "$SYSTEM_BASHRC_PATH"
-  printf "\nSuccessfully installed emu utilities\n\n"
+  printf "Successfully installed emu utilities\n\n"
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
