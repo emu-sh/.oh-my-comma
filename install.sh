@@ -44,7 +44,7 @@ install_echo() {  # only prints if not updating
 install_community_bashrc() {
   cp "${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community" $COMMUNITY_BASHRC_PATH
   chmod 755 ${COMMUNITY_BASHRC_PATH}
-  echo "Copied ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community to ${COMMUNITY_BASHRC_PATH}"
+  echo "✅ Copied ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community to ${COMMUNITY_BASHRC_PATH}"
 }
 
 remount_system() {
@@ -95,14 +95,14 @@ if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false 
   esac
 fi
 
-install_echo "Installing emu utilities\n"
-# If community .bashrc is sourced, do nothing, else merely append source line to system .bashrc
+install_echo "ℹ️  Installing emu utilities\n"
+# If community .bashrc is already sourced, do nothing, else merely append source line to system .bashrc
 if grep -q "$SYSTEM_BASHRC_PATH" -e "source ${COMMUNITY_BASHRC_PATH}"; then
   install_echo "✅ Community .bashrc is sourced in system .bashrc, skipping"
 else
   # Append community .bashrc source onto system .bashrc
   remount_system rw
-  echo "Sourcing community .bashrc in system .bashrc"
+  echo "ℹ️  Sourcing community .bashrc in system .bashrc"
   printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" | sudo tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
   remount_system ro
   printf "✅ Success!\n\n"
@@ -123,7 +123,7 @@ fi
 
 # If community .bashrc file doesn't exist, copy from .bashrc-community
 if [ ! -f "$COMMUNITY_BASHRC_PATH" ]; then
-  echo "Creating your community .bashrc at ${COMMUNITY_BASHRC_PATH}"
+  echo "ℹ️  Creating your community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   install_community_bashrc
 elif [ $update = false ]; then
   printf "\n❗ A .bashrc file already exists at ${COMMUNITY_BASHRC_PATH}, but you're installing .oh-my.comma\n"
@@ -142,7 +142,7 @@ printf "\n\033[92m"
 if [ $update = true ]; then
   echo "✅ Successfully updated emu utilities!"
 else
-  echo "✅ Successfully installed emu utilities"
+  echo "✅ Successfully installed emu utilities!"
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
@@ -152,7 +152,7 @@ fi
 
 install_echo "Current version: $OMC_VERSION"  # prints in update.sh
 if [ $update = false ]; then
-  printf "\033[0mYou may need to run the following to initialize emu:\n\033[92msource %s/emu.sh\n" "${OH_MY_COMMA_PATH}"
+  echo "\033[0mYou may want to exit out of this bash instance to automatically source emu"
 fi
 
 printf "\033[0m\n"  # reset color
