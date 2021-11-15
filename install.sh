@@ -51,10 +51,10 @@ remount_system() {
   writable_str=$([ "$1" = "rw" ] && echo "writable" || echo "read-only")
   if [ -f /EON ]; then
     permission=$([ "$1" = "ro" ] && echo "r" || echo "rw")  # just maps ro to r on EON
-    install_echo "- Remounting /system partition as ${writable_str}"
+    install_echo "❗ Remounting /system partition as ${writable_str}"
     mount -o "$permission",remount /system || exit 1
   else
-    install_echo "- Remounting / partition as ${writable_str}"
+    install_echo "❗ Remounting / partition as ${writable_str}"
     sudo mount -o "$1",remount / || exit 1
   fi
 }
@@ -95,17 +95,17 @@ if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false 
   esac
 fi
 
-install_echo "\nInstalling emu utilities"
+install_echo "Installing emu utilities\n"
 # If community .bashrc is sourced, do nothing, else merely append source line to system .bashrc
 if grep -q "$SYSTEM_BASHRC_PATH" -e "source ${COMMUNITY_BASHRC_PATH}"; then
-  install_echo "Community .bashrc is sourced in system .bashrc, skipping"
+  install_echo "✅ Community .bashrc is sourced in system .bashrc, skipping"
 else
   # Append community .bashrc source onto system .bashrc
   remount_system rw
   echo "Sourcing community .bashrc in system .bashrc"
   printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" >> "$SYSTEM_BASHRC_PATH" || exit 1
   remount_system ro
-  printf "Success!\n\n"
+  printf "✅ Success!\n\n"
 fi
 
 # FIXME: not applicable on TICI
@@ -126,11 +126,11 @@ if [ ! -f "$COMMUNITY_BASHRC_PATH" ]; then
   echo "Creating your community .bashrc at ${COMMUNITY_BASHRC_PATH}"
   install_community_bashrc
 elif [ $update = false ]; then
-  printf "\nA .bashrc file already exists at ${COMMUNITY_BASHRC_PATH}, but you're installing .oh-my.comma\n"
+  printf "\n❗ A .bashrc file already exists at ${COMMUNITY_BASHRC_PATH}, but you're installing .oh-my.comma\n"
   printf "Would you like to overwrite it with the default to make sure it's up to date?\n\n"
   read -p "[Y/n]: " overwrite
   case ${overwrite} in
-    n|N ) printf "Skipping...\n\n";;
+    n|N ) printf "Skipping...\n";;
     * ) install_community_bashrc;;
   esac
 fi
@@ -140,14 +140,14 @@ chmod 775 ${COMMUNITY_PATH}/.bash_history
 
 printf "\n\033[92m"
 if [ $update = true ]; then
-  printf "Successfully updated emu utilities!\n"
+  echo "✅ Successfully updated emu utilities!"
 else
-  printf "Successfully installed emu utilities\n\n"
+  echo "✅ Successfully installed emu utilities"
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 if [ "${CURRENT_BRANCH}" != "master" ]; then
-  printf "\n\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n" "${CURRENT_BRANCH}"
+  printf "\n❗\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n" "${CURRENT_BRANCH}"
 fi
 
 install_echo "Current version: $OMC_VERSION"  # prints in update.sh
