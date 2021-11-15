@@ -51,10 +51,10 @@ remount_system() {
   writable_str=$([ "$1" = "rw" ] && echo "writable" || echo "read-only")
   if [ -f /EON ]; then
     permission=$([ "$1" = "ro" ] && echo "r" || echo "rw")  # just maps ro to r on EON
-    install_echo "❗ Remounting /system partition as ${writable_str}"
+    install_echo "ℹ Remounting /system partition as ${writable_str}"
     mount -o "$permission",remount /system || exit 1
   else
-    install_echo "❗ Remounting / partition as ${writable_str}"
+    install_echo "ℹ Remounting / partition as ${writable_str}"
     sudo mount -o "$1",remount / || exit 1
   fi
 }
@@ -147,7 +147,7 @@ fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 if [ "${CURRENT_BRANCH}" != "master" ]; then
-  printf "\n❗\033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n" "${CURRENT_BRANCH}"
+  printf "\n❗ \033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n" "${CURRENT_BRANCH}"
 fi
 
 install_echo "Current version: $OMC_VERSION"  # prints in update.sh
