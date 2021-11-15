@@ -18,9 +18,16 @@
 # Located on git at https://github.com/emu-sh/.oh-my-comma
 # To install this, ssh into your comma device and paste:
 # bash <(curl -fsSL install.emu.sh) # the brain of the bird
-# source /home/.bashrc
+# source $SYSTEM_BASHRC_PATH depending on system
 
-SYSTEM_BASHRC_PATH=/home/.bashrc
+if [ -f /EON ] || [ -f /TICI ]; then
+  SYSTEM_BASHRC_PATH=$([ -f /EON ] && echo "/home/.bashrc" || echo "/etc/bash.bashrc")
+else
+  echo "Attempting to install on an unsupported platform"
+  echo "emu only supports comma.ai devices at this time"
+  exit 1
+fi
+
 COMMUNITY_PATH=/data/community
 COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
@@ -54,8 +61,12 @@ if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
-install_echo "Remounting /system as rewritable (until NEOS 15)"
-mount -o rw,remount /system
+install_echo "Remounting .bashrc partition as writable"
+if [ -f /EON ]; then
+  mount -o rw,remount /system
+else
+  mount -o rw,remount /
+fi
 
 if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
@@ -69,8 +80,8 @@ fi
 install_echo "\nInstalling emu utilities..."
 
 if [ -f "$SYSTEM_BASHRC_PATH" ]; then
-  install_echo "Your system /home/.bashrc exists..."
-  if grep -q '/home/.bashrc' -e 'source /data/community/.bashrc'
+  install_echo "Your system ${SYSTEM_BASHRC_PATH} exists..."
+  if grep -q "$SYSTEM_BASHRC_PATH" -e 'source /data/community/.bashrc'
   then
     install_echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
   else
@@ -93,8 +104,12 @@ else
   install_echo "Symlink check passed"
 fi
 
-install_echo "Remounting /system as read-only"
-mount -o r,remount /system
+install_echo "Remounting .bashrc partition as read-only"
+if [ -f /EON ]; then
+  mount -o r,remount /system
+else
+  mount -o r,remount /
+fi
 
 #Coping user bashrc, outside of system partition
 if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
@@ -137,7 +152,7 @@ chmod 775 ${COMMUNITY_PATH}/.bash_history
 #Post-install
 if [ $update = false ]; then
   printf "    Contents of system bashrc:   \n"
-  cat ${SYSTEM_BASHRC_PATH}
+  cat "${SYSTEM_BASHRC_PATH}"
   printf "      End of %s       \n\n  Contents of community bashrc:  \n" "$SYSTEM_BASHRC_PATH"
   cat ${COMMUNITY_BASHRC_PATH}
   printf " End of %s  \n\n" "$COMMUNITY_BASHRC_PATH"
@@ -147,8 +162,8 @@ printf "\033[92m"
 if [ $update = true ]; then
   printf "Successfully updated emu utilities!\n"
 else
-  echo "Sourcing /home/.bashrc to apply the changes made during installation"
-  source /home/.bashrc
+  echo "Sourcing ${SYSTEM_BASHRC_PATH} to apply the changes made during installation"
+  source "$SYSTEM_BASHRC_PATH"
   printf "\nSuccessfully installed emu utilities\n\n"
 fi
 
