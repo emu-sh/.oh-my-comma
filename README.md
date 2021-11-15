@@ -18,7 +18,7 @@ If you have any questions about the development process, or have any ideas you w
 To install these utilities, SSH into your comma device running neos (ie Comma 2, Eon, etc), and paste in the following:
 ```bash
 bash <(curl -fsSL install.emu.sh) # the brain of the bird
-source /home/.bashrc
+source /data/community/.bashrc
 ```
 
 <!-- <img src="https://thumbs.gfycat.com/DopeyHairyGeese-size_restricted.gif" alt ="" /> -->
