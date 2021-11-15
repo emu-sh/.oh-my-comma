@@ -23,7 +23,7 @@
 if [ ! -f /EON ] && [ ! -f /TICI ]; then
   echo "Attempting to install on an unsupported platform"
   echo "emu only supports comma.ai devices at this time"
-#  exit 1
+  exit 1
 fi
 
 SYSTEM_BASHRC_PATH=$([ -f /EON ] && echo "/home/.bashrc" || echo "/etc/bash.bashrc")
