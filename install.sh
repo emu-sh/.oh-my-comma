@@ -36,8 +36,7 @@ OMC_VERSION=0.1.17
 
 install_echo() {  # only prints if not updating
   if [ "$update" != true ]; then
-    # shellcheck disable=SC2059
-    printf "$1\n"
+    printf "%s\n" "$1"
   fi
 }
 
@@ -45,6 +44,18 @@ install_community_bashrc() {
   cp "${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community" $COMMUNITY_BASHRC_PATH
   chmod 755 ${COMMUNITY_BASHRC_PATH}
   echo "Copied ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community to ${COMMUNITY_BASHRC_PATH}"
+}
+
+remount_system() {
+  writable_str=$([ "$1" = "rw" ] && echo "writable" || echo "read-only")
+  if [ -f /EON ]; then
+    permission=$([ "$1" = "ro" ] && echo "r" || echo "rw")  # just maps ro to r on EON
+    install_echo "- Remounting /system partition as ${writable_str}"
+    mount -o "$permission",remount /system || exit 1
+  else
+    install_echo "- Remounting / partition as ${writable_str}"
+    sudo mount -o "$1",remount / || exit 1
+  fi
 }
 
 # Check system .bashrc path exists
@@ -73,19 +84,12 @@ if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
-install_echo "Remounting .bashrc partition as writable"
-if [ -f /EON ]; then
-  mount -o rw,remount /system
-else
-  sudo mount -o rw,remount /
-fi
-
 # FIXME: figure out how to install pip packages in AGNOS
 if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[Y/n] > " choices
   case ${choices} in
-    y|Y ) pip install powerline-shell;;
+    y|Y ) remount_system rw && pip install powerline-shell && remount_system ro;;
     * ) echo "Skipping...";;
   esac
 fi
@@ -96,9 +100,11 @@ if grep -q "$SYSTEM_BASHRC_PATH" -e "source ${COMMUNITY_BASHRC_PATH}"; then
   install_echo "Community .bashrc is sourced in system .bashrc, skipping"
 else
   # Append community .bashrc source onto system .bashrc
+  remount_system rw
   echo "Sourcing community .bashrc in system .bashrc"
   printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" >> "$SYSTEM_BASHRC_PATH"
-  echo "Done!"
+  remount_system ro
+  printf "\nSuccess!\n\n"
 fi
 
 # FIXME: not applicable on TICI
