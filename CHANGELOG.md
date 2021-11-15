@@ -2,7 +2,9 @@ Release 0.1.17 (2021-11-14)
 =====
 
 * Support comma three, which has its .bashrc located elsewhere.
-* Clean up installation logic, we now only add one `source` line to the system .bashrc to avoid cluttering it up. All changes are made in the community .bashrc
+* Clean up installation logic:
+  * Minimal modification to the system .bashrc file, only one `source` line is appended to the community .bashrc
+  * Much safer: the previous installer moved the system .bashrc file to a permanently rw partition
 
 Release 0.1.16 (2021-04-18)
 =====
