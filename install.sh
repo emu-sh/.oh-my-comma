@@ -51,10 +51,10 @@ remount_system() {
   writable_str=$([ "$1" = "rw" ] && echo "writable" || echo "read-only")
   if [ -f /EON ]; then
     permission=$([ "$1" = "ro" ] && echo "r" || echo "rw")  # just maps ro to r on EON
-    install_echo "ℹ Remounting /system partition as ${writable_str}"
+    install_echo "ℹ️  Remounting /system partition as ${writable_str}"
     mount -o "$permission",remount /system || exit 1
   else
-    install_echo "ℹ Remounting / partition as ${writable_str}"
+    install_echo "ℹ️  Remounting / partition as ${writable_str}"
     sudo mount -o "$1",remount / || exit 1
   fi
 }
