@@ -26,9 +26,9 @@ if [ ! -f /EON ] && [ ! -f /TICI ]; then
 #  exit 1
 fi
 
-SYSTEM_BASHRC_PATH=/home/shane/dev/.oh-my-comma/system_bashrc  # $([ -f /EON ] && echo "/home/.bashrc" || echo "/etc/bash.bashrc")
+SYSTEM_BASHRC_PATH=$([ -f /EON ] && echo "/home/.bashrc" || echo "/etc/bash.bashrc")
 COMMUNITY_PATH=/data/community
-COMMUNITY_BASHRC_PATH=/home/shane/dev/.oh-my-comma/default-bashrcs/.bashrc-community  # /data/community/.bashrc
+COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 GIT_BRANCH_NAME=master
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
