@@ -116,7 +116,7 @@ install_echo "Remounting .bashrc partition as read-only"
 if [ -f /EON ]; then
   mount -o r,remount /system
 else
-  sudo mount -o r,remount /
+  sudo mount -o ro,remount /
 fi
 
 # If community .bashrc file doesn't exist, copy from .bashrc-community
