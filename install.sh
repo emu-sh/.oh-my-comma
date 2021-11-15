@@ -103,7 +103,7 @@ else
   # Append community .bashrc source onto system .bashrc
   remount_system rw
   echo "Sourcing community .bashrc in system .bashrc"
-  printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" >> "$SYSTEM_BASHRC_PATH" || remount_system ro && echo "Try running with sudo!" && exit 1
+  printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" | sudo tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
   remount_system ro
   printf "✅ Success!\n\n"
 fi
