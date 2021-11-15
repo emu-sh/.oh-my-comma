@@ -20,26 +20,38 @@
 # bash <(curl -fsSL install.emu.sh) # the brain of the bird
 # source $SYSTEM_BASHRC_PATH depending on system
 
-if [ -f /EON ] || [ -f /TICI ]; then
-  SYSTEM_BASHRC_PATH=$([ -f /EON ] && echo "/home/.bashrc" || echo "/etc/bash.bashrc")
-else
+if [ ! -f /EON ] && [ ! -f /TICI ]; then
   echo "Attempting to install on an unsupported platform"
   echo "emu only supports comma.ai devices at this time"
-  exit 1
+#  exit 1
 fi
 
+SYSTEM_BASHRC_PATH=/home/shane/dev/.oh-my-comma/system_bashrc  # $([ -f /EON ] && echo "/home/.bashrc" || echo "/etc/bash.bashrc")
 COMMUNITY_PATH=/data/community
-COMMUNITY_BASHRC_PATH=/data/community/.bashrc
+COMMUNITY_BASHRC_PATH=/home/shane/dev/.oh-my-comma/default-bashrcs/.bashrc-community  # /data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 GIT_BRANCH_NAME=master
 GIT_REMOTE_URL=https://github.com/emu-sh/.oh-my-comma.git
-OMC_VERSION=0.1.16
+OMC_VERSION=0.1.17
 
 install_echo() {  # only prints if not updating
   if [ "$update" != true ]; then
-    echo "$1"
+    # shellcheck disable=SC2059
+    printf "$1\n"
   fi
 }
+
+install_community_bashrc() {
+  cp "${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community" $COMMUNITY_BASHRC_PATH
+  chmod 755 ${COMMUNITY_BASHRC_PATH}
+  echo "Copied ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community to ${COMMUNITY_BASHRC_PATH}"
+}
+
+# Check system .bashrc path exists
+if [ ! -f "$SYSTEM_BASHRC_PATH" ]; then
+  echo "Your .bashrc file does not exist at ${SYSTEM_BASHRC_PATH}"
+  exit 1
+fi
 
 update=false
 if [ $# -ge 1 ] && [ $1 = "update" ]; then
@@ -57,7 +69,7 @@ fi
 chmod 755 /data/community
 
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
-  echo "Cloning..."
+  echo "Cloning .oh-my-comma"
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
 fi
 
@@ -68,7 +80,8 @@ else
   sudo mount -o rw,remount /
 fi
 
-if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
+# FIXME: figure out how to install pip packages in AGNOS
+if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[Y/n] > " choices
   case ${choices} in
@@ -77,31 +90,26 @@ if [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
   esac
 fi
 
-install_echo "\nInstalling emu utilities..."
-
-if [ -f "$SYSTEM_BASHRC_PATH" ]; then
-  install_echo "Your system ${SYSTEM_BASHRC_PATH} exists..."
-  if grep -q "$SYSTEM_BASHRC_PATH" -e 'source /data/community/.bashrc'
-  then
-    install_echo "Found an entry point point for ${COMMUNITY_BASHRC_PATH} in ${SYSTEM_BASHRC_PATH}, skipping changes to /system"
-  else
-    echo "Your bashrc file is different than the one on the repo. NEOS 15 will redirect all users to store their bashrc in /data/community"
-    echo "Moving your current bashrc to /data/community"
-    mv ${SYSTEM_BASHRC_PATH} ${COMMUNITY_BASHRC_PATH}
-    echo "Copying .bashrc that sources local bashrc to system partition (wont be needed in neos 15)"
-    cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
-  fi
+install_echo "\nInstalling emu utilities"
+# If community .bashrc is sourced, do nothing, else merely append source line to system .bashrc
+if grep -q "$SYSTEM_BASHRC_PATH" -e "source ${COMMUNITY_BASHRC_PATH}"; then
+  install_echo "Community .bashrc is sourced in system .bashrc, skipping"
 else
-  echo "Creating a .bashrc in /home/ that sources the community bashrc in /data/community/"
-  cp ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-system ${SYSTEM_BASHRC_PATH}
+  # Append community .bashrc source onto system .bashrc
+  echo "Sourcing community .bashrc in system .bashrc"
+  printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" >> "$SYSTEM_BASHRC_PATH"
+  echo "Done!"
 fi
 
-install_echo "Checking /home/.config symlink..."
-if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
-  echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
-  ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
-else
-  install_echo "Symlink check passed"
+# FIXME: not applicable on TICI
+if [ -f /EON ]; then
+  install_echo "Checking /home/.config symlink..."
+  if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
+    echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
+    ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
+  else
+    install_echo "Symlink check passed"
+  fi
 fi
 
 install_echo "Remounting .bashrc partition as read-only"
@@ -111,52 +119,22 @@ else
   sudo mount -o r,remount /
 fi
 
-#Coping user bashrc, outside of system partition
-if [ -f "$COMMUNITY_BASHRC_PATH" ]; then
-  #bashrc found
-  if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu-utils.sh'
-  then
-    # v0.1.0 -> v0.1.1
-    # Test for and patch Backwards compatibility issues with file rename
-    if grep -q '/data/community/.bashrc' -e '^### End of \.oh-my-comma magic ###$'
-    then
-      echo "There's something wrong with your community .bashrc ?? You should copy the one from ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community) to ${COMMUNITY_BASHRC_PATH}"
-    else
-    # Patch the current bashrc with the updated settings, without destroying user modifications
-    echo "Found old entrypoint filename. Removing that line"
-    rm .bashrc.lock
-    chmod 755 ${COMMUNITY_BASHRC_PATH}
-    mv ${COMMUNITY_BASHRC_PATH} ${COMMUNITY_PATH}/.bashrc.lock
-    sed -i.bak.$(date +"%Y-%m-%d-%T") -e "/^source \/data\/community\/\.oh-my-comma\/emu-utils\.sh$/d" ${COMMUNITY_BASHRC_PATH}.lock
-    printf "$(sed '/### End of \.oh-my-comma magic ###/q' ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)\n$(cat ${COMMUNITY_BASHRC_PATH}.lock)\n" >> ${COMMUNITY_BASHRC_PATH}
-    rm ${COMMUNITY_BASHRC_PATH}.lock
-    chmod 755 ${COMMUNITY_BASHRC_PATH}
-    fi
-  fi
-
-  if grep -q '/data/community/.bashrc' -e 'source /data/community/.oh-my-comma/emu.sh'
-  then
-    install_echo "Skipping community .bashrc installation as it already sources .oh-my-comma's entrypoint"
-  else
-    echo "Your community bashrc is different than what we've got in this repo... Echoing out our entry point to the bottom of your bashrc in /data/community/.bashrc"
-    printf "\n%s\n" "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)" >>  ${COMMUNITY_BASHRC_PATH}
-  fi
-else
-  echo "Creating the community .bashrc at ${COMMUNITY_BASHRC_PATH}"
-  touch ${COMMUNITY_BASHRC_PATH}
-  chmod 755 ${COMMUNITY_BASHRC_PATH}
-  printf "%s\n" "$(cat ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community)" >>  ${COMMUNITY_BASHRC_PATH}
+# If community .bashrc file doesn't exist, copy from .bashrc-community
+if [ ! -f "$COMMUNITY_BASHRC_PATH" ]; then
+  echo "Creating your community .bashrc at ${COMMUNITY_BASHRC_PATH}"
+  install_community_bashrc
+elif [ $update = false ]; then
+  echo "A community .bashrc file already exists at ${COMMUNITY_BASHRC_PATH}, but you're installing .oh-my.comma"
+  echo "Would you like to overwrite it with the default to make sure it's up to date?"
+  read -p "[Y/n]: " overwrite
+  case ${overwrite} in
+    n|N ) echo "Skipping...";;
+    * ) install_community_bashrc;;
+  esac
 fi
+
 touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
-#Post-install
-if [ $update = false ]; then
-  printf "    Contents of system bashrc:   \n"
-  cat "${SYSTEM_BASHRC_PATH}"
-  printf "      End of %s       \n\n  Contents of community bashrc:  \n" "$SYSTEM_BASHRC_PATH"
-  cat ${COMMUNITY_BASHRC_PATH}
-  printf " End of %s  \n\n" "$COMMUNITY_BASHRC_PATH"
-fi
 
 printf "\033[92m"
 if [ $update = true ]; then
@@ -173,7 +151,7 @@ if [ "${CURRENT_BRANCH}" != "master" ]; then
 fi
 
 install_echo "Current version: $OMC_VERSION"  # prints in update.sh
-if [ "$update" != true ]; then
+if [ $update = false ]; then
   printf "\033[0mYou may need to run the following to initialize emu:\n\033[92msource %s/emu.sh\n" "${OH_MY_COMMA_PATH}"
 fi
 

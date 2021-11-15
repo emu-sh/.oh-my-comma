@@ -1,7 +1,4 @@
 #!/bin/bash
-SYSTEM_BASHRC_PATH=/home/.bashrc
-COMMUNITY_PATH=/data/community
-COMMUNITY_BASHRC_PATH=/data/community/.bashrc
 OH_MY_COMMA_PATH=/data/community/.oh-my-comma
 PREV_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 PREV_VERSION=$(cd ${OH_MY_COMMA_PATH} && git describe --tags | grep -Po "^v(\d+\.)?(\d+\.)?(\*|\d+)")
@@ -23,7 +20,7 @@ echo "======= TO ======="
 if git -C $OH_MY_COMMA_PATH log --stat -1 | grep -q 'default-bashrcs/.bashrc-community'; then
   if [ "${PREV_VERSION}" != "${CURRENT_VERSION}" ]; then
     printf "\n\33[38;5;190mThe default .bashrc has been updated!\033[0m The update has not been applied to retain your custom changes.\nTo update and reset your .bashrc, run the command:\n"
-    printf "\033[92mcp -fr /data/community/.oh-my-comma/default-bashrcs/.bashrc-community /data/community/.bashrc\033[0m\n\n"
+    printf "\033[92mcp -fr ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community /data/community/.bashrc\033[0m\n\n"
     printf "This will wipe any custom changes you've made!\n"
   fi
 fi
