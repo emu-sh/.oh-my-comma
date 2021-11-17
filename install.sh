@@ -149,7 +149,7 @@ fi
 
 install_echo "Current version: $OMC_VERSION"  # prints in update.sh
 if [ $update = false ]; then
-  echo "\033[0mYou may want to exit out of this bash instance to automatically source emu"
+  printf "\033[0mYou may want to exit out of this bash instance to automatically source emu\n"
 fi
 
 printf "\033[0m\n"  # reset color
