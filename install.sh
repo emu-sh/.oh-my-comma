@@ -42,12 +42,14 @@ install_echo() {  # only prints if not updating
 }
 
 install_community_bashrc() {
+  # Copies default-bashrcs/.bashrc-community to /data/community/.bashrc
   cp "${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community" $COMMUNITY_BASHRC_PATH
   chmod 755 ${COMMUNITY_BASHRC_PATH}
   echo "✅ Copied ${OH_MY_COMMA_PATH}/default-bashrcs/.bashrc-community to ${COMMUNITY_BASHRC_PATH}"
 }
 
 remount_system() {
+  # Mounts the correct partition at which each OS's .bashrc is located
   writable_str=$([ "$1" = "rw" ] && echo "writable" || echo "read-only")
   if [ -f /EON ]; then
     permission=$([ "$1" = "ro" ] && echo "r" || echo "rw")  # just maps ro to r on EON
@@ -59,7 +61,7 @@ remount_system() {
   fi
 }
 
-# Check system .bashrc path exists
+# System .bashrc should exist
 if [ ! -f "$SYSTEM_BASHRC_PATH" ]; then
   echo "Your .bashrc file does not exist at ${SYSTEM_BASHRC_PATH}"
   exit 1
@@ -70,15 +72,10 @@ if [ $# -ge 1 ] && [ $1 = "update" ]; then
   update=true
 fi
 
-if [ $update = false ]; then
-  [[ "$DEBUG" == 'true' ]] && set -x
-fi
-
 if [ ! -d "/data/community" ]; then
   mkdir /data/community
+  chmod 755 /data/community
 fi
-
-chmod 755 /data/community
 
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   echo "Cloning .oh-my-comma"
