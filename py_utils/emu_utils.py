@@ -15,7 +15,6 @@ if __package__ is None:
 else:
   from py_utils.colors import COLORS
 
-SYSTEM_BASHRC_PATH = '/home/.bashrc'
 COMMUNITY_PATH = '/data/community'
 COMMUNITY_BASHRC_PATH = '/data/community/.bashrc'
 OH_MY_COMMA_PATH = '/data/community/.oh-my-comma'

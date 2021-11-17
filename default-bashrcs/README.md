@@ -1,7 +1,6 @@
-These files are copied during installation process. If each bashrc exists on the filesystem and contains the `source`
-to whatever entrypoint they each point to, then these files will not be overwritten by update. The files in this directory should only be edited when modifying distribution files.
+A source to /data/community/.bashrc is made in the system .bashrc file, depending on the system (AGNOS or NEOS).
 
-To edit your own bashrc:
+To edit your own bashrc after installation:
 ```
 cd /data/community/
 ls -al
