@@ -1,4 +1,4 @@
-Release 0.1.17 (2021-11-14)
+Release 0.1.17 (2021-11-17)
 =====
 
 * Support comma three, which has its .bashrc located elsewhere.
