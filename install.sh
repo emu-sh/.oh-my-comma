@@ -100,7 +100,11 @@ else
   # Append community .bashrc source onto system .bashrc
   remount_system rw
   echo "ℹ️  Sourcing community .bashrc in system .bashrc"
-  printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" | sudo tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
+  if [ -f /TICI ]; then  # need to sudo on AGNOS
+    printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" | sudo tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
+  else
+    printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" | tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
+  fi
   remount_system ro
   printf "✅ Success!\n\n"
 fi
