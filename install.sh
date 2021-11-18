@@ -87,7 +87,7 @@ if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false 
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[Y/n] > " choices
   case ${choices} in
-    y|Y ) remount_system rw && pip install powerline-shell || remount_system ro;;
+    y|Y ) remount_system rw && pip install powerline-shell && remount_system ro;;
     * ) echo "Skipping...";;
   esac
 fi
