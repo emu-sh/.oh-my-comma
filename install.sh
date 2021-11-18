@@ -87,7 +87,7 @@ if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false 
   echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
   read -p "[Y/n] > " choices
   case ${choices} in
-    y|Y ) remount_system rw && pip install powerline-shell && remount_system ro;;
+    y|Y ) remount_system rw && pip install powerline-shell || remount_system ro;;
     * ) echo "Skipping...";;
   esac
 fi
@@ -100,10 +100,11 @@ else
   # Append community .bashrc source onto system .bashrc
   remount_system rw
   echo "ℹ️  Sourcing community .bashrc in system .bashrc"
+  msg="\n# automatically added by .oh-my-comma:\nif [ -f ${COMMUNITY_BASHRC_PATH} ]; then\n  source ${COMMUNITY_BASHRC_PATH}\nfi\n"
   if [ -f /TICI ]; then  # need to sudo on AGNOS
-    printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" | sudo tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
+    printf msg | sudo tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
   else
-    printf "\n# automatically added by .oh-my-comma:\n%s\n" "source ${COMMUNITY_BASHRC_PATH}" | tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
+    printf msg | tee -a "$SYSTEM_BASHRC_PATH" > /dev/null || exit 1
   fi
   remount_system ro
   printf "✅ Success!\n\n"
