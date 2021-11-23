@@ -4,7 +4,7 @@ improving the dev workflow friction is paramount to innovating [openpilot](https
 
 ***PRs accepted!** What cool shit do you do to your ssh session with your car??*
 
-This tool was created by [Alice Knag](https://github.com/AskAlice) - `@emu#6969` on Discord, and is widely contributed to by [ShaneSmiskol](https://github.com/ShaneSmiskol) - `Shane#6175`
+This tool was created by [Alice Knag](https://github.com/AskAlice) - `@emu#6969` on Discord, and is widely contributed to by [ShaneSmiskol](https://github.com/sshane) - `Shane#6175`
 If you have any questions about the development process, or have any ideas you want to see happen, check out [CONTRIBUTING.md](CONTRIBUTING.md) and/or DM one of us on Discord or ask in #custom-forks
 <p align="center">
   <img src="https://emu.bz/bh8" alt="" />
@@ -17,7 +17,7 @@ If you have any questions about the development process, or have any ideas you w
 
 To install these utilities, SSH into your comma device running neos (ie Comma 2, Eon, etc), and paste in the following:
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/emu-sh/.oh-my-comma/master/install.sh) # the brain of the bird
+bash <(curl -fsSL install.emu.sh) # the brain of the bird
 source /data/community/.bashrc
 ```
 
