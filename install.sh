@@ -117,8 +117,9 @@ fi
 touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
 
+# FIXME: is this only available on comma three?
 if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
-  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal. see: https://www.nerdfonts.com/font-downloads]"
+  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal. See: https://www.nerdfonts.com/font-downloads]"
   read -p "[y/N] > " choices
   case ${choices} in
     y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
@@ -126,20 +127,17 @@ if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
   esac
 fi
 
-printf "\n\033[92m"
-
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
 if [ "${CURRENT_BRANCH}" != "master" ]; then
   printf "\n❗ \033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n" "${CURRENT_BRANCH}"
 fi
 
-printf "\033[0m\n"  # reset color
-install_echo "Current version: $OMC_VERSION"  # prints in update.sh
-
+printf "\n\033[92m"
 if [ $update = true ]; then
+  echo "Current version: $OMC_VERSION"  # prints in update.sh
   echo "✅ Successfully updated emu utilities!"
 else
-  printf "\033[0mYou may want to exit out of this bash instance to automatically source emu\n"
   echo "✅ Successfully installed emu utilities!"
+  printf "\033[0mYou may want to exit out of this bash instance to finish the install"
   set +x
 fi
