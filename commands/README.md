@@ -33,4 +33,8 @@ de-🐛-ing tools
 - `emu device battery`: 🔋 see information about the state of your battery
 - `emu device reboot`: ⚡ safely reboot your device
 - `emu device shutdown`: 🔌 safely shutdown your device
+  - Arguments 💢:
+    - -r, --reboot: ♻️ An alternate way to reboot your device
 - `emu device settings`: ⚙ open the Settings app
+  - Arguments 💢:
+    - -c, --close: ❌ Closes the settings application

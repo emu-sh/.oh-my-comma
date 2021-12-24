@@ -29,13 +29,13 @@ class Device(CommandBase):
   def _shutdown(self):
     flags = self.get_flags('shutdown')
     if flags.reboot:
-      self.__reboot()
+      self._reboot()
       return
     check_output('am start -n android/com.android.internal.app.ShutdownActivity')
     success('🌙 Goodnight!')
 
   @staticmethod
-  def __reboot():
+  def _reboot():
     check_output('am start -a android.intent.action.REBOOT')
     success('👋 See you in a bit!')
 
