@@ -78,7 +78,7 @@ To see more information about each command and its arguments, checkout the full 
 # Fork management
 When you first run any `emu fork` command, `emu` will ask you to perform a one-time setup of cloning the base repository of openpilot from commaai. This may take a while, but upon finishing the setup you will be able to switch to any openpilot fork much quicker than the time it usually takes to full-clone a new fork the old fashioned way.
 
-For each new fork you install with the `emu fork switch` command, Git is able to re-use blobs already downloaded from commaai/openpilot and other similar installed forks, enabling quicker install times.
+For each new fork you install with the `emu fork switch` command, Git is able to re-use blobs already downloaded from commaai/openpilot and other similar installed forks, enabling quicker install times. For a shorter command, `fork` is automatically aliased to `emu fork switch`.
 
 # Git config
 
