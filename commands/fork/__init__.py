@@ -4,9 +4,11 @@ import shutil
 import os
 import json
 from datetime import datetime
+
 from commands.base import CommandBase, Command, Flag
+from py_utils.hardware import EON
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
-from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS, OH_MY_COMMA_PATH
+from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 REMOTE_ALREADY_EXISTS = 'already exists'
@@ -85,8 +87,11 @@ class Fork(CommandBase):
     self.description = '🍴 Manage installed forks, or install a new one'
 
     self.fork_params = ForkParams()
-    self.remote_defaults = {'commaai': RemoteInfo('openpilot', ['stock', 'origin'], 'release2' if os.path.isdir('/EON') else 'release3'),
-                            'dragonpilot-community': RemoteInfo('dragonpilot', ['dragonpilot'], 'devel-i18n')}  # devel-i18n isn't most stable, but its name remains the same
+    default_commaai_branch = 'release2' if EON else 'release3'
+    self.remote_defaults = {
+      'commaai': RemoteInfo('openpilot', ['stock', 'origin'], default_commaai_branch),
+      'dragonpilot-community': RemoteInfo('dragonpilot', ['dragonpilot'], 'devel-i18n')  # devel-i18n isn't most stable, but its name remains the same
+    }
 
     self.comma_origin_name = 'commaai'
     self.comma_default_branch = self.remote_defaults['commaai'].default_branch
