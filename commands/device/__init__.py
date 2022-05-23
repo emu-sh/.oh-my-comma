@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from commands.base import CommandBase, Command, Flag
-from py_utils.emu_utils import error, check_output, COLORS, success
+from py_utils.emu_utils import error, check_output, COLORS, success, info
+from py_utils.hardware import EON, PC, TICI
 
 
 class Device(CommandBase):
@@ -10,12 +11,15 @@ class Device(CommandBase):
     self.name = 'device'
     self.description = '📈 Statistics about your device'
 
-    self.commands = {'battery': Command(description='🔋 see information about the state of your battery'),
-                     'reboot': Command(description='⚡ safely reboot your device'),
-                     'shutdown': Command(description='🔌 safely shutdown your device',
-                                         flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot your device', dtype='bool')]),
-                     'settings': Command(description='⚙️ open the Settings app',
-                                         flags=[Flag(['-c', '--close'], 'Closes the settings application', dtype='bool')])}
+    self.commands = {
+      'battery': Command(description='🔋 see information about the state of your battery'),
+      'reboot': Command(description='⚡ safely reboot your device'),
+      'shutdown': Command(description='🔌 safely shutdown your device',
+                          flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot your device', dtype='bool')]),
+    }
+    if EON:  # No Android settings app to show if not NEOS
+      self.commands['settings'] = Command(description='⚙️ open the Settings app',
+                                          flags=[Flag(['-c', '--close'], 'Closes the settings application', dtype='bool')])
 
   def _settings(self):
     flags = self.get_flags('settings')
@@ -31,16 +35,27 @@ class Device(CommandBase):
     if flags.reboot:
       self._reboot()
       return
-    check_output('am start -n android/com.android.internal.app.ShutdownActivity')
+    if EON:
+      check_output('am start -n android/com.android.internal.app.ShutdownActivity')
+    else:
+      check_output('sudo shutdown')
     success('🌙 Goodnight!')
 
   @staticmethod
   def _reboot():
-    check_output('am start -a android.intent.action.REBOOT')
+    if EON:
+      check_output('am start -a android.intent.action.REBOOT')
+    else:
+      check_output('sudo reboot')
     success('👋 See you in a bit!')
 
   @staticmethod
   def _battery():
+    if not EON:  # TODO: This check doesn't work for C2 which doesn't have a battery
+      # TODO: replace with some power stats on TICI?
+      info('This command is not available on non-EON devices')
+      return
+
     r = check_output('dumpsys batterymanager')
     if not r:
       error('Unable to get battery status!')
@@ -51,9 +66,9 @@ class Device(CommandBase):
     success('Battery info:')
     for name in battery_idxs:
       idx = battery_idxs[name]
-      info = r[idx]
+      battery_info = r[idx]
 
-      value = float(info.split(': ')[1])
+      value = float(battery_info.split(': ')[1])
       if name == 'temperature':
         value /= 10
         value = str(value) + '°C'
