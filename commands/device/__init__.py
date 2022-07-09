@@ -17,7 +17,8 @@ class Device(CommandBase):
       'shutdown': Command(description='🔌 safely shutdown your device',
                           flags=[Flag(['-r', '--reboot'], 'An alternate way to reboot your device', dtype='bool')]),
     }
-    if EON:  # No Android settings app to show if not NEOS
+    if EON:  # Android-specific commands
+      self.commands['battery'] = Command(description='🔋 see information about the state of your battery')
       self.commands['settings'] = Command(description='⚙️ open the Settings app',
                                           flags=[Flag(['-c', '--close'], 'Closes the settings application', dtype='bool')])
 
@@ -51,10 +52,7 @@ class Device(CommandBase):
 
   @staticmethod
   def _battery():
-    if not EON:  # TODO: This check doesn't work for C2 which doesn't have a battery
-      # TODO: replace with some power stats on TICI?
-      info('This command is not available on non-EON devices')
-      return
+    # TODO: add some power stats on TICI?
 
     r = check_output('dumpsys batterymanager')
     if not r:
