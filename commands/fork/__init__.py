@@ -6,9 +6,9 @@ import json
 from datetime import datetime
 
 from commands.base import CommandBase, Command, Flag
-from py_utils.hardware import EON
 from py_utils.emu_utils import run, error, success, warning, info, is_affirmative, check_output, most_similar
 from py_utils.emu_utils import OPENPILOT_PATH, FORK_PARAM_PATH, COLORS
+from py_utils.hardware import EON
 
 GIT_OPENPILOT_URL = 'https://github.com/commaai/openpilot'
 REMOTE_ALREADY_EXISTS = 'already exists'
