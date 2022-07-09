@@ -164,6 +164,11 @@ class Fork(CommandBase):
 
     username = flags.username
     branch = flags.branch
+
+    # Support username:branch syntax on GH pull requests
+    if ':' in username and username.count(':') == 1 and branch is None:
+      username, branch = username.split(':')
+
     repo_name = flags.repo
     force_switch = flags.force
     if username is None:  # branch is specified, so use current checked out fork/username
