@@ -38,16 +38,16 @@ class Device(CommandBase):
     if EON:
       check_output('am start -n android/com.android.internal.app.ShutdownActivity')
     else:
+      success('🌙 Goodnight!')
       check_output('sudo shutdown')
-    success('🌙 Goodnight!')
 
   @staticmethod
   def _reboot():
     if EON:
       check_output('am start -a android.intent.action.REBOOT')
     else:
+      success('👋 See you in a bit!')
       check_output('sudo reboot')
-    success('👋 See you in a bit!')
 
   @staticmethod
   def _battery():
