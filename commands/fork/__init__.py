@@ -418,7 +418,17 @@ class Fork(CommandBase):
       success('Backed up your current openpilot install to {}'.format(bak_dir))
 
     info('Cloning commaai/openpilot into {}, please wait...'.format(OPENPILOT_PATH))
-    r = run(['git', 'clone', '-b', self.comma_default_branch, GIT_OPENPILOT_URL, OPENPILOT_PATH])  # default to stock/release2 for setup
+    r = run(
+      [
+        'git',
+        'clone',
+        '--reference-if-able',
+        '{}.bak'.format(OPENPILOT_PATH),
+        '-b',
+        self.comma_default_branch,
+        GIT_OPENPILOT_URL,
+        OPENPILOT_PATH]
+    )  # default to stock/release2 for setup
     if not r:
       error('Error while cloning, please try again')
       return
