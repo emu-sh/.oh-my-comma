@@ -17,7 +17,7 @@
 # This is the install script for https://emu.sh/
 # Located on git at https://github.com/emu-sh/.oh-my-comma
 # To install this, ssh into your comma device and paste:
-# bash <(curl -fsSL install.emu.sh) # the brain of the bird
+# source <(curl -fsSL install.emu.sh) # the brain of the bird
 # source $SYSTEM_BASHRC_PATH depending on system
 
 if [ ! -f /EON ] && [ ! -f /TICI ]; then
@@ -68,7 +68,7 @@ if [ ! -f "$SYSTEM_BASHRC_PATH" ]; then
 fi
 
 update=false
-if [ $# -ge 1 ] && [ $1 = "update" ]; then
+if [ $# -ge 1 ] && [ "$1" = "update" ]; then
   update=true
 fi
 
@@ -80,16 +80,6 @@ fi
 if [ ! -d "$OH_MY_COMMA_PATH" ]; then
   echo "Cloning .oh-my-comma"
   git clone -b ${GIT_BRANCH_NAME} ${GIT_REMOTE_URL} ${OH_MY_COMMA_PATH}
-fi
-
-# FIXME: figure out how to install pip packages in AGNOS
-if [ -f /EON ] && [ ! -x "$(command -v powerline-shell)" ] && [ $update = false ]; then
-  echo "Do you want to install powerline? [You will also need to install the fonts on your local terminal.]"
-  read -p "[Y/n] > " choices
-  case ${choices} in
-    y|Y ) remount_system rw && pip install powerline-shell && remount_system ro;;
-    * ) echo "Skipping...";;
-  esac
 fi
 
 install_echo "ℹ️  Installing emu utilities\n"
@@ -110,19 +100,6 @@ else
   printf "✅ Success!\n\n"
 fi
 
-# FIXME: not applicable on TICI
-if [ -f /EON ]; then
-  install_echo "Checking /home/.config symlink..."
-  if [ "$(readlink -f /home/.config/powerline-shell)" != "$OH_MY_COMMA_PATH/.config/powerline-shell" ]; then
-    remount_system rw  # FIXME: do we need /system rw to access /home on NEOS?
-    echo "Creating a symlink of ${OH_MY_COMMA_PATH}/.config/powerline-shell to /home/.config/powerline-shell"
-    ln -s ${OH_MY_COMMA_PATH}/.config/powerline-shell /home/.config/powerline-shell
-    remount_system ro
-  else
-    install_echo "Symlink check passed"
-  fi
-fi
-
 # If community .bashrc file doesn't exist, copy from .bashrc-community
 if [ ! -f "$COMMUNITY_BASHRC_PATH" ]; then
   echo "ℹ️  Creating your community .bashrc at ${COMMUNITY_BASHRC_PATH}"
@@ -140,11 +117,14 @@ fi
 touch ${COMMUNITY_PATH}/.bash_history
 chmod 775 ${COMMUNITY_PATH}/.bash_history
 
-printf "\n\033[92m"
-if [ $update = true ]; then
-  echo "✅ Successfully updated emu utilities!"
-else
-  echo "✅ Successfully installed emu utilities!"
+# FIXME: is this only available on comma three?
+if [ ! -d /data/community/.oh-my-zsh ] && [ $update = false ]; then
+  echo "Do you want to install zsh, .oh-my-zsh, and powerlevel10k? [You will also need to install nerd fonts on your local terminal. See: https://www.nerdfonts.com/font-downloads]"
+  read -p "[y/N] > " choices
+  case ${choices} in
+    y|Y ) apt update && apt install zsh && zsh ${OH_MY_COMMA_PATH}/install-oh-my-zsh.zsh;;
+    * ) echo "Skipping...";;
+  esac
 fi
 
 CURRENT_BRANCH=$(cd ${OH_MY_COMMA_PATH} && git rev-parse --abbrev-ref HEAD)
@@ -152,13 +132,12 @@ if [ "${CURRENT_BRANCH}" != "master" ]; then
   printf "\n❗ \033[0;31mWarning:\033[0m your current .oh-my-comma git branch is %s. If this is unintentional, run:\n\033[92mgit -C /data/community/.oh-my-comma checkout master\033[0m\n\n" "${CURRENT_BRANCH}"
 fi
 
-install_echo "Current version: $OMC_VERSION"  # prints in update.sh
-if [ $update = false ]; then
-  printf "\033[0mYou may want to exit out of this bash instance to automatically source emu\n"
-fi
-
-printf "\033[0m\n"  # reset color
-
-if [ $update = false ]; then
+printf "\n\033[92m"
+if [ $update = true ]; then
+  echo "Current version: $OMC_VERSION"  # prints in update.sh
+  echo "✅ Successfully updated emu utilities!"
+else
+  echo "✅ Successfully installed emu utilities!"
+  printf "\033[0mYou may want to exit out of this bash instance to finish the install"
   set +x
 fi

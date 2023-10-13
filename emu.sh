@@ -1,9 +1,8 @@
 #!/bin/bash
 export COMMUNITY_PATH=/data/community
 export COMMUNITY_BASHRC_PATH=${COMMUNITY_PATH}/.bashrc
-export OH_MY_COMMA_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+export OH_MY_COMMA_PATH=${COMMUNITY_PATH}/.oh-my-comma
 
-source ${OH_MY_COMMA_PATH}/powerline.sh
 source ${OH_MY_COMMA_PATH}/aliases.sh
 
 function _updateohmycomma(){  # good to keep a backup in case python CLI is broken
@@ -14,9 +13,9 @@ function _updateohmycomma(){  # good to keep a backup in case python CLI is brok
 function emu(){  # main wrapper function
   if $(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))' | grep -q -e '^2')
   then
-    python3 ${OH_MY_COMMA_PATH}/emu.py "$@"
+    python3 "${OH_MY_COMMA_PATH}"/emu.py "$@"
   else
-    python ${OH_MY_COMMA_PATH}/emu.py "$@"
+    python "${OH_MY_COMMA_PATH}"/emu.py "$@"
   fi
 
   if [ $? = 1 ] && [ "$1" = "update" ]; then  # fallback to updating immediately if CLI crashed updating
